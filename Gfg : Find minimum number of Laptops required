@@ -1,0 +1,29 @@
+Question Link: https://practice.geeksforgeeks.org/problems/af49b143a4ead583e943ca6176fbd7ea55b121ae/1
+
+Solution:
+
+class Solution {
+  public:
+  //striver : minimum number of plateforms
+    int minLaptops(int N, int start[], int end[]) {
+        sort(start,start+N);
+        sort(end,end + N);
+        int i=0,j=0;
+        int cnt = 0,ans = 0;
+        
+        while(i < N && j<N){
+            if(start[i] < end[j]){
+                cnt++;
+                i++;
+            }
+            else{
+                cnt--;
+                j++;
+            }
+            
+            ans = max(ans,cnt);
+        }
+        
+        return ans;
+    }
+};
