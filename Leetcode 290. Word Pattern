@@ -1,0 +1,70 @@
+Question Link : https://leetcode.com/problems/word-pattern/
+
+Solution 1: 
+
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        unordered_map<char,string> chToStr;
+        unordered_map<string,char> strToCh;
+        int ptr1=0,ptr2=0;
+
+        for(int i=0;i<pattern.size();i++){
+            string str;
+            if(i!=pattern.size()-1){
+                ptr2 = s.find(' ',ptr1);
+                str = s.substr(ptr1,ptr2 - ptr1);
+            }
+            else{
+                str = s.substr(ptr1);
+            }
+
+            if(str=="") return false;
+            if(chToStr.count(pattern[i]) == 0) chToStr[pattern[i]] = str;
+            if(strToCh.count(str) == 0) strToCh[str] = pattern[i];
+
+            if(chToStr[pattern[i]] != str || strToCh[str] != pattern[i]) return false;
+            ptr1 = ptr2 + 1;
+        }
+        return true;
+    }
+};
+
+Solution 2:
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        vector<string> v;
+        string str = "";
+        for(char ch : s){
+            if(ch == ' '){
+                v.push_back(str);
+                str = "";
+                continue;
+            }
+            
+            str += ch;
+        }
+        v.push_back(str);
+        
+        if(v.size() % pattern.size() != 0) return false;
+        
+        for(int i=0;i<v.size();i += pattern.size()){
+            vector<string> vec(26,"");
+            unordered_map<string,int> mp;
+            for(int j=0;j<pattern.size();j++){
+                
+               if(vec[pattern[j]-'a'] != ""){
+                   if(vec[pattern[j]-'a'] != v[i+j]) return false;
+               }
+               else{
+                   if(mp[v[i+j]] > 0) return false;
+                   vec[pattern[j] - 'a'] = v[i+j];
+               }
+                
+                mp[v[i+j]]++;
+            }
+        }
+        return true;
+    }
+};
