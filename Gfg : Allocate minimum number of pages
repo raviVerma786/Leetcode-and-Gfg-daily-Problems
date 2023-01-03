@@ -1,0 +1,42 @@
+Question Link : https://practice.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1
+
+Solution: 
+
+class Solution 
+{
+    public:
+    //striver
+    
+    bool isPossible(int A[],int N,int M,int maxPages){
+        int pages = 0,students = 1;
+        for(int i=0;i<N;i++){
+            if(pages + A[i] <= maxPages) pages += A[i];
+            else{
+                students++;
+                pages = A[i];
+            }
+            
+            if(A[i] > maxPages || students > M) return false;
+        }
+        
+        return true;
+    }
+    int findPages(int A[], int N, int M) 
+    {
+       if(M > N) return -1;
+       int ans = -1;
+       int low = 0,high = accumulate(A,A+N,0);
+       
+       while(low <= high){
+           int mid = (low + high)/2;
+           
+           if(isPossible(A,N,M,mid)){
+               ans = mid;
+               high = mid - 1;
+           }
+           else low = mid + 1;
+       }
+       
+       return ans;
+    }
+};
