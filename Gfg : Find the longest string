@@ -1,0 +1,34 @@
+Question Link : https://practice.geeksforgeeks.org/problems/8d157f11af5416087251513cfc38ffc4d23be308/1
+
+Solution : 
+
+class Solution
+{
+public:
+    string longestString(vector<string> &words)
+    {
+        string ans = "";
+        unordered_map<string,int> mp;
+        for(string &s : words) mp[s]++;
+        
+        for(string &s : words){
+            string str = "";
+            bool isAllSubstrPresent = true;
+            
+            for(int j=0;j<s.size();j++){
+                str.push_back(s[j]);
+                if(mp[str] == 0){
+                    isAllSubstrPresent = false;
+                    break;
+                }
+            }
+            
+            if(isAllSubstrPresent){
+                if(str.size() > ans.size()) ans = str;
+                else if(str.size() == ans.size() && str < ans) ans = str;
+            }
+        }
+        
+        return ans;
+    }
+};
