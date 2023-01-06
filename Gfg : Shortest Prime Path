@@ -1,0 +1,52 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1646a9b5169d7571cf672f2a31533af083d1f479/1
+
+Solution : 
+
+class Solution{   
+  public:
+    bool isPrime(int n){
+        for(int i=2;i<=sqrt(n);i++){
+            if(n%i==0){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    int shortestPath(int Num1,int Num2)
+    {   
+        unordered_set<int> primes;
+        for(int i=1000;i<=9999;i++){
+            if(isPrime(i)){
+                primes.insert(i);
+            }
+        }
+        
+        queue<pair<string,int>> q;
+        string num2=to_string(Num2);
+        q.push({to_string(Num1),0});
+        primes.erase(Num1);
+        
+        while(!q.empty()){
+            string s=q.front().first;
+            int cnt=q.front().second;
+            q.pop();
+            
+            if(s==num2){
+                return cnt;
+            }
+            
+            for(int pos=0;pos<4;pos++){
+                for(int i=0;i<=9;i++){
+                    string s1 = s;
+                    s1[pos] = i+'0';
+                    if(primes.find(stoi(s1)) != primes.end()){
+                        q.push({s1,cnt+1});
+                        primes.erase(stoi(s1));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
