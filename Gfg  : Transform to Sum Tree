@@ -1,0 +1,22 @@
+Question Link : https://practice.geeksforgeeks.org/problems/d7e0ce338b11f0be36877d9c35cc8dfad6636957/1
+
+Solution : 
+
+class Solution {
+  public:
+    int helper(Node* node){
+        if(!node) return 0;
+        
+        int x = node->data;
+        int sum = x;
+        sum += helper(node->left) + helper(node->right);
+        node->data = sum - x;
+        
+        return sum;
+    }
+    
+    void toSumTree(Node *node)
+    {
+        helper(node);
+    }
+};
