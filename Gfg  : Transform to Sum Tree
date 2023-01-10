@@ -7,10 +7,9 @@ class Solution {
     int helper(Node* node){
         if(!node) return 0;
         
-        int x = node->data;
-        int sum = x;
+        int sum = node->data;
         sum += helper(node->left) + helper(node->right);
-        node->data = sum - x;
+        node->data = sum - node->data;
         
         return sum;
     }
