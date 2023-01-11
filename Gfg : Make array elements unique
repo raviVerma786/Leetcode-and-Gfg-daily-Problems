@@ -1,0 +1,20 @@
+Question Link : https://practice.geeksforgeeks.org/problems/6e63df6d2ebdf6408a9b364128bb1123b5b13450/1
+
+Solution : 
+
+class Solution {
+  public:
+    long long int minIncrements(vector<int> arr, int N) {
+        sort(arr.begin(),arr.end());
+        long long int ans = 0;
+        for(int i=1;i<N;i++){
+            if(arr[i] <= arr[i-1]){
+                int x = arr[i];
+                arr[i] = arr[i-1] + 1;
+                ans += (arr[i] - x); // add how much incremented from original value
+            }
+        }
+        
+        return ans;
+    }
+};
