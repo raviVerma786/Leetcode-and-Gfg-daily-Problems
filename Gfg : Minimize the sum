@@ -1,0 +1,27 @@
+Question Link : https://practice.geeksforgeeks.org/problems/86e609332c9ef4f6b8aa79db11a6c0808c4a1bca/1
+
+Solution : 
+
+class Solution {
+public:
+    int minimizeSum(int N, vector<int> arr) {
+        
+        priority_queue<int,vector<int>,greater<int>>pq;
+        for(int i=0;i<N;i++){
+            pq.push(arr[i]);
+        }
+        
+        int sum = 0;
+        while(pq.size() > 1){
+            int x = pq.top();
+            pq.pop();
+            int y = pq.top();
+            pq.pop();
+            
+            sum += (x + y);
+            pq.push(x + y);
+        }
+        
+        return sum;
+    }
+};
