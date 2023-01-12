@@ -1,0 +1,40 @@
+Question Link : https://leetcode.com/problems/number-of-nodes-in-the-sub-tree-with-the-same-label/description/
+
+Solution :
+
+class Solution {
+//https://www.youtube.com/watch?v=9CbzRhXOql8&ab_channel=CodingBeast
+// codefreaks ka bhi hai
+private: 
+    vector<int> dfs(vector<int>adj[],int node,string &labels,vector<bool>&vis,vector<int>&ans){
+        vis[node] = true;
+
+        vector<int> cnt(26,0);
+        for(int child : adj[node]){
+            if(!vis[child]){
+                vector<int> v = dfs(adj,child,labels,vis,ans);
+                for(int i=0;i<26;i++){
+                    cnt[i] += v[i];
+                }
+            }
+        }
+        cnt[labels[node] - 'a']++;
+        ans[node] = cnt[labels[node] - 'a'];
+
+        return cnt;
+    }
+public:
+    vector<int> countSubTrees(int n, vector<vector<int>>& edges, string labels) {
+        vector<int> adj[n];
+        for(vector<int>& edge : edges){
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+
+        vector<int> ans(n,0);
+        vector<bool>vis(n,false);
+        dfs(adj,0,labels,vis,ans);
+        
+        return ans;
+    }
+};
