@@ -1,6 +1,6 @@
 Question Link : https://leetcode.com/problems/longest-path-with-different-adjacent-characters/description/
 
-Solution :
+Solution 1:
 
 class Solution {
 private:
@@ -33,3 +33,41 @@ public:
 };
 
 
+
+Solution 2 : (Best)
+
+class Solution {
+private:
+    int ans = 1;
+
+    int dfs(int src,vector<int>adj[],string &s){
+        int longest = 0,secondLongest = 0;
+        for(int node : adj[src]){
+            int pathLength = dfs(node,adj,s);
+            if(s[src] != s[node]){
+                if(pathLength > longest){
+                    secondLongest = longest;
+                    longest = pathLength;
+                }
+                else if(pathLength > secondLongest){
+                    secondLongest = pathLength;
+                }
+            }
+        }
+
+        ans = max(ans,longest + secondLongest + 1);
+        return longest + 1;
+    }
+
+public:
+    int longestPath(vector<int>& parent, string s) {
+        int n = parent.size();
+        vector<int> adj[n];
+        for(int i=1;i<n;i++){
+            adj[parent[i]].push_back(i);
+        }
+
+        dfs(0,adj,s);
+        return ans;
+    }
+};
