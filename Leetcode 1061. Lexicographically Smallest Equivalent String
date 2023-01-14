@@ -1,0 +1,43 @@
+Qustion Link :https://leetcode.com/problems/lexicographically-smallest-equivalent-string/description/
+
+Solution :
+
+class Solution {
+private:
+    int parent[26];
+
+    int findParent(int node){
+        if(node == parent[node]) return node;
+        return parent[node] = findParent(parent[node]);
+    }
+    void disjointSetUnion(char ch1,char ch2){
+        int u = findParent((ch1 - 'a'));
+        int v = findParent((ch2 - 'a'));
+        
+        if(u==v) return;
+
+        if(u < v) parent[v] = u;
+        else parent[u] = v;
+    }
+public:
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        //intitialize parents
+        for(int i=0;i<26;i++) parent[i] = i;
+
+
+        //union
+        int n = s1.size();
+        for(int i=0;i<n;i++){
+            disjointSetUnion(s1[i],s2[i]);
+        }
+        
+        //answer calculation
+        string ans = "";
+        for(char ch : baseStr){
+            int smallest = findParent((ch - 'a'));
+            ans.push_back((smallest + 'a'));
+        }
+
+        return ans;
+    }
+};
