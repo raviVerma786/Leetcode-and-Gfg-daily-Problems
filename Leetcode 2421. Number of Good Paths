@@ -1,0 +1,78 @@
+Question Link :https://leetcode.com/problems/number-of-good-paths/description/
+
+Solution :
+
+//https://www.youtube.com/watch?v=_uVYiM7LmSk&ab_channel=codingMohan
+class DSU{
+private:
+    vector<int> size;
+    vector<int> parent;
+public:
+    DSU(int n){
+        size.resize(n+1,1);
+        parent.resize(n+1,0);
+
+        for(int i=0;i<=n;i++){
+            parent[i] = i;
+        }
+    }
+
+    int findParent(int node){
+        if(parent[node] == node) return node;
+        return parent[node] = findParent(parent[node]);
+    }
+
+    void merge(int node1,int node2){
+        int u = findParent(node1);
+        int v = findParent(node2);
+
+        if(size[u] > size[v]) swap(u,v);
+
+        size[v] += size[u];
+        parent[u] = v;
+    }
+
+};
+class Solution {
+public:
+    int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) {
+        int n = vals.size();
+        vector<int> adj[n];
+        for(vector<int>&edge : edges){
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+        
+        map<int,vector<int>> valToNode;
+        for(int i=0;i<n;i++) valToNode[vals[i]].push_back(i);
+
+        DSU dsu(n);
+        int ans = n;
+        vector<bool> isActive(n,false);
+
+        for(pair<int,vector<int>> p : valToNode){
+            for(int index : p.second){
+                for(int i : adj[index]){
+                    if(isActive[i]) dsu.merge(index,i);
+                }
+                isActive[index] = true;
+            }
+
+            vector<int> leaders;
+            for(auto i : p.second) leaders.push_back(dsu.findParent(i));
+            sort(leaders.begin(),leaders.end());
+
+            int sz = leaders.size();
+            for(int j=0;j<sz;j++){
+                long long cnt = 0;
+                int curr = leaders[j];
+                while(j<sz && leaders[j] == curr) j++,cnt++;
+                j--;
+
+                ans += (cnt * (cnt - 1))/2;
+            }
+        }        
+        
+        return ans;
+    }
+};
