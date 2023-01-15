@@ -1,0 +1,53 @@
+Question Link : https://practice.geeksforgeeks.org/problems/f72994353d123b925ff20f0694b662191df03ea2/1
+
+Solution: 
+
+class Solution{
+public:
+// https://www.youtube.com/watch?v=7ov66037E8w&ab_channel=CodeFreaks
+  long long countSubstring(string s){
+    // start writing from here
+    long long ans=0;
+    unordered_map<long long,long long> sumPos; //sumPos[sum] => position of sum last occurred   
+    vector<long long> dp(s.size(),0); // dp[i] = answer up to ith position
+    long long sum=-1;
+    if(s[0]=='1'){
+         dp[0]=1;
+         ans=1;
+         sum=1;
+    }
+    sumPos[sum]=0;
+    sumPos[0]=-1;//default condition
+    
+    for(int i=1;i<s.size();i++){
+        long long temp=0;
+        if(s[i]=='0') sum-=1;
+        else sum+=1;
+        
+        if(s[i]=='0'){
+            if(sumPos.find(sum)!=sumPos.end()) {
+                if(sumPos[sum]!=-1){
+                    temp=dp[sumPos[sum]];
+                }
+            }
+        }
+        else{
+            if(sumPos.find(sum)!=sumPos.end()){
+                if(sumPos[sum]!=-1){
+                    temp=dp[sumPos[sum]]+i-sumPos[sum]-1;
+                }
+                else{
+                    temp=i-sumPos[sum]-1;
+                }
+            }
+            else{
+                temp =i+1;
+            }
+        }
+        sumPos[sum]=i;
+        dp[i]=temp;
+        ans+=temp;
+    }
+    return ans;
+  }
+};
