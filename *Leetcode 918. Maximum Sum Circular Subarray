@@ -1,0 +1,32 @@
+Question Link :https://leetcode.com/problems/maximum-sum-circular-subarray/description/
+
+Solution :
+
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& nums) {
+        int n = nums.size();
+        int maxSum = INT_MIN , minSum = INT_MAX , tempMaxSum = 0 , tempMinSum = 0,
+        arraySum = 0;
+
+        for(int i=0;i<n;i++){
+            arraySum += nums[i];
+            
+            tempMaxSum += nums[i];
+            maxSum = max(maxSum , tempMaxSum);
+            tempMaxSum = tempMaxSum < 0 ? 0 : tempMaxSum;
+
+            tempMinSum += nums[i];
+            minSum = min(minSum , tempMinSum);
+            tempMinSum = tempMinSum > 0 ? 0 : tempMinSum;
+        }
+
+        if(arraySum == minSum){
+            //means all elements are negative
+            return maxSum;
+        }
+
+        //now only +ve or both +ve and -ve numbers present
+        return max(maxSum,(arraySum - minSum));
+    }
+};
