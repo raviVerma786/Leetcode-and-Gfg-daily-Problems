@@ -1,0 +1,51 @@
+Question Link :
+
+Solution 1 : O(1) space solution
+
+class Solution
+{
+    private:
+    Node* isLoopPresent(Node* head){
+        Node* slow = head , *fast = head;
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow == fast) return slow;
+        }
+        return NULL;
+    }
+    
+    public:
+    int findFirstNode(Node* head)
+    {
+        Node* concurrentPoint = isLoopPresent(head);
+        if(concurrentPoint == NULL) return -1;
+        
+        Node* node = head;
+        while(node != concurrentPoint){
+            node = node->next;
+            concurrentPoint = concurrentPoint->next;
+        }
+        
+        return concurrentPoint->data;
+    }
+};
+
+
+Solution 2: O(n) space
+
+class Solution
+{
+    public:
+    int findFirstNode(Node* head)
+    {
+        unordered_set<Node*> st;
+        Node* node = head;
+        while(node){
+            if(st.count(node)) return node->data;
+            st.insert(node);
+            node = node->next;
+        }
+        return -1;
+    }
+};
