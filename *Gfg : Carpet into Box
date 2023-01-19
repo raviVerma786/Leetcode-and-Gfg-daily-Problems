@@ -1,0 +1,30 @@
+Question Link :https://practice.geeksforgeeks.org/problems/230d87552a332a2970b2092451334a007f2b0eec/1
+
+Solution :
+
+class Solution{
+    public:
+    int carpetBox(int A, int B, int C, int D){
+        int a = min(A,B) , b = max(A,B);
+        int c = min(C,D) , d = max(C,D);
+        
+        int cnt = 0;
+        while(a > c || b > d){
+            int tempA = a,tempB = b;
+            
+            if(tempB > d) {
+                tempB /=2;
+                cnt++;
+            }
+            else if(tempA > c){
+                tempA /= 2;
+                cnt++;
+            }
+            
+            a = min(tempA,tempB);
+            b = max(tempA,tempB);
+        }
+        
+        return cnt;
+    }
+};
