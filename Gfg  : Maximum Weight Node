@@ -1,0 +1,31 @@
+Question Link :https://practice.geeksforgeeks.org/problems/b64485d3994958cca8748991bb58668204b3e4c0/1
+
+Solution :
+
+class Solution
+{
+  public:
+  int maxWeightCell(int n, vector<int> edge)
+  {
+      unordered_map<int,int> weight;
+      for(int i=0;i<n;i++){
+          if(edge[i] != -1)
+            weight[edge[i]] += i;
+      }
+      
+      int maxWeight = INT_MIN,maxIndexWithMaxWeight = 0;
+      for(pair<int,int> p : weight){
+          int cell = p.first,wt = p.second;
+          if(wt > maxWeight){
+              maxWeight = wt;
+              maxIndexWithMaxWeight = cell;
+          }
+          else if(wt == maxWeight){
+              maxIndexWithMaxWeight = max(cell,maxIndexWithMaxWeight);
+          }
+      }
+      
+      return maxIndexWithMaxWeight;
+  }
+};
+
