@@ -6,6 +6,7 @@ class Solution {
 public:
     vector<string> restoreIpAddresses(string s) {
         vector<string> result;
+        if(s.size() < 4 || s.size() > 12) return result;
         string ip;
         dfs(s,0,0,ip,result);
         return result;
