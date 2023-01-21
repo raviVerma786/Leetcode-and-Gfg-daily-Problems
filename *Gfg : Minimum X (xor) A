@@ -1,0 +1,47 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1fc4278adf2a36780f637c7b4cd06391dd1487e4/1 
+
+Solution : 
+
+class Solution {
+  private:
+    void toBinary(int n,vector<int>&binary){
+        for(int i=30;i>=0;i--){
+            binary[i] = (n & 1);
+            n = n>>1;
+        }
+    }
+    
+    int toDecimal(vector<int>&binary){
+        int num = 0 , base = 1;
+        for(int i=30;i>=0;i--){
+            num += (binary[i] * base);
+            base = base * 2;
+        }
+        return num;
+    }
+    
+  public:
+    int minVal(int a, int b) {
+        vector<int> binA(31,0),binB(31,0);
+        toBinary(a,binA);
+        toBinary(b,binB);
+        
+        // to make xor minimum make sure that bits of B with higher values are same as A if not
+        // then do the following steps to minimize xor keeping set bit fixed 
+        for(int i=0;i<31;i++){
+            if(binA[i] != binB[i]){
+                int j = 30;
+                while(j > i && binB[j] == binB[i]) j--;
+                if(j == i) continue;
+                else{
+                    int temp = binB[i];
+                    binB[i] = binB[j];
+                    binB[j] = temp;
+                }
+            }
+        }
+        
+        int ans = toDecimal(binB);
+        return ans;
+    }
+};
