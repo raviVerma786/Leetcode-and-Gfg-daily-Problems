@@ -45,3 +45,30 @@ class Solution {
         return ans;
     }
 };
+
+
+Solution 2 : (Best Solution ):
+
+class Solution {
+  public:
+    int minVal(int a, int b) {
+        // to make xor minimum make sure that bits of B with higher values are same as A if not
+        // then do the following steps to minimize xor keeping set bit fixed 
+        for(int i=31;i>=0;i--){
+            int bitA = (1 & (a>>i)),bitB = (1 & (b>>i));
+            if(bitA == bitB) continue; // already xor will be 0 for the bit
+            
+            //find alternet bit of b from lsb and reverse both bits at i and j
+            for(int j=0;j<i;j++){
+                int currBitB = (1 & (b>>j));
+                if(currBitB != bitB){
+                    b = (b ^ (1<<j)); // reverse jth bit
+                    b = (b ^ (1<<i)); // reverse ith bit
+                    break;
+                }
+            }
+        }
+    
+        return b;
+    }
+};
