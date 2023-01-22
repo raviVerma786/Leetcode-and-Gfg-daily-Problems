@@ -1,0 +1,37 @@
+Question Link : https://practice.geeksforgeeks.org/problems/2b70d42632a4e207569c6d2d777383e4603d6fe1/1
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=3LhOG0GP6TA&ab_channel=CodeFreaks
+  public:
+    int solve(int N, int K, vector<int> &arr) {
+        int sum = 0;
+        vector<int> prefixSum(N,0);
+        
+        for(int i=0;i<N;i++){
+            sum += arr[i];
+            prefixSum[i] = sum;
+        }
+        
+        //find devisors of the total sum
+        vector<int> devisors;
+        for(int i=1;i*i<=sum;i++){
+            if(sum % i == 0){
+                devisors.push_back(i);
+                if(i != sum/i) devisors.push_back(sum/i);
+            }
+        }
+        
+        //solve for each prefix sum
+        int ans = 1;
+        for(int d : devisors){
+            int partitions = 0;
+            for(int i : prefixSum){
+               if(i % d ==0 ) partitions++;
+               if(partitions >= K) ans = max(ans,d);
+            }
+        }
+        return ans;
+    }
+};
