@@ -1,0 +1,46 @@
+Question Link : https://leetcode.com/problems/palindrome-partitioning/description/
+
+Solution : 
+
+//https://www.youtube.com/watch?v=WBgsABoClE0&ab_channel=takeUforward
+class Solution {
+private:
+    bool isPalindrome(string &s){
+        if(s.size() == 0) return false; // we can't take empty string here
+
+        int i=0,j=s.size() - 1;
+        while(i<j){
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    void helper(int index,string s,vector<string>&v,vector<vector<string>>& ans){
+        if(s.size()==0){
+            ans.push_back(v);
+            return;
+        }
+
+        for(int j=index;j<s.size();j++){
+            string str = s.substr(index,j-index+1);
+
+            if(isPalindrome(str)){
+                v.push_back(str);
+                str = s.substr(j+1);
+                helper(0,str,v,ans);
+                v.pop_back();
+            }
+            
+        }
+    }
+public:
+    vector<vector<string>> partition(string s) {
+        vector<string> v;
+        vector<vector<string>> ans;
+        helper(0,s,v,ans);
+
+        return ans;
+    }
+};
