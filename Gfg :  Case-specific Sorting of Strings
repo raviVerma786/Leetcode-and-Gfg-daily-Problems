@@ -1,0 +1,75 @@
+Question Link : https://practice.geeksforgeeks.org/problems/case-specific-sorting-of-strings4845/1
+
+Soltuion 1 : 
+
+class Solution
+{
+    public:
+    string caseSort(string str, int n)
+    {
+       string smalls = "",capitals="";
+       for(char ch : str){
+           if(ch >='a' && ch <='z') smalls += ch;
+           else capitals += ch;
+       }
+       
+       sort(smalls.begin(),smalls.end());
+       sort(capitals.begin(),capitals.end());
+       
+       string ans = "";
+       int sml=0,cpl=0;
+       
+       for(char ch : str){
+           if(ch >= 'a' && ch<='z'){
+               ans += smalls[sml];
+               sml++;
+           }
+           else{
+               ans += capitals[cpl];
+               cpl++;
+           }
+       }
+       
+       return ans;
+    }
+};
+
+
+
+
+
+Solution 2 :(best)
+
+class Solution
+{
+    public:
+    string caseSort(string str, int n)
+    {
+       vector<int> smalls(26,0);
+       vector<int> capitals(26,0);
+       
+       for(char ch : str){
+           if(ch >='a' && ch <='z') smalls[ch-'a']++;
+           else capitals[ch - 'A']++;
+       }
+       
+       int i = 0,j=0;
+       string ans = "";
+       
+       for(char ch : str){
+           while(smalls[i] == 0) i++;
+           while(capitals[j] == 0) j++;
+           
+           if(ch >= 'a' && ch<='z'){
+               ans += (i + 'a');
+               smalls[i]--;
+           }
+           else{
+               ans += (j + 'A');
+               capitals[j]--;
+           }
+       }
+       
+       return ans;
+    }
+};
