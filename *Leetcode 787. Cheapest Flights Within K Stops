@@ -1,0 +1,42 @@
+Question Link : https://leetcode.com/problems/cheapest-flights-within-k-stops/description/
+
+Solution :
+
+class Solution {
+private:
+    int dp[101][102];
+public:
+    long long helper(vector<pair<int,int>> adj[],int src,int dst,int k){
+        if(src == dst){
+            if(k>=0) return 0; // reached at destination
+            return 10000000;
+        }
+        else if(k<0) {
+            return 10000000;
+        }
+        
+        if(dp[src][k] != -1) return dp[src][k];
+
+        long long ans = INT_MAX;
+        for(pair<int,int> p : adj[src]){
+            int city = p.first,price = p.second;
+            ans = min(ans,price + helper(adj,city,dst,k-1));
+        }
+
+        return dp[src][k] = ans;
+    }
+    
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<pair<int,int>> adj[n];
+        for(vector<int> &v : flights){
+            adj[v[0]].push_back({v[1],v[2]});
+        }
+        k++; // adding one more stop at destination
+
+        memset(dp,-1,sizeof(dp));
+        int ans = helper(adj,src,dst,k);
+        if(ans >= 10000000) return -1;
+
+        return (int)ans;
+    }
+};
