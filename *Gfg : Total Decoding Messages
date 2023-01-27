@@ -1,0 +1,30 @@
+Question Link : https://practice.geeksforgeeks.org/problems/total-decoding-messages1235/1
+
+Solution : 
+
+class Solution {
+    int mod = 1e9 + 7;
+    int dp[10001];
+    private:
+        int helper(string &str,int i){
+            if(i == str.size()) return 1;
+            if(dp[i] != -1) return dp[i];
+            
+            int nums = 0,ans = 0;
+            for(int j=i;j<str.size();j++){
+                nums = nums*10 + (str[j] - '0');
+                
+                if(nums >= 1 && nums<=26){
+                    ans = (ans + helper(str,j+1)) % mod;
+                }else break;
+            }
+            
+            return dp[i] = ans % mod;
+        }
+	public:
+		int CountWays(string str){
+		    memset(dp,-1,sizeof(dp));
+		    return helper(str,0);
+		}
+
+};
