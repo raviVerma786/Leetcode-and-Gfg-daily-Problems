@@ -1,0 +1,46 @@
+Question Link :https://practice.geeksforgeeks.org/problems/scrambled-string/1
+
+Solution : 
+
+class Solution{
+    private: 
+    //   https://www.youtube.com/watch?v=DK8ryDpNJhg&ab_channel=AkshayAnil
+        unordered_map<string,bool> mp;
+        
+    public:
+    bool isScramble(string s1, string s2){
+        if(s1 == s2){
+            mp[s1 + s2] = true;
+            return true;
+        }
+        if(mp.count(s1 + s2)) return mp[s1 + s2];
+        
+        int n = s1.size();
+        for(int i=1;i<n;i++){
+            //1st case
+            string a = s1.substr(0,i) ,
+            b = s2.substr(0,i),
+            c = s1.substr(i),
+            d = s2.substr(i);
+            
+            if(isScramble(a,b) && isScramble(c,d)){
+                mp[s1 + s2] = true;
+                return true;
+            }
+            
+            //2nd case
+            string e = s1.substr(0,i) ,
+            f = s2.substr(n-i),
+            g = s1.substr(i),
+            h = s2.substr(0,n-i);
+            
+            if(isScramble(e,f) && isScramble(g,h)){
+                mp[s1 + s2] = true;
+                return true;
+            }
+        }
+        
+        mp[s1 + s2] = false;
+        return false;
+    }    
+};
