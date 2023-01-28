@@ -1,0 +1,73 @@
+Question Link : https://leetcode.com/problems/data-stream-as-disjoint-intervals/description/
+
+Solution 1: 
+
+class SummaryRanges {
+private:
+    vector<int> v;
+public:
+    SummaryRanges() {
+        
+    }
+    
+    void addNum(int value) {
+        v.push_back(value);
+    }
+    
+    vector<vector<int>> getIntervals() {
+        sort(v.begin(),v.end());
+        v.erase(unique(v.begin(),v.end()),v.end());
+
+        vector<vector<int>> ans;
+        int i = 0;
+        while(i < v.size()){
+            vector<int> temp;
+            temp.push_back(v[i]);
+            i++;
+
+            while(i<v.size() && v[i] == v[i-1]+1) i++;
+
+            temp.push_back(v[i-1]);
+            ans.push_back(temp);
+        }
+        
+        return ans;
+    }
+};
+
+
+Solution 2 : (Faster)
+
+class SummaryRanges {
+private:
+    set<int> st;
+public:
+    SummaryRanges() {
+        
+    }
+    
+    void addNum(int value) {
+        st.insert(value);
+    }
+    
+    vector<vector<int>> getIntervals() {
+        vector<vector<int>> ans;
+        auto i = st.begin();
+        while(i != st.end()){
+            vector<int> temp;
+            temp.push_back(*i);
+            int last = *i;
+            i++;
+
+            while(i != st.end() && *i == last +1) {
+                last = *i;
+                i++;
+            }
+
+            temp.push_back(last);
+            ans.push_back(temp);
+        }
+        
+        return ans;
+    }
+};
