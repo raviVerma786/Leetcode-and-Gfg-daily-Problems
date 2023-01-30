@@ -1,0 +1,34 @@
+Question Link :https://practice.geeksforgeeks.org/problems/f7bfa137576243795abb0595962d61b632bbad21/1
+
+Solution : 
+
+class Solution{
+  public:
+//   https://www.youtube.com/watch?v=WKFDy3wjswA&ab_channel=CodeFreaks
+    void dfs(vector<int> adj[],int src,int par,vector<pair<int,int>>&dp){
+        for(int node : adj[src]){
+            if(node != par){
+                dfs(adj,node,src,dp);
+            }
+        }
+        
+        for(int node : adj[src]){
+            if(node != par){
+                dp[src].first += dp[node].second;
+                dp[src].second += min(dp[node].first,dp[node].second);
+            }
+        }
+    }
+    int countVertex(int N, vector<vector<int>>edges){
+        vector<int> adj[N];
+        for(vector<int>& edge : edges){
+            adj[edge[0] - 1].push_back(edge[1] - 1);
+            adj[edge[1] - 1].push_back(edge[0] - 1);
+        }
+        
+        vector<pair<int,int>> dp(N,{0,1}); // d[i] = {0,1} => {not lamp,lamp}
+        dfs(adj,0,0,dp);
+        
+        return min(dp[0].first,dp[0].second);
+    }
+};
