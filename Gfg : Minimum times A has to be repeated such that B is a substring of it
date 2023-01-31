@@ -1,0 +1,25 @@
+Question Link : https://practice.geeksforgeeks.org/problems/fda70097eb2895ecfff269849b6a8aace441947c/1
+
+Solution : 
+
+class Solution {
+  public:
+    int minRepeats(string A, string B) {
+        string parent = A;
+        parent += A; // added at least one time because substring can start from middle
+        
+        while(parent.size() <= B.size()){
+            parent += A;
+        }
+        
+        int n = B.size();
+        for(int i=0;i<=(parent.size() - n);i++){
+            string temp = parent.substr(i,n);
+            if(temp == B){
+                return ceil((i + n)/(A.size() * 1.0));
+            }
+        }
+        return -1;
+    }
+};
+
