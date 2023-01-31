@@ -1,0 +1,38 @@
+Question Link : https://leetcode.com/problems/best-team-with-no-conflicts/description/
+
+Solution : 
+
+class Solution {
+private:
+    int dp[1001][1001];
+    int maxScore(vector<pair<int,int>>&v,int i,int last){
+        if(i == -1) return 0;
+        if(dp[i][last] != -1) return dp[i][last];
+
+        int totalScore = 0;
+        if(i==v.size()-1 || (v[i].first == v[last].first) || (v[i].second <= v[last].second)){
+            int newLast = last;
+            if(v[i].second <= v[last].second){
+                newLast = i;
+            }
+            totalScore = v[i].second + maxScore(v,i-1,newLast); // take
+        }
+
+        return dp[i][last] = max(totalScore,maxScore(v,i-1,last)); //max(take,not take)
+    }
+public:
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        int n = scores.size();
+        vector<pair<int,int>> v(n); // {age,score}
+        for(int i=0;i<n;i++){
+            v[i] = {ages[i],scores[i]};
+        }
+        
+        v.push_back({INT_MAX , INT_MAX}); // just to maintain last
+        sort(v.begin(),v.end());
+        
+        n = v.size();
+        memset(dp,-1,sizeof(dp));
+        return maxScore(v,n-2,n-1);
+    }
+};
