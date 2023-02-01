@@ -1,0 +1,29 @@
+Question Link :https://practice.geeksforgeeks.org/problems/844b4fdcd988ac5461324d62d43f7892749a113c/1
+
+Solution : 
+
+class Solution{   
+public:
+    long long int distinctColoring(int N, int r[], int g[], int b[]){
+        vector<vector<long long>> dp(N+1,vector<long long>(3,0));
+        //dp[i][0] => cost when ith home is painted with red
+        //dp[i][1] => cost when ith home is painted with green
+        //dp[i][2] => cost when ith home is painted with blue
+        
+        for(int i=1;i<=N;i++){
+            int idx = i-1;
+            
+            //coloring red
+            dp[i][0] = min(r[idx] + dp[i-1][1],r[idx] + dp[i-1][2]);
+            
+            //coloring green
+            dp[i][1] = min(g[idx] + dp[i-1][0],g[idx] + dp[i-1][2]);
+            
+            //coloring blue
+            dp[i][2] = min(b[idx] + dp[i-1][0], b[idx] + dp[i-1][1]);
+        }
+        
+        // for(vector<long long> v : dp) cout<<v[0]<<" "<<v[1]<<" "<<v[2]<<endl;
+        return min(dp[N][0],min(dp[N][1],dp[N][2]));
+    }
+};
