@@ -1,0 +1,55 @@
+Question Link : https://leetcode.com/problems/greatest-common-divisor-of-strings/
+
+Solution :
+
+class Solution {
+public:
+    string gcdOfStrings(string str1, string str2) {
+        string divisor = str2;
+        if(str1.size() < str2.size()){
+            divisor = str1;
+        }
+
+        while(divisor.size() > 0){
+            int n = divisor.size();
+            if(str1.size() % n == 0 && str2.size() % n == 0){
+                bool same = true;
+                //checking string 1
+                int i=0,j=0;
+                while(j<str1.size()){
+                    if(divisor[i] != str1[j]){
+                        same = false;
+                        break;
+                    }
+                    j++;
+                    i++;
+                    
+                    if(j==str1.size() && i < n) same = false;
+                    if(i == n) i=0;
+                }
+                
+                // checking string 2 only if str1 was multiple of divisor
+                if(same){
+                    i=0,j=0;
+                    while(j<str2.size()){
+                        if(divisor[i] != str2[j]){
+                            same = false;
+                            break;
+                        }
+                        j++;
+                        i++;
+                        
+                        if(j==str2.size() && i < n) same = false;
+                        if(i == n) i=0;
+                    }
+                }
+
+                if(same) return divisor;
+            }
+
+            divisor.pop_back();
+        }
+
+        return "";
+    }
+};
