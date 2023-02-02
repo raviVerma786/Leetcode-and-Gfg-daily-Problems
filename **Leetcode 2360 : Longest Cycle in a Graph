@@ -1,0 +1,54 @@
+Question Link :https://leetcode.com/problems/longest-cycle-in-a-graph/description/
+
+Solution :
+
+class Solution
+{
+//https://www.youtube.com/watch?v=PyCE2tUHl1I&ab_channel=CodeFreaks
+public:
+    int longestCycle(vector<int>& edge) {
+    int N = edge.size();
+    vector<int> count(N,0);
+    for(int i : edge){
+        if(i==-1) continue;
+        count[i]++;
+    }
+    
+    vector<bool> vis(N,false);
+    queue<int> q;
+    for(int i=0;i<N;i++){
+        if(count[i]==0){
+            q.push(i);
+            vis[i] = true;
+        }
+    }
+    
+    while(!q.empty()){
+        int curr = q.front();
+        q.pop();
+        
+        int par = edge[curr];
+        if(par == -1) continue;
+        count[par]--;
+        if(count[par] == 0){
+            q.push(par);
+            vis[par] = true;
+        }
+    }
+    
+    int ans = -1;
+    for(int i=0;i<N;i++){
+        if(vis[i]) continue;
+        
+        int cycle = 0;
+        for(int j=i;!vis[j];j=edge[j]){
+            cycle++;
+            vis[j] = true;
+        }
+        
+        ans = max(ans,cycle);
+    }
+    
+    return ans;
+    }
+};
