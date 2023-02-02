@@ -1,0 +1,32 @@
+Question Link :https://leetcode.com/problems/verifying-an-alien-dictionary/submissions/889818136/
+
+Solution : 
+
+class Solution {
+public:
+    bool isAlienSorted(vector<string>& words, string order) {
+        vector<int> index(26,-1);
+        for(int i=0;i<26;i++){
+            index[order[i] - 'a'] = i;
+        }
+
+        for(int i=1;i<words.size();i++){
+            string curr = words[i];
+            string prev = words[i-1];
+            
+            if(curr == prev) continue;
+            
+            int j=0,k=0;
+            while(j<curr.size() && k<prev.size() && curr[j] == prev[k]){
+                j++;
+                k++;
+            }
+
+            if(j == curr.size() && k < prev.size()) return false;
+            else if(k==prev.size() && j<curr.size()) continue;
+            else if(index[curr[j] - 'a'] < index[prev[k] - 'a']) return false;
+        }
+
+        return true;
+    }
+};
