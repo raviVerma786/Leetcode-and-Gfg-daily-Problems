@@ -1,0 +1,28 @@
+Question Link : https://practice.geeksforgeeks.org/problems/2e068e2342b9c9f40cfda1ed8e8119542d748fd8/1
+
+Solution : 
+
+class Solution{
+    public:
+    pair<int,int> endPoints(vector<vector<int>> matrix, int R, int C){
+        vector<pair<int,int>> directions = {{0,1},{1,0},{0,-1},{-1,0}};//{right,down,left,right}
+        int i=0,j=0,dir = 0;
+        
+        while(i>=0 && i<R && j>=0 && j<C){
+            if(matrix[i][j] == 1){
+                dir = (dir + 1)%4;
+                matrix[i][j] = 0;
+            }
+            int x = i + directions[dir].first;
+            int y = j + directions[dir].second;
+            
+            if(x<0 || y<0 || x==R || y==C) return {i,j};
+            else{
+                i = x;
+                j = y;
+            }
+        }
+        
+        return {-1,-1};
+    }
+};
