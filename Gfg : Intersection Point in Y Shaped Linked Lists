@@ -32,3 +32,48 @@ public:
         return common->data;
     }
 };
+
+Solution 2 : (Best)
+
+class Solution
+{
+public:
+    int getLength(Node* head)
+    {
+        int l=0;
+        while(head)
+        {
+            head=head->next;
+            l++;
+        }
+        return l;
+    }
+    int intersectPoint(Node* head1, Node* head2)
+    {
+        // adding 3000 in each element of head1
+        Node* h1 = head1,*h2 = head2;
+        int len1 = getLength(h1);
+        int len2 = getLength(h2);
+        
+        h1 = head1;
+        h2 = head2;
+        while(len1 > len2){
+            len1--;
+            h1 = h1->next;
+        }
+        
+        while(len2 > len1){
+            len2--;
+            h2 = h2->next;
+        }
+        
+        //now both have same length
+        while(h1 && h2){
+            if(h1 == h2) return h1->data;
+            h1 = h1->next;
+            h2 = h2->next;
+        }
+        
+        return -1;
+    }
+};
