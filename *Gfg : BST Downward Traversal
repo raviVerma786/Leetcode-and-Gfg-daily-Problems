@@ -1,0 +1,34 @@
+Question Link :https://practice.geeksforgeeks.org/problems/c85e3a573a7de6dfd18398def16d05387852b319/1
+
+Solution: 
+class Solution{
+private:
+    long long ans = 0;
+public:
+    void descendantSum(Node* root,int vLabel){
+        if(!root) return;
+        //vLabel=>vertical level if any root in same vertical level of target so add its data
+        if(vLabel == 0) ans += root->data;
+        
+        descendantSum(root->left,vLabel - 1);
+        descendantSum(root->right,vLabel + 1);
+    }
+    
+    Node* search(Node* root,int target){
+        if(!root) return NULL;
+        if(root->data == target) return root;
+        
+        if(root->data < target)
+            return search(root->right,target);
+        
+        else return search(root->left,target);
+    }
+    
+    long long int verticallyDownBST(Node *root,int target){
+       Node* node = search(root,target);
+       if(!node) return -1;
+       
+       descendantSum(node,0);
+       return ans - node->data; //we are not taking the target node so decrease it
+    }
+};
