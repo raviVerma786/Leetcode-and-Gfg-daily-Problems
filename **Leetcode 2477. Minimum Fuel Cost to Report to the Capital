@@ -1,0 +1,39 @@
+Question link : https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/submissions/896575848/
+
+Solution :
+
+class Solution {
+private:
+    long long ans = 0;
+public:
+    long long dfs(vector<int> adj[],int node,vector<bool> &vis,int seats){
+        vis[node] = true;
+
+        long long cnt = 1; // count of persons
+        for(int i : adj[node]){
+            if(!vis[i])
+                cnt += dfs(adj,i,vis,seats);
+        }
+
+        long long x = cnt / seats; // number of cars required
+        if(cnt % seats) x++;
+
+        if(node != 0) ans += x; // fuel needed 
+
+        return cnt;
+    }
+    long long minimumFuelCost(vector<vector<int>>& roads, int seats) {
+        int n = roads.size();
+        if(n==0) return 0;
+        vector<int> adj[n+1];
+        for(vector<int> v : roads){
+            adj[v[0]].push_back(v[1]);
+            adj[v[1]].push_back(v[0]);
+        }
+        
+        vector<bool>vis(n+1,false);
+        dfs(adj,0,vis,seats);
+
+        return ans;
+    }
+};
