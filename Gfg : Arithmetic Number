@@ -1,0 +1,13 @@
+Question link :https://practice.geeksforgeeks.org/problems/arithmetic-number2815/1
+
+Solution : 
+
+class Solution{
+public:
+    int inSequence(int A, int B, int C){
+        // A + (n-1)C = B 
+        
+        if(C == 0) return A==B;
+        return (A== B) || ((B - A)%C == 0 && (B - A)/C > 0);
+    }
+};
