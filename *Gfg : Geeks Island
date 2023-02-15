@@ -1,0 +1,62 @@
+Question Link :https://practice.geeksforgeeks.org/problems/234ca3b438298fb04befd5abe7fbd98c006d4884/1
+Link On Leetcode : https://leetcode.com/problems/pacific-atlantic-water-flow/description/
+
+Solution : 
+
+class Solution{
+private: 
+// just 4 minutes of the video is enough to understand
+//https://www.youtube.com/watch?v=64496xYlLJQ&ab_channel=CodewithAlisha
+    int dx[4] = {1,0,-1,0};
+    int dy[4] = {0,1,0,-1};
+    bool isValid(int i,int j,int m,int n){
+        return i>=0 && j>=0 && i<m && j<n;
+    }
+    
+    void dfsIndianOcean(vector<vector<int>> &mat,vector<vector<bool>> &indian,int i,int j){
+        indian[i][j] = true;
+        
+        for(int k=0;k<4;k++){
+            int r = i + dx[k] , c = j + dy[k];
+            if(isValid(r,c,mat.size(),mat[0].size()) && mat[r][c] >= mat[i][j] && !indian[r][c]){
+                dfsIndianOcean(mat,indian,r,c);
+            }
+        }
+    }
+    
+    void dfsArabianOcean(vector<vector<int>> &mat,vector<vector<bool>> &arabian,int i,int j){
+        arabian[i][j] = true;
+        
+        for(int k=0;k<4;k++){
+            int r = i + dx[k] , c = j + dy[k];
+            if(isValid(r,c,mat.size(),mat[0].size()) && mat[r][c] >= mat[i][j] && !arabian[r][c]){
+                dfsArabianOcean(mat,arabian,r,c);
+            }
+        }
+    }
+public:
+    int water_flow(vector<vector<int>> &mat,int M,int N){
+        //M rows, N cols
+        vector<vector<bool>> indian(M,vector<bool>(N,false));
+        vector<vector<bool>> arabian(M,vector<bool>(N,false));
+        
+        for(int i=0;i<M;i++){
+            dfsIndianOcean(mat,indian,i,0);
+            dfsArabianOcean(mat,arabian,i,N-1);
+        }
+        
+        for(int i=0;i<N;i++){
+            dfsIndianOcean(mat,indian,0,i);
+            dfsArabianOcean(mat,arabian,M-1,i);
+        }
+        
+        int ans = 0;
+        for(int i=0;i<M;i++){
+            for(int j=0;j<N;j++){
+                if(indian[i][j] && arabian[i][j]) ans++;
+            }
+        }
+        
+        return ans;
+    }
+};
