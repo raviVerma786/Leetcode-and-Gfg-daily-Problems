@@ -1,0 +1,35 @@
+Question link : https://leetcode.com/problems/add-to-array-form-of-integer/description/
+
+Solution : 
+
+ class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& nums, int k) {
+        vector<int> ans;
+        int rem = 0;
+
+        for(int i=nums.size()-1;i>=0;i--){
+            int sum = nums[i] + (k%10) + rem;
+            ans.push_back(sum%10);
+
+            k /= 10;
+            rem = sum / 10;
+        }
+        
+        while(k > 0){
+            int sum = (k%10) + rem;
+            ans.push_back(sum % 10);
+
+            k /= 10;
+            rem = sum/10;
+        }
+        
+        while(rem > 0){
+            ans.push_back(rem % 10);
+            rem /= 10;
+        }
+
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+};
