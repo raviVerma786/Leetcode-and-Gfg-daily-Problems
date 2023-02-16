@@ -1,0 +1,48 @@
+Question Link : https://practice.geeksforgeeks.org/problems/e2d156755ca4e0a9b9abf5680191d4b06e52b1a8/1
+
+Solution : 
+
+class Solution{
+//this question is basically detect loop in directed graph
+// make a directed graph from source to destination and check for loops
+bool pathVis[100009];
+public:
+    bool cycle(vector<int> adj[],vector<bool>&vis,int node,int &cnt){
+        
+        cnt++;
+        pathVis[node] = vis[node] = true;
+        for(int next : adj[node]){
+            if(!vis[next]){
+                if(cycle(adj,vis,next,cnt)) return true;
+            }
+            
+            else if(pathVis[next]) return true;
+        }
+        pathVis[node] = false;
+        return false;
+    }
+    
+    int goodStones(int n,vector<int> &arr){
+        vector<int> adj[n]; // only one path from source to destination
+        
+        for(int i=0;i<n;i++){
+            int next = i + arr[i];
+            
+            if(next >=0 && next < n)
+                adj[i].push_back(next); // if node is going outside then it is safe no need to take
+        }
+        
+        int nodesMakingCycle = 0;
+        vector<bool> vis(n,false);
+        memset(pathVis,false,sizeof(pathVis));
+        
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                int cntNodes = 0;
+                if(cycle(adj,vis,i,cntNodes)) nodesMakingCycle += cntNodes;
+            }
+        }
+        
+        return n - nodesMakingCycle;
+    }  
+};
