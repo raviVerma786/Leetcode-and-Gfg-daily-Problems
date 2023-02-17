@@ -1,0 +1,25 @@
+Question Link : https://leetcode.com/problems/minimum-distance-between-bst-nodes/description/
+
+Solution : 
+
+class Solution {
+private:
+//inorder traversal gives sorted order
+   void inorder(TreeNode* root,vector<int>&v){
+       if(!root) return;
+       inorder(root->left,v);
+       v.push_back(root->val);
+       inorder(root->right,v);
+   }
+public:
+    int minDiffInBST(TreeNode* root) {
+        vector<int> v;
+        inorder(root,v);
+        
+        int diff = INT_MAX;
+        for(int i=1;i<v.size();i++){
+            diff = min(diff,v[i] - v[i-1]);
+        }
+        return diff;
+    }
+};
