@@ -1,0 +1,23 @@
+Question Link : https://practice.geeksforgeeks.org/problems/202d95ecdeec659401edc63dd952b1d37b989ab8/1
+
+Solution : 
+
+class Solution {
+  public:
+    long long solve(int N, int K, vector<long long> GeekNum) {
+       if(GeekNum.size() >= N) return GeekNum[N-1];
+       
+       long long ans = accumulate(GeekNum.begin(),GeekNum.end(),0LL);
+       GeekNum.push_back(ans);
+       N--;
+       
+       int j = 0;
+       for(int i=K;i<N;i++){
+           ans = ans + GeekNum[i] - GeekNum[j];
+           j++;
+           
+           GeekNum.push_back(ans);
+       }
+       return ans;
+    }
+};
