@@ -1,0 +1,30 @@
+Question Link : https://leetcode.com/problems/invert-binary-tree/submissions/900093642/
+
+Solution 1 : 
+
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+       if(!root) return NULL;
+       
+       //swapping algorithm
+       TreeNode* node = root->left;
+       root->left = invertTree(root->right);
+       root->right = invertTree(node);
+
+       return root;
+    }
+};
+
+Solution 2 : 
+
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(!root) return NULL;
+        TreeNode* node = new TreeNode(root->val);
+        node->left = invertTree(root->right);
+        node->right = invertTree(root->left);
+        return node;
+    }
+};
