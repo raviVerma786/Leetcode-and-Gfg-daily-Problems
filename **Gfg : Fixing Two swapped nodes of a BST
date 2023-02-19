@@ -1,0 +1,35 @@
+Questin Link : https://practice.geeksforgeeks.org/problems/6c4053871794c5e7a0817d7eaf88d71c4bb4c2bc/1
+
+Solution : 
+
+class Solution {
+  private:
+  //inorder traversal
+  //https://www.youtube.com/watch?v=unq_Kwxhv7w&ab_channel=GeeksforGeeksPractice
+    void helper(Node* root,Node* &prev,Node* &first,Node* &last){
+        if(!root) return;
+        
+        helper(root->left,prev,first,last);
+        
+        if(prev){
+            if(prev->data > root->data){
+                if(!first) first = prev;
+                last = root;
+            }
+        }
+        
+        prev = root;
+        helper(root->right,prev,first,last);
+    }
+  public:
+    struct Node *correctBST(struct Node *root) {
+        Node* prev = NULL,
+        *first = NULL,
+        *last = NULL;
+        
+        helper(root,prev,first,last);
+        swap(first->data,last->data);
+        
+        return root;
+    }
+};
