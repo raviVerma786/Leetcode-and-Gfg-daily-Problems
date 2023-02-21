@@ -1,0 +1,39 @@
+Question Link : 
+
+Solution 1 : O(n) solution =>
+simply xor all element and return the result
+
+Soltution 2 : O(log n) Solution
+
+class Solution {
+private:
+    int ans = -1;
+    bool check(vector<int>&nums,int mid){
+        return nums[mid] != nums[mid-1] && nums[mid] != nums[mid+1];
+    }
+
+    void mergeSort(vector<int>&nums,int low,int high){
+        if(low < high){
+            int mid = (low + high)/2;
+            mergeSort(nums,low,mid);
+            mergeSort(nums,mid+1,high);
+
+            if(check(nums,mid)){
+                ans = nums[mid];
+                return;
+            }
+        }
+    }
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int n = nums.size();
+
+        //Handling edge cases
+        if(n == 1 || nums[0] != nums[1]) return nums[0];
+        if(nums[n-1] != nums[n-2]) return nums[n-1];
+
+        mergeSort(nums,1,n-2);
+        return ans;
+    }
+};
+
