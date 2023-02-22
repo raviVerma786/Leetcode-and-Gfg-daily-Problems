@@ -1,0 +1,34 @@
+Question Link :https://practice.geeksforgeeks.org/problems/95423710beef46bd66f8dbb48c510b2c320dab05/1
+
+Solution : 
+
+class Solution{
+    public:
+    void connect(Node *root)
+    {
+       queue<Node*> q;
+       q.push(root);
+       
+       while(!q.empty()){
+           int n = q.size();
+           
+           Node* last = NULL;
+           
+           //pushing all nodes at next level and at the same time link nextRight
+           while(n--){
+               Node* node = q.front();
+               q.pop();
+               
+               if(node->left) q.push(node->left);
+               if(node->right) q.push(node->right);
+               
+               if(!last) last = node;
+               else{
+                   last->nextRight = node;
+                   last = node;
+               }
+           }
+           
+       }
+    }    
+};
