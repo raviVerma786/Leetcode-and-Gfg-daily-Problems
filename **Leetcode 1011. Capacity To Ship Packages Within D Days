@@ -1,0 +1,39 @@
+Question Link : https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/description/
+
+Solution : 
+
+class Solution {
+public:
+//same as allocate minimum number of pages on gfg (striver)
+    bool isPossible(vector<int>&A,int N,int MaxDays,int maxWeight){
+        int wgt = 0,days = 1;
+        for(int i=0;i<N;i++){
+            if(wgt + A[i] <= maxWeight) wgt += A[i];
+            else{
+                days++;
+                wgt = A[i];
+            }
+            
+            if(A[i] > maxWeight || days > MaxDays) return false;
+        }
+        
+        return true;
+    }
+
+    int shipWithinDays(vector<int>& weights, int days) {
+       int ans = -1;
+       int low = 0,high = accumulate(weights.begin(),weights.end(),0);
+       
+       while(low <= high){
+           int mid = (low + high)/2;
+           
+           if(isPossible(weights,weights.size(),days,mid)){
+               ans = mid;
+               high = mid - 1;
+           }
+           else low = mid + 1;
+       }
+       
+       return ans;
+    }
+};
