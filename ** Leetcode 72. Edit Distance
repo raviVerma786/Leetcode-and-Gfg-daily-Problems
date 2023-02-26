@@ -1,0 +1,36 @@
+Question Link : https://leetcode.com/problems/edit-distance/description/
+
+Solution : 
+
+class Solution {
+public:
+//https://www.youtube.com/watch?v=AuYujVj646Q&ab_channel=TECHDOSE
+    int helper(string &s1,string &s2,int i,int j,vector<vector<int>>&dp){
+        //base cases
+        if(i==-1 && j==-1){
+            //both finished
+            return 0;
+        }
+        else if(i==-1){
+            //s1 is ended
+            return j+1; // elements to change
+        }
+        else if(j==-1){
+            //s2 is ended
+            return i+1;
+        }
+        else if(dp[i][j] != -1) return dp[i][j];
+
+        //operations
+        if(s1[i] == s2[j]) 
+            return dp[i][j] = helper(s1,s2,i-1,j-1,dp);
+
+        // else return 1 + min(insert,delete,replace) // here 1 operation is performed
+        return dp[i][j] = 1 + min(helper(s1,s2,i,j-1,dp),min(helper(s1,s2,i-1,j,dp),helper(s1,s2,i-1,j-1,dp)));
+    }
+    int minDistance(string word1, string word2) {
+        int m=word1.size(),n=word2.size();
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        return helper(word1,word2,m-1,n-1,dp);
+    }
+};
