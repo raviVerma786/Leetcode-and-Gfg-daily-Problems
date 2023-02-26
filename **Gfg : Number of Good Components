@@ -1,0 +1,36 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1a4b617b70f0142a5c2b454e6fbe1b9a69ce7861/1
+
+Solution : 
+
+class Solution {
+  public:
+    void dfs(vector<vector<int>>&adj,vector<bool>&visited,int node,int &vertices,int &edges){
+        visited[node] = true;
+        vertices++;
+        edges += adj[node].size();
+        
+        for(int u : adj[node]){
+            if(!visited[u])
+                dfs(adj,visited,u,vertices,edges);
+        }
+    }
+    
+    int findNumberOfGoodComponent(int V, vector<vector<int>>& adj) {
+        vector<bool>visited(V+1,false);
+        int count=0;
+        
+        for(int i=1;i<=V;i++){
+            if(!visited[i]){
+                int vertices = 0 , edges = 0;
+                dfs(adj,visited,i,vertices,edges);
+                
+                edges = edges /2; // because each edge is counted 2 times
+                
+                //condition for connected component
+                if(edges == (vertices * (vertices - 1))/2) count++;
+            }
+        }
+        
+        return count;
+    }
+};
