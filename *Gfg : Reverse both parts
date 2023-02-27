@@ -1,0 +1,36 @@
+Question Link : https://practice.geeksforgeeks.org/problems/bae68b4d6a2a77fb6bd459cf7447240919ebfbf5/1
+
+Solution : 
+
+class Solution
+{
+public:
+    Node* helper(Node* head){
+        Node* prev = NULL,*curr=head;
+        while(curr){
+            Node* temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        
+        return prev;
+    }
+    
+    Node *reverse(Node *head, int k)
+    {
+        Node* h1 = head,*h2 = head;
+        Node* breakPoint = head;
+        while(k--){
+            breakPoint = h2;
+            h2 = h2->next;
+        }
+        breakPoint->next = NULL;
+        
+        Node* newHead1 = helper(h1);
+        Node* newHead2 = helper(h2);
+        
+        h1->next = newHead2;
+        return newHead1;
+    }
+};
