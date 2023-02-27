@@ -34,3 +34,30 @@ public:
         return newHead1;
     }
 };
+
+
+Solution 2 : 
+
+class Solution
+{
+public:
+    Node *reverse(Node *head, int k)
+    {
+        Node* prev = NULL,*curr=head;
+        
+        while(curr && k--){
+            Node* temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+            
+        }
+        
+        if(!curr) return prev;
+        
+        head->next = reverse(curr,INT_MAX);
+        
+        return prev;
+    }
+};
+
