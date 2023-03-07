@@ -1,0 +1,32 @@
+Question Link : https://leetcode.com/problems/minimum-time-to-complete-trips/description/
+
+Solution : 
+
+class Solution {
+public:
+    long long numberOfTrips(long long t,vector<int>&time,int totalTrips){
+        long long cnt = 0;
+        for(int i : time){
+            cnt += (t/i); // adding number of trips by bus in t time
+
+            if(cnt >= totalTrips) return cnt; //to avoid long long overflow
+        }
+        
+        return cnt;
+    }
+    long long minimumTime(vector<int>& time, int totalTrips) {
+        long long ans = -1;
+        long long low = 0,high = 1e18;
+
+        while(low <= high){
+            long long mid = (low + high)/2;
+            if(numberOfTrips(mid,time,totalTrips) >= totalTrips){
+                ans = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
+        }
+
+        return ans;
+    }
+};
