@@ -15,3 +15,30 @@ public:
        return head;
     }
 };
+
+Solution 2 : O(1) space
+
+class Solution {
+    // https://www.youtube.com/watch?v=owc1yVJOklw&ab_channel=CodeFreaks
+public:
+    ListNode *detectCycle(ListNode *head) {
+       ListNode* fast = head,*slow = head;
+
+       while(fast && fast->next){
+           fast = fast->next->next;
+           slow = slow->next;
+           if(slow == fast) break;
+       }
+
+       if(!fast || !fast->next) return NULL;
+       
+       //meeting point of slow and fast is mid point of the cycle
+       fast = head;
+       while(fast != slow){
+           fast = fast->next;
+           slow = slow->next;
+       }
+
+       return fast;
+    }
+};
