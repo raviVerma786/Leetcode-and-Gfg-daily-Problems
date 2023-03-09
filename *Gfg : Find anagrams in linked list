@@ -1,0 +1,48 @@
+Question Link : https://practice.geeksforgeeks.org/problems/de6f6a196aecdfb3e4939ba7729809a5a4bdfe90/1
+
+Solution : 
+
+class Solution {
+  public:
+    vector<Node*> findAnagrams(struct Node* head, string s) {
+        vector<int> v(26,0);
+        for(char ch : s) v[ch - 'a']++;
+        
+        vector<Node*> ans;
+        Node* node = head;
+        
+        int len = 0;
+        vector<int> temp(26,0);
+        
+        while(head){
+            if(len < s.size()){
+                temp[head->data - 'a']++;
+                len++;
+            }
+            
+            if(len == s.size()){
+                if(v == temp){
+                    ans.push_back(node);
+                    node = head->next;
+                    head->next = NULL;
+                    head = node;
+                    
+                    for(int &i : temp) i = 0; // making all elements of temp array 0
+                    
+                    len = 0;
+                }
+                else{
+                    temp[node->data - 'a']--;
+                    node = node->next;
+                    head = head->next;
+                    len--;
+                }
+            }
+            else{
+                head = head->next;
+            }
+        }
+        
+        return ans;
+    }
+};
