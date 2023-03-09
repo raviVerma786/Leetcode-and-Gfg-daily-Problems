@@ -1,0 +1,17 @@
+Question Link :https://leetcode.com/problems/linked-list-cycle-ii/description/
+
+Solution :
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+       unordered_set<ListNode*> st;
+       while(head){
+           if(st.count(head)) return head;
+           st.insert(head);
+           head = head->next;
+       }
+
+       return head;
+    }
+};
