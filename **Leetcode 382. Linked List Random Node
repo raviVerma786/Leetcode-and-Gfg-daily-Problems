@@ -1,0 +1,48 @@
+Question Link : https://leetcode.com/problems/linked-list-random-node/description/
+
+Solution : O(n) space complexity
+
+class Solution {
+private:
+    vector<int> nodes;
+public:
+    Solution(ListNode* head) {
+        ListNode* temp = head;
+        while(temp){
+            nodes.push_back(temp->val);
+            temp = temp->next;
+        }
+    }
+    
+    int getRandom() {
+        return nodes[rand() % nodes.size()];
+    }
+};
+
+Solution : O(1) space complexity
+
+class Solution {
+private:
+    ListNode* node;
+    int len=0;
+public:
+    Solution(ListNode* head) {
+        node = head;
+        ListNode* temp = head;
+        while(temp){
+            len++;
+            temp = temp->next;
+        }
+    }
+    
+    int getRandom() {
+        int index = rand() % len;
+
+        ListNode* temp = node;
+        for(int i=0;i<index;i++){
+            temp = temp->next;
+        }
+
+        return temp->val;
+    }
+};
