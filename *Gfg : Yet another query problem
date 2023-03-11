@@ -1,0 +1,38 @@
+Question Link : https://practice.geeksforgeeks.org/problems/ad6699d4aaf84c74b119fac3b65e9ceb3fc8ef14/1
+
+Solution : 
+
+class Solution {
+  public:
+    vector<int> solveQueries(int N, int num, vector<int> &A, vector<vector<int>> &Q) {
+        //to store frequency
+        vector<vector<int>> freq(N,vector<int>(N,0)); //freq[i][j]=>freq of arr[i] from j to N-1
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                if(j==0){
+                    if(A[j]==A[i]) freq[i][j]++;
+                }
+                else{
+                    if(A[j] == A[i]) freq[i][j] = freq[i][j-1] + 1;
+                    else freq[i][j] = freq[i][j-1];
+                }
+            }
+        }
+        
+        vector<int> ans(num,0);
+        int idx = 0;
+        for(vector<int> &query : Q){
+            int l = query[0] , r = query[1] , k  = query[2];
+            for(int i=l;i<=r;i++){
+                int cnt = freq[i][N-1];
+                if(i > 0) cnt -= freq[i][i-1];
+                
+                if(cnt == k) ans[idx]++;
+            }
+            
+            idx++;
+        }
+        
+        return ans;
+    }
+};
