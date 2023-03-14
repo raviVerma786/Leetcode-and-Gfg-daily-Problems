@@ -1,0 +1,46 @@
+Question Link :https://practice.geeksforgeeks.org/problems/899540d741547e2d75d1c5c03a4161ab53affd13/1
+
+Solution : 
+
+    // https://www.youtube.com/watch?v=4w97NOW6WFo&ab_channel=CODEKARLO
+    private:
+    bool isPossible(int n,int k,int w,vector<int> a,int mid){
+        for(int i=0;i<n;i++){
+            if(a[i] < mid){
+                int daysRequired = mid - a[i];
+                if(daysRequired > k) return false;
+                else{
+                    for(int j=i;j<min(n,i+w);j++){
+                        a[j] += daysRequired;
+                    }
+                    
+                    k -= daysRequired;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    public:
+    long long  maximizeMinHeight(int n, int k, int w, vector <int> &a) {
+        //defining range of possible answers
+    	int low = *min_element(a.begin(),a.end());//can't be less than the minimum element
+    	int high = low + k; // maximum possible answer
+    	
+    	//now calculation i.e. checking for possible answers using binary search(video for that)
+    	long long ans = low;
+    	while(low <= high){
+    	    int mid = low + (high - low)/2;
+    	    if(isPossible(n,k,w,a,mid)){
+    	        ans = mid;
+    	        low = mid + 1;
+    	    }
+    	    else{
+    	        high = mid - 1;
+    	    }
+    	}
+    	
+    	return ans;
+    }
+};
