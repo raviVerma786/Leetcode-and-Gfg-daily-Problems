@@ -1,0 +1,59 @@
+Question Link : https://leetcode.com/problems/partition-array-for-maximum-sum/description/
+
+Recursive Solution : 
+
+class Solution {
+// https://www.youtube.com/watch?v=PhWWJmaKfMc&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=55&ab_channel=takeUforward
+private:
+    int helper(vector<int>&arr,int idx,int k,vector<int>&dp){
+        if(idx == arr.size()) return 0;
+        if(dp[idx] != -1) return dp[idx];
+
+        int n = arr.size();
+        int len = 0,maxEle = INT_MIN,maxSum = INT_MIN;
+
+        for(int i=idx;i<min(idx+k,n);i++){
+            len++;
+            maxEle = max(maxEle,arr[i]);
+            int sum = (len * maxEle) + helper(arr,i+1,k,dp);
+
+            maxSum = max(maxSum,sum);
+        }
+
+        return dp[idx] = maxSum;
+    }
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<int> dp(n,-1);
+        return helper(arr,0,k,dp);
+    }
+};
+
+
+Iterative Solution : 
+
+class Solution {
+// https://www.youtube.com/watch?v=PhWWJmaKfMc&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=55&ab_channel=takeUforward
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n = arr.size();
+        
+        vector<int> dp(n+1,0);
+        for(int idx=n-1;idx>=0;idx--){
+            int len = 0,maxEle = INT_MIN,maxSum = INT_MIN;
+
+            for(int i=idx;i<min(idx+k,n);i++){
+                len++;
+                maxEle = max(maxEle,arr[i]);
+                int sum = (len * maxEle) + dp[i+1];
+
+                maxSum = max(maxSum,sum);
+            }
+
+            dp[idx] = maxSum;
+        }
+
+        return dp[0];
+    }
+};
