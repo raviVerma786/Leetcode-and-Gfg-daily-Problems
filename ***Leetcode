@@ -1,0 +1,63 @@
+Question Link :
+
+Solution : (Iterative Solution)
+
+class Solution {
+// https://www.youtube.com/watch?v=xwomavsC86c&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=51&ab_channel=takeUforward
+public:
+
+    int minCost(int n, vector<int>& cuts) {
+        sort(cuts.begin(),cuts.end());
+
+        int sz = cuts.size();
+        cuts.insert(cuts.begin(),0);
+        cuts.push_back(n);
+        
+        vector<vector<int>> dp(sz+2,vector<int>(sz+2,0));
+        for(int i=sz;i>=1;i--){
+            for(int j=1;j<=sz;j++){
+                if(i > j) continue;
+                int mini = INT_MAX;
+                for(int k=i;k<=j;k++){
+                    int cost = (cuts[j+1] - cuts[i-1]) + dp[i][k-1] + dp[k+1][j];
+                    mini = min(mini, cost);
+                }
+                dp[i][j] = mini;
+
+            }
+        }
+
+        return dp[1][sz];
+    }
+};
+
+Solution 2 : (Recursive Solution)
+
+class Solution {
+// https://www.youtube.com/watch?v=xwomavsC86c&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=51&ab_channel=takeUforward
+public:
+
+    int helper(vector<int>&cuts,int i,int j,vector<vector<int>>&dp){
+        if(i>j) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int mini = INT_MAX;
+        for(int k=i;k<=j;k++){
+            int cost = (cuts[j+1] - cuts[i-1]) + helper(cuts,i,k-1,dp) + helper(cuts,k+1,j,dp);
+            mini = min(mini, cost);
+        }
+
+        return dp[i][j] = mini;
+    }
+    int minCost(int n, vector<int>& cuts) {
+        sort(cuts.begin(),cuts.end());
+
+        int sz = cuts.size();
+        cuts.insert(cuts.begin(),0);
+        cuts.push_back(n);
+
+        vector<vector<int>> dp(sz+1,vector<int>(sz+1,-1));
+        return helper(cuts,1,sz,dp);
+
+    }
+};
