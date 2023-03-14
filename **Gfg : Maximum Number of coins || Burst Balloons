@@ -1,0 +1,31 @@
+Question Link : https://practice.geeksforgeeks.org/problems/7ae455e552dc4e07f76bbe2adc4d4207ce1ff16e/1
+
+Solution : 
+
+class Solution{
+    // https://www.youtube.com/watch?v=Yz4LlDSlkns&ab_channel=takeUforward
+    //exactly burst balloon problem
+    private:
+      int helper(vector<int>&a,vector<vector<int>>&dp,int i,int j){
+          if(i>j) return 0;
+          if(dp[i][j] != -1) return dp[i][j];
+          
+          int maxCost = INT_MIN;
+          for(int k=i;k<=j;k++){
+              int cost = a[i-1]*a[k]*a[j+1] + helper(a,dp,i,k-1) + helper(a,dp,k+1,j);
+              maxCost = max(maxCost,cost);
+          }
+          
+          return dp[i][j] = maxCost;
+          
+      }
+    public:
+        int maxCoins(int N, vector <int> &a)
+        {
+            a.insert(a.begin(),1);
+            a.push_back(1);
+            vector<vector<int>> dp(N+1,vector<int>(N+1,-1));
+            
+            return helper(a,dp,1,N);
+        }
+};
