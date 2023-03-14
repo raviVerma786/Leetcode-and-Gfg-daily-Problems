@@ -1,0 +1,40 @@
+Question Link : https://leetcode.com/problems/sum-root-to-leaf-numbers/description/
+
+Solution : 
+
+class Solution {
+private:
+    int ans = 0;
+    void helper(TreeNode* root,vector<int>&digits){
+        if(!root) return;
+        if((!root->left && !root->right)){
+            //means this is leaf node
+
+            digits.push_back(root->val);
+
+            int num = 0;
+            //maximum size of digits array can be 10 i.e. depth of the tree
+            for(int i=0;i<digits.size();i++){
+                num = (num * 10 )+ digits[i];
+            }
+
+            ans += num;
+
+            digits.pop_back();
+            return;
+        }
+
+        digits.push_back(root->val);
+
+        helper(root->left,digits);
+        helper(root->right,digits);
+
+        digits.pop_back();
+    }
+public:
+    int sumNumbers(TreeNode* root) {
+        vector<int> digits;
+        helper(root,digits);
+        return ans;
+    }
+};
