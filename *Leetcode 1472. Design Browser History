@@ -1,0 +1,55 @@
+Question Link : https://leetcode.com/problems/design-browser-history/description/
+
+Solution : 
+
+class Node{
+    //creating doubly linked list
+    public:
+        string url;
+        Node* next;
+        Node* back;
+
+        Node(string s){
+            url = s;
+            next = NULL;
+            back = NULL;
+        }
+};
+
+class BrowserHistory {
+private:
+    Node* head,*tail,*curr;
+public:
+    BrowserHistory(string homepage) {
+        head = new Node(homepage);
+        tail = head;
+        curr = head;
+    }
+    
+    void visit(string url) {
+        Node *newNode = new Node(url);
+        curr->next = newNode;
+        newNode->back = curr;
+
+        curr = curr->next;
+        tail = curr;
+    }
+    
+    string back(int steps) {
+        while(steps--){
+            if(curr == head) return head->url;
+            curr = curr->back;
+        }
+
+        return curr->url;
+    }
+    
+    string forward(int steps) {
+        while(steps--){
+            if(curr == tail) return tail->url;
+            curr = curr->next;
+        }
+
+        return curr->url;
+    }
+};
