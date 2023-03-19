@@ -1,0 +1,72 @@
+Question Link : https://leetcode.com/problems/design-add-and-search-words-data-structure/description/
+
+Solution :
+
+class Node{
+public:
+    Node* link[26];
+    bool flag;
+
+    bool containsKey(char ch){
+        return link[ch-'a'];
+    }
+    
+    void createTrie(char ch,Node* node){
+        link[ch - 'a'] = node;
+    }
+    
+    Node* getNext(char ch){
+        return link[ch - 'a'];
+    }
+
+    void setEnd(){
+        flag = true;
+    }
+
+    bool isEnd(){
+        return flag;
+    }
+
+};
+class WordDictionary {
+private:
+     Node* root;
+public:
+    WordDictionary() {
+        root = new Node();
+    }
+    
+    void addWord(string word) {
+       Node* node = root;
+        for(int i=0;i<word.size();i++){
+            if(!node->containsKey(word[i])){
+               node->createTrie(word[i],new Node());
+            }
+            //Move to the reference trie
+           node = node->getNext(word[i]);
+        }
+
+        node->setEnd();
+    }
+    
+    bool search(string word) {
+        return searchHelper(word,root);
+    }
+
+    bool searchHelper(string word,Node* node){
+         for(int i=0;i<word.size();i++){
+              if(word[i] == '.'){
+                   for(Node* child : node->link){
+                        if(child && searchHelper(word.substr(i+1),child)) return true;
+                   }
+                   return false;
+              }
+              else{
+                   if(!node->containsKey(word[i])) return false;
+                   node = node->getNext(word[i]);
+              }
+         }
+
+         return node->isEnd();
+    }
+};
