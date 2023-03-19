@@ -70,3 +70,75 @@ public:
          return node->isEnd();
     }
 };
+
+
+Solution 2 : (Best Solution)
+
+class Node{
+public:
+    Node* link[26];
+    bool flag;
+
+    bool containsKey(char ch){
+        return link[ch-'a'];
+    }
+    
+    void createTrie(char ch,Node* node){
+        link[ch - 'a'] = node;
+    }
+    
+    Node* getNext(char ch){
+        return link[ch - 'a'];
+    }
+
+    void setEnd(){
+        flag = true;
+    }
+
+    bool isEnd(){
+        return flag;
+    }
+
+};
+class WordDictionary {
+private:
+     Node* root;
+public:
+    WordDictionary() {
+        root = new Node();
+    }
+    
+    void addWord(string word) {
+       Node* node = root;
+        for(int i=0;i<word.size();i++){
+            if(!node->containsKey(word[i])){
+               node->createTrie(word[i],new Node());
+            }
+            //Move to the reference trie
+           node = node->getNext(word[i]);
+        }
+
+        node->setEnd();
+    }
+    
+    bool search(string word) {
+        Node* node = root;
+        return searchHelper(word,0,node);
+    }
+
+    bool searchHelper(string &word,int index,Node* node){
+          if(index == word.size()) return node->isEnd();
+
+          if(word[index] == '.'){
+               for(int i=0;i<26;i++){
+                    if(node->link[i] && searchHelper(word,index+1,node->link[i]))
+                         return true;
+               }
+          }
+          else{
+               if(node->containsKey(word[index]) && searchHelper(word,index+1,node->getNext(word[index]))) return true;
+          }
+
+         return false;
+    }
+};
