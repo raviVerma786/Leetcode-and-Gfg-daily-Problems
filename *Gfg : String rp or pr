@@ -68,3 +68,68 @@ public:
       return removeRP(Y,S) + removePR(X,S);
     }
 };
+
+
+Solution 2 : 
+
+class Solution{   
+public:
+    long long removePR(int X,string &S){
+        stack<char>st;
+        for(char ch : S){
+            st.push(ch);
+        }
+        
+        S = "";
+        long long ans = 0;
+        while(!st.empty()){
+            char ch = st.top();
+            st.pop();
+            
+            if(ch == 'r' && !st.empty() && st.top() == 'p') {
+                ans += X;
+                st.pop();
+            }
+            else if(ch == 'p' && S.back()=='r'){
+                ans += X;
+                S.pop_back();
+            }
+            else S.push_back(ch);
+        }
+        
+        reverse(S.begin(),S.end());
+        return ans;
+    }
+    long long removeRP(int Y,string &S){
+        stack<char>st;
+        for(char ch : S){
+            st.push(ch);
+        }
+        
+        S = "";
+        long long ans = 0;
+        while(!st.empty()){
+            char ch = st.top();
+            st.pop();
+            
+            if(ch == 'p' && !st.empty() && st.top() == 'r') {
+                ans+=Y;
+                st.pop();
+            }
+            else if(ch == 'r' && S.back() == 'p') {
+                ans+=Y;
+                S.pop_back();
+            }
+            else S.push_back(ch);
+        }
+        
+        reverse(S.begin(),S.end());
+        return ans;
+    }
+    
+    long long solve(int X,int Y,string S){
+      if(X > Y) return removePR(X,S) + removeRP(Y,S);
+      
+      return removeRP(Y,S) + removePR(X,S);
+    }
+};
