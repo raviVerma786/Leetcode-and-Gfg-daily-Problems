@@ -1,0 +1,70 @@
+Question Link : 
+
+Solution : 
+
+class Solution{   
+public:
+    long long removePR(int X,string &S){
+        stack<char>left,right;
+        for(char ch : S){
+            left.push(ch);
+        }
+    
+        long long ans = 0;
+        while(!left.empty()){
+            char ch = left.top();
+            left.pop();
+            
+            if(ch == 'r' && !left.empty() && left.top() == 'p') {
+                ans += X;
+                left.pop();
+            }
+            else if(ch == 'p' && !right.empty() && right.top() == 'r') {
+                ans += X;
+                right.pop();
+            }
+            else right.push(ch);
+        }
+        S = "";
+        while(!right.empty()){
+            S.push_back(right.top());
+            right.pop();
+        }
+        return ans;
+    }
+    long long removeRP(int Y,string &S){
+        stack<char>left,right;
+        for(char ch : S){
+            left.push(ch);
+        }
+        
+        long long ans = 0;
+        while(!left.empty()){
+            char ch = left.top();
+            left.pop();
+            
+            if(ch == 'p' && !left.empty() && left.top() == 'r') {
+                ans+=Y;
+                left.pop();
+            }
+            else if(ch == 'r' && !right.empty() && right.top() == 'p') {
+                ans+=Y;
+                right.pop();
+            }
+            else right.push(ch);
+        }
+        
+        S = "";
+        while(!right.empty()){
+            S.push_back(right.top());
+            right.pop();
+        }
+        return ans;
+    }
+    
+    long long solve(int X,int Y,string S){
+      if(X > Y) return removePR(X,S) + removeRP(Y,S);
+      
+      return removeRP(Y,S) + removePR(X,S);
+    }
+};
