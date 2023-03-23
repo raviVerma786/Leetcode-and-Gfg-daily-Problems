@@ -1,0 +1,38 @@
+Question Link : https://leetcode.com/problems/number-of-operations-to-make-network-connected/description/
+
+Solution : 
+
+class Solution {
+//indirectly this ques is number of connected components of graph
+public:
+    void dfs(vector<int>adj[],vector<bool>&vis,int node){
+        vis[node] = true;
+        for(int child : adj[node]){
+            if(!vis[child]){
+                dfs(adj,vis,child);
+            }
+        }
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        int edges = connections.size();
+        int requiredEdges = n-1; //minimum edges required to connect n nodes
+        if(requiredEdges > edges) return -1;
+        
+        //else we have to return number of connected components
+        vector<int> adj[n];
+        for(vector<int>&v : connections){
+            adj[v[0]].push_back(v[1]);
+            adj[v[1]].push_back(v[0]);
+        }
+        int cnt = 0;
+        vector<bool> vis(n,false);
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                cnt++;
+                dfs(adj,vis,i);
+            }
+        }
+
+        return cnt-1; // if x components then x-1 edges required to connect them
+    }
+};
