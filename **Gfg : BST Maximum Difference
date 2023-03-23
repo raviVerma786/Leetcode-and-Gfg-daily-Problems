@@ -1,0 +1,44 @@
+Question Link : https://practice.geeksforgeeks.org/problems/e841e10213ddf839d51c2909f1808632a19ae0bf/1
+
+Solution : 
+
+class Solution{
+private:
+    int beforeTargetSum = 0,afterTargetSum = 0; // both are inclusive to the target so no effect on answer
+    Node* search(Node* root,int target){
+        if(!root) return NULL;
+        beforeTargetSum += root->data;
+        
+        if(root->data == target) return root;
+        
+        if(root->data > target)
+            return search(root->left,target);
+        
+        return search(root->right,target);
+    }
+    
+    int sum(Node* node){
+        if(!node->left && !node->right){
+           return node->data;
+        }
+       
+       int ans = INT_MAX;
+       if(node->left){
+           ans = min(ans,node->data + sum(node->left));
+       }
+       if(node->right){
+           ans = min(ans,node->data + sum(node->right));
+       }
+       
+       return ans;
+    }
+public:
+    int maxDifferenceBST(Node *root,int target){
+        Node* targetNode = search(root,target);
+        if(!targetNode) return -1;
+        
+        afterTargetSum = sum(targetNode);
+        return beforeTargetSum - afterTargetSum;
+        
+    }
+};
