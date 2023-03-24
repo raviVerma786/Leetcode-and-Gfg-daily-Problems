@@ -1,0 +1,49 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1e2f365be6114b671b915e145ec7dbcfdc432910/1
+
+Solution : 
+
+class Solution {
+  public:
+    string removeReverse(string S) {
+       vector<int> v(26,0);
+       for(char ch : S){
+           v[ch - 'a']++;
+       }
+       string left = "",right="";
+       int i=0,j=S.size()-1 , cntRotations = 0;;
+       
+       bool startFromLeft = true;
+       while(i<=j){
+           if(startFromLeft){
+               if(v[S[i] - 'a'] > 1){
+                   v[S[i] - 'a']--;
+                   i++;
+                   startFromLeft = false;
+                   cntRotations++;
+               }else{
+                   left.push_back(S[i]);
+                   i++;
+               }
+           }
+           else{
+               if(v[S[j] - 'a'] > 1){
+                   v[S[j] - 'a']--;
+                   j--;
+                   startFromLeft = true;
+                   cntRotations++;
+               }
+               else{
+                   right.push_back(S[j]);
+                   j--;
+               }
+           }
+           
+       }
+       
+       reverse(right.begin(),right.end());
+       S = left + right;
+       if(cntRotations%2) reverse(S.begin(),S.end());
+       
+       return S;
+    }
+};
