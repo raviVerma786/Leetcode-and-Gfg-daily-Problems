@@ -1,0 +1,38 @@
+Question link : https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/description/
+
+Solution : 
+
+class Solution {
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        set<pair<int,int>> path;
+        for(vector<int>& v : connections) path.insert({v[0],v[1]});
+
+        vector<int> adj[n];
+        for(vector<int>&v : connections){
+            adj[v[0]].push_back(v[1]);
+            adj[v[1]].push_back(v[0]);
+        }
+
+        vector<bool> vis(n,false);
+        queue<int> q;
+        q.push(0);
+        vis[0] = true;
+
+        int cnt = 0;
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+
+            for(int child : adj[node]){
+                if(!vis[child]){
+                    q.push(child);
+                    vis[child] = true;
+                    if(path.count({node,child})) cnt++;
+                }
+            }
+        }
+
+        return cnt;
+    }
+};
