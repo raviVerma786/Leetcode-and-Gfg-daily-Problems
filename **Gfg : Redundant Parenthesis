@@ -1,0 +1,78 @@
+Question Link : https://practice.geeksforgeeks.org/problems/ef5111156686a3136c6a0df8bbda17f952947e17/1
+
+Solution : 
+
+class Solution{ 
+private:
+    bool isOperatorPresent(string &s){
+        for(char ch : s){
+            if(ch == '+' || ch=='-' || ch=='*' || ch=='/') return true;
+        }
+        return false;
+    }
+public:
+    string removeBrackets(string Exp){    
+        stack<string> st;
+
+        string temp = "";
+        for(char ch : Exp){
+            if(ch == '('){
+                if(temp.size() > 0) st.push(temp);
+                st.push("(");
+                
+                temp = "";
+            }
+            else if(ch == ')'){
+                if(temp.size() > 0) st.push(temp);
+                st.push(")");
+                
+                temp = "";
+            }
+            else{
+                temp.push_back(ch);
+            }
+        }
+        
+        stack<string> helper;
+        while(!st.empty()){
+            string s = st.top();
+            st.pop();
+            
+            if(!st.empty() && st.top()=="(" && !helper.empty() && helper.top()==")" &&
+            !isOperatorPresent(s)){
+                st.pop();
+                helper.pop();
+                
+                helper.push(s);
+            }
+            else{
+                helper.push(s);
+            }
+        }
+        
+        string ans = "";
+        int cnt = 0,inside = 0;
+        while(!helper.empty()){
+            string s = helper.top();
+            helper.pop();
+            
+            if(cnt > 0 && s == "(") inside++;
+            if(s == "(" && (ans.size() ==0 || ans.back() == '+' || ans.back()=='-') ){
+                cnt++;
+            }
+            else if(s==")"){
+                if(cnt > 0 && cnt == inside){
+                    ans += s;
+                    inside--;
+                }
+                else{
+                    cnt--;
+                    inside--;
+                }
+            }
+            else ans += s;
+        }
+        
+        return ans;
+    }
+};
