@@ -1,0 +1,39 @@
+Question Link : https://leetcode.com/problems/longest-cycle-in-a-graph/description/
+
+Solution :
+
+class Solution {
+    // https://www.youtube.com/watch?v=vc_kz2M-jw4&ab_channel=CodewithAlisha
+private:
+    int ans = -1;
+    void dfs(vector<int>&edges,vector<int>&dist,vector<bool>&vis,vector<bool>&extra,int node,int distance){
+        if(node != -1){
+            if(!vis[node]){
+                vis[node] = true;
+                extra[node] = true;
+                dist[node] = distance;
+                dfs(edges,dist,vis,extra,edges[node],distance + 1);
+                extra[node] = false;
+            }
+            else if(extra[node]){
+                //means already visited ,cycle present
+                ans = max(ans,distance - dist[node]);
+            }
+        }
+    }
+public:
+    int longestCycle(vector<int>& edges) {
+        int n = edges.size();
+        vector<int>dist(n,0);
+        vector<bool>vis(n,false);
+        vector<bool>extra(n,false);
+        
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                dfs(edges,dist,vis,extra,i,0);
+            }
+        }
+
+        return ans;
+    }
+};
