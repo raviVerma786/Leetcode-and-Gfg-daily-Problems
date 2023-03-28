@@ -1,0 +1,37 @@
+Question Link : https://practice.geeksforgeeks.org/problems/59dfb26eb6c659e6e5f60869ac335f450f97165a/1
+
+Solution : 
+
+class Solution{
+    
+    Shop shop;
+    public:
+    
+    Solution(Shop s)
+    {
+        this->shop = s;
+    }
+    long long find(int n, long k){
+        if(k <= 0) return 0;
+        
+        int low = 0,high = n-1;
+        long long price = INT_MAX;
+        
+        while(low <= high){
+            int mid = (low + high)/2;
+            int currPrice = shop.get(mid);
+            
+            if(currPrice > k) high = mid - 1;
+            else{
+                price = currPrice;
+                low = mid + 1;
+            }
+        }
+        
+        if(price == INT_MAX) return 0;
+        
+        long long cnt = k/price;
+        return cnt + find(high,k - price*cnt);
+    }
+
+};
