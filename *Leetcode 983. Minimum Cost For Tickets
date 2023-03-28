@@ -1,0 +1,29 @@
+Question Link :https://leetcode.com/problems/minimum-cost-for-tickets/submissions/923421216/
+
+Solution :
+
+class Solution {
+private:
+    int helper(vector<int>& days, vector<int>& costs,int i,int dayLimit,vector<vector<int>>&dp){
+        if(i == days.size()) return 0;
+        if(dp[i][dayLimit] != -1) return dp[i][dayLimit];
+
+        int totalCost = INT_MAX;
+        if(days[i] >= dayLimit){
+            totalCost = min(totalCost,min(costs[0] + helper(days,costs,i+1,days[i] + 1,dp),
+            min(costs[1] + helper(days,costs,i+1,days[i] + 7,dp),
+            costs[2] + helper(days,costs,i+1,days[i] + 30,dp))));
+        }
+        else{
+            totalCost = min(totalCost,helper(days,costs,i+1,dayLimit,dp));
+        }
+
+        return dp[i][dayLimit] = totalCost;
+    }
+public:
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        int n = days.size();
+        vector<vector<int>> dp(n+1,vector<int>(400,-1));
+        return helper(days,costs,0,0,dp);
+    }
+};
