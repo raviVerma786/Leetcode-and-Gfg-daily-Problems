@@ -1,0 +1,24 @@
+Question Link : https://leetcode.com/problems/reducing-dishes/submissions/924003800/
+
+Solution : 
+
+class Solution {
+private:
+    int helper(vector<int>& v,int i,int t,vector<vector<int>>&dp){
+        if(i == v.size()) return 0;
+        if(dp[i][t] != -1) return dp[i][t];
+
+        int take = v[i]*t + helper(v,i+1,t+1,dp);
+        int notTake = helper(v,i+1,t,dp);
+
+        return dp[i][t] = max(take,notTake);
+    }
+public:
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(),satisfaction.end());
+        
+        int n = satisfaction.size();
+        vector<vector<int>> dp(n,vector<int>(n+3,-1));
+        return helper(satisfaction,0,1,dp);
+    }
+};
