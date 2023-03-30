@@ -1,0 +1,20 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1ccf56f107bcb24242469ea45c02f852165a2184/1
+
+Solution : 
+
+class Solution {
+  public:
+    int minimumInteger(int N, vector<int> &A) {
+        long long sum = accumulate(A.begin(),A.end(),0LL);
+        long long ans = 1e15;
+        
+        for(int i : A){
+            long long num = i*1LL*N;
+            if(num >= sum){
+                ans = min(ans,i*1LL);
+            }
+        }
+        
+        return ans;
+    }
+};
