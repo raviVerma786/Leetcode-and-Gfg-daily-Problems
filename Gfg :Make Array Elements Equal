@@ -1,0 +1,24 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1f05c7c12b1084f270c57566b2110967c046730d/1
+
+Solution : 
+
+class Solution {
+  public:
+    long long int minOperations(int N) {
+        long long median = 2*(N/2) + 1;
+        if(N%2 == 0){
+            median++;
+        }
+        
+        long long totalSum = (N*1LL*N);
+        long long leftEle = N/2;
+        long long rightEle = N - N/2;
+        long long leftSum = (leftEle * 1LL * leftEle);
+        long long rightSum = (totalSum - leftSum);
+        
+        // cout<<leftSum<<" "<<rightSum<<" ";
+        long long ans = (median*leftEle - leftSum) + (rightSum - median*rightEle);
+        return ans/2;
+        
+    }
+};
