@@ -1,0 +1,22 @@
+Question Link : https://leetcode.com/problems/optimal-partition-of-string/description/
+
+Solution :
+
+class Solution {
+public:
+    int partitionString(string s) {
+        unordered_set<char> st;
+        int partition = 0;
+        for(char ch : s){
+            if(st.count(ch)){
+                partition++;
+                st.clear();
+                st.insert(ch);
+            }
+            else{
+                st.insert(ch);
+            }
+        }
+        return partition + 1;
+    }
+};
