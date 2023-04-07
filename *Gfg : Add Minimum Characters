@@ -1,0 +1,27 @@
+Question Link ; https://practice.geeksforgeeks.org/problems/55dbfdc246f3f62d6a7bcee7664cacf6be345527/1
+
+Solution : 
+
+class Solution{   
+public:
+    int addMinChar(string str){    
+        int i=0,n=str.size();
+        int j = n-1,ans = 0;
+        
+        while(i<j){
+            if(str[i] != str[j]){
+                ans++;
+                i=0;
+                j= n-ans -1;
+            }
+            else{
+                i++;
+                j--;
+            }
+        }
+        
+        if(ans == n) ans--;
+        
+        return ans;
+    }
+};
