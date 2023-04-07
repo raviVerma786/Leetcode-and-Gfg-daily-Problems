@@ -1,0 +1,49 @@
+Question Link : https://leetcode.com/problems/number-of-enclaves/description/
+
+Solution : 
+
+class Solution {
+private:
+    bool isValid(int i,int j,int m,int n){
+        return i<m && i>=0 && j<n && j>=0;
+    }
+    void dfs(vector<vector<int>>&grid,int i,int j,vector<vector<bool>>&vis){
+        vis[i][j] = true;
+
+        if(isValid(i+1,j,grid.size(),grid[0].size()) && !vis[i+1][j] && grid[i+1][j]==1) 
+            dfs(grid,i+1,j,vis);
+
+        if(isValid(i-1,j,grid.size(),grid[0].size()) && !vis[i-1][j] && grid[i-1][j]==1) 
+            dfs(grid,i-1,j,vis);
+
+        if(isValid(i,j+1,grid.size(),grid[0].size()) && !vis[i][j+1] && grid[i][j+1]==1) 
+            dfs(grid,i,j+1,vis);
+
+        if(isValid(i,j-1,grid.size(),grid[0].size()) && !vis[i][j-1] && grid[i][j-1]==1) 
+            dfs(grid,i,j-1,vis);
+    }
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int m = grid.size(),n=grid[0].size();
+        vector<vector<bool>> vis(m,vector<bool>(n,false));
+
+        for(int i=0;i<m;i++){
+            if(grid[i][0]==1 && !vis[i][0]) dfs(grid,i,0,vis);
+            if(grid[i][n-1]==1 && !vis[i][n-1]) dfs(grid,i,n-1,vis);
+        }
+
+        for(int i=0;i<n;i++){
+            if(grid[0][i]==1 && !vis[0][i]) dfs(grid,0,i,vis);
+            if(grid[m-1][i]==1 && !vis[m-1][i]) dfs(grid,m-1,i,vis);
+        }
+        
+        int cnt = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(!vis[i][j] && grid[i][j] == 1) cnt++;
+            }
+        }
+
+        return cnt;
+    }
+};
