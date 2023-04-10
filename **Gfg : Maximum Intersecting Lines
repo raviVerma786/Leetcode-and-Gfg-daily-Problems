@@ -1,0 +1,27 @@
+Question Link : https://practice.geeksforgeeks.org/problems/63c232252d445a377e01cd91adfd7d1060580038/1
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=qV5lWbtW8yo&ab_channel=CodeFreaks
+    
+  public:
+    int maxIntersections(vector<vector<int>> lines, int N) {
+        map<int,int> cntLines;//store points in sorted order\
+        
+        for(vector<int> &v : lines){
+            cntLines[v[0]]++; // one new line starts
+            cntLines[v[1] + 1]--; // no line at v[i]+1 i.e. one line decreased
+        }
+        
+        int currLines = 0 ; // prefix sum 
+        int ans = 0;
+        for(pair<int,int> p : cntLines){
+            currLines += p.second;
+            
+            ans = max(ans,currLines); 
+        }
+        
+        return ans;
+    }
+};
