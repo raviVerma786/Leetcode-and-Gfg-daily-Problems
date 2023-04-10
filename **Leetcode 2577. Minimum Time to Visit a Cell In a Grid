@@ -1,0 +1,39 @@
+Question link : https://leetcode.com/problems/minimum-time-to-visit-a-cell-in-a-grid/description/
+
+Solution : https://www.youtube.com/watch?v=w9oMct1YeAg&ab_channel=DeepCodes
+
+class Solution {
+public:
+    int minimumTime(vector<vector<int>>& grid) {
+        int m = grid.size(),n= grid[0].size();
+        priority_queue<pair<pair<int,int>,int>,vector<pair<pair<int,int>,int>>,greater<pair<pair<int,int>,int>>> pq;
+        pq.push({{0,0},0}); //{time,x,y}
+        
+        if(grid[0][1] > 1 && grid[1][0] > 1) return -1;
+        int dx[4] = {1,0,-1,0};
+        int dy[4] = {0,1,0,-1};
+        
+        vector<vector<bool>> vis(m,vector<bool>(n,false));
+        vis[0][0] = true;
+
+        while(!pq.empty()){
+            int t = pq.top().first.first, i=pq.top().first.second, j=pq.top().second;
+            pq.pop();
+
+            if(i==m-1 && j==n-1) return t;
+            for(int k=0;k<4;k++){
+                int x = i + dx[k], y = j + dy[k];
+
+                if(x < 0 || y < 0 || x >= m || y >= n || vis[x][y]) continue;
+
+                bool isWaitEven = ((grid[x][y] - t) % 2 == 0);
+                int newTime = max(grid[x][y] + isWaitEven,t+1);
+       
+                pq.push({{newTime,x},y});
+                vis[x][y] = true;
+            }
+        }
+
+        return -1;
+    }
+};
