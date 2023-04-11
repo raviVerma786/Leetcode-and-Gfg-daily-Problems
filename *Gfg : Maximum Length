@@ -29,3 +29,16 @@ public:
         return -1;
     }
 };
+
+
+Solution 2 ( Best Solution ) :
+
+ int solve(int a, int b, int c) {
+       
+        //check invalid condition
+        if(a>(2*(b+c)) || b>(2*(a+c)) || c>(2*(b+a))){
+            return -1;
+        }
+        
+        return a+b+c;
+    }
