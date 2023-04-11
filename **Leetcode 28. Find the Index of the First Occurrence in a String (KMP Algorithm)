@@ -1,0 +1,49 @@
+Question Link : https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/description/
+
+Solution :  https://www.youtube.com/watch?v=lhhqbGH7Pao&ab_channel=ApnaCollege
+
+class Solution {
+public:
+// this is string matching problem
+//best for this is is kmp algorithm
+    
+    void calculateLpsArray(string &needle,vector<int>&lps){
+        int n = needle.size();
+        for(int i=1;i<n;i++){
+            int j = lps[i-1];
+
+            while(j > 0 && needle[i] != needle[j]){
+                j = lps[j-1];
+            }
+
+            if(needle[i] == needle[j]) j++;
+
+            lps[i] = j;
+        }
+    }
+
+    int strStr(string haystack, string needle) {
+        int n = needle.size();
+        vector<int> lps(n,0);
+        calculateLpsArray(needle,lps);
+        
+        int i=0,j=0,pos=-1;
+        while(i < haystack.size()){
+            if(haystack[i] == needle[j]){
+                i++;
+                j++;
+            }
+            else{
+                if(j > 0) j = lps[j-1];
+                else i++;
+            }
+
+            if(j == needle.size()){
+                pos = i - needle.size();
+                break;
+            }
+        }
+
+        return pos;
+    }
+};
