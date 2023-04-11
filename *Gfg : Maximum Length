@@ -1,0 +1,31 @@
+Question Link : https://practice.geeksforgeeks.org/problems/84963d7b5b84aa24f7807d86e672d0f97f41a4b5/1
+
+Solution : 
+
+class Solution {
+public:
+    int solve(int a, int b, int c) {
+        if(a == b && b == c) return a + b + c;
+        if(a < 3 && b<3 && c<3) return a + b + c;
+        
+        vector<int> v(3);
+        v[0] = a; v[1] = b; v[2] = c;
+        sort(v.begin(),v.end());
+        
+        a = v[0]; b = v[1]; c = v[2];
+        int sum = a + b + c;
+        
+        //lets take biggest element and fit other elements in gaps
+        if((a + b)/(c - 1) > 0){
+           return sum;
+        }
+        
+        //now lets take biggest element in pairs and fit other elements in gaps
+        c = (c + 1)/2;
+        if((a + b)/(c - 1) > 0){
+           return sum;
+        }
+        
+        return -1;
+    }
+};
