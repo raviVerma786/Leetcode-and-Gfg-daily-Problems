@@ -1,0 +1,26 @@
+Question Link : https://leetcode.com/problems/removing-stars-from-a-string/description/
+
+Solution : 
+
+class Solution {
+public:
+    string removeStars(string s) {
+        stack<char> st;
+        for(char ch : s) st.push(ch);
+
+        string ans = "";
+        while(!st.empty()){
+            if(st.top() != '*' && ans.size() > 0 && ans.back() == '*'){
+                ans.pop_back();
+                st.pop();
+            }
+            else{
+                ans.push_back(st.top());
+                st.pop();
+            }
+        }
+
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+};
