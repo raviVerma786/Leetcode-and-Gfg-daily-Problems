@@ -1,0 +1,35 @@
+Question Link : https://leetcode.com/problems/count-increasing-quadruplets/description/
+
+Solution :
+
+#define ll long long
+// https://www.youtube.com/watch?v=HFFfWeme8rY&ab_channel=DeepCodes
+// https://www.youtube.com/watch?v=_1w1FFH96Js&ab_channel=PretestPassed
+class Solution {
+public:
+    long long countQuadruplets(vector<int>& nums) {
+         int n = nums.size();
+
+         vector<vector<int>> lessThan(n+1,vector<int>(n+1,0));
+         //lessThan[i][j] => no of elements less than i in first j elements
+
+         for(int i=1;i<=n;i++){
+             for(int j=1;j<=n;j++){
+                 lessThan[i][j] = lessThan[i][j-1] + (nums[j-1] < i);
+             }
+         }
+
+         long long ans = 0;
+         for(int j=0;j<n;j++){
+             for(int k=j+1;k<n;k++){
+                 if(nums[k] < nums[j]){
+                     long long less = lessThan[nums[k]][j];
+                     long long greater = (n - nums[j]) - (k - lessThan[nums[j]][k+1]);
+                     ans += (less * greater);
+                 }
+             }
+         }
+
+         return ans;
+    }
+};
