@@ -1,0 +1,18 @@
+Question Link : https://practice.geeksforgeeks.org/problems/2a1c11024ceae36363fc405e07f2fa3e2f896ef0/1
+
+Solution : 
+
+class Solution{
+public:
+    int dominantPairs(int n,vector<int> &arr){
+        sort(arr.begin(),arr.begin() + n/2);
+        
+        int cnt = 0;
+        for(int j=n/2;j<n;j++){
+            int i = lower_bound(arr.begin(),arr.begin() + n/2, 5*arr[j]) - arr.begin();
+            cnt += (n/2 - i); // (n/2 - i) elements will make pair with the jth element-
+        }
+        
+        return cnt;
+    }  
+};
