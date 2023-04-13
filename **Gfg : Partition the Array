@@ -1,0 +1,54 @@
+Question Link : https://practice.geeksforgeeks.org/problems/84912de770541b2a56bee869cf603fab990fd3e5/1
+
+Solution : 
+
+class Solution
+{
+    // https://www.youtube.com/watch?v=-ogxPgK0nN8&ab_channel=CODEKARLO
+public:
+    int binarySearch(vector<long long>&arr,int low,int high,long long sum,long long temp){
+        int index = -1,diff = INT_MAX;
+        while(low <= high){
+            int mid = low + (high - low)/2;
+            
+            long long first = arr[mid] - temp;
+            long long second = sum - arr[mid];
+            
+            if(abs(first - second) < diff){
+                diff = abs(first - second);
+                index = mid;
+            }
+            
+            if(first < second) low = mid + 1;
+            else high = mid - 1;
+        }
+        
+        return index;
+    }
+    long long minDifference(int N, vector<int> &A) {
+        vector<long long> presum(N,0);
+        presum[0] = A[0];
+        
+        for(int i=1;i<N;i++){
+            presum[i] = presum[i-1] + A[i];
+        }
+        
+        long long ans = 1e15;
+        for(int i=2;i<(N-1);i++){
+            int index = binarySearch(presum,0,i-1,presum[i-1],0);
+            long long p = presum[index];
+            long long q = presum[i-1] - p;
+            
+            index = binarySearch(presum,i,N-1,presum[N-1],presum[i-1]);
+            long long r = presum[index] - presum[i-1];
+            long long s = presum[N-1] - presum[index];
+            
+            long long maxSum = max(p,max(q,max(r,s)));
+            long long minEle = min(p,min(q,min(r,s)));
+            
+            ans = min(ans,maxSum - minEle);
+        }
+        
+        return ans;
+    }
+};
