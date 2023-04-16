@@ -1,0 +1,33 @@
+Question Link : https://leetcode.com/problems/number-of-ways-to-form-a-target-string-given-a-dictionary/description/
+
+Solution : 
+
+class Solution {
+public:
+    int mod = 1e9 + 7;
+    vector<vector<int>> v;
+    long long helper(vector<string>&words,string &target,int i,int k,vector<vector<int>> &dp){
+        if(i == target.size()) return 1;
+        if(k==words[0].size()) return 0;
+        
+        if(dp[i][k] != -1) return dp[i][k];
+
+        long long cnt = helper(words,target,i,k+1,dp) % mod;
+        cnt += (v[k][target[i] - 'a'] * helper(words,target,i+1,k+1,dp)) % mod;
+
+        return dp[i][k] = cnt % mod;
+    }
+    int numWays(vector<string>& words, string target) {
+        int n = target.size(),k=words[0].size();
+        vector<vector<int>> dp(n+2,vector<int>(k+2,-1));
+
+        v = vector<vector<int>>(k,vector<int>(26,0));
+        for(int i=0;i<k;i++){
+            for(int j=0;j<words.size();j++){
+                v[i][words[j][i] - 'a']++;
+            }
+        }
+
+        return helper(words,target,0,0,dp) % mod;
+    }
+};
