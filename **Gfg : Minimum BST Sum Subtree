@@ -1,0 +1,47 @@
+Question link : https://practice.geeksforgeeks.org/problems/d064cc0468a5c2bb7817ecd7c1bc59ce25e23613/1
+
+Solution : 
+
+class Solution {
+private:
+    bool isBst(Node* root,long long minVal,long long maxVal){
+        if(!root) return true;
+        if(root->data <= minVal || root->data >= maxVal) return false;
+        
+        return isBst(root->left,minVal,root->data) && isBst(root->right,root->data,maxVal);
+    }
+    
+    int subtreeSum(Node* root){
+        if(!root) return 0;
+        return root->data + subtreeSum(root->left) + subtreeSum(root->right);
+    }
+    
+    int height(Node* root){
+        if(!root) return 0;
+        return 1 + height(root->left) + height(root->right);
+    }
+    
+    void traversal(Node* root,vector<Node*>&nodes){
+        if(!root) return;
+        
+        traversal(root->left,nodes);
+        nodes.push_back(root);
+        traversal(root->right,nodes);
+    }
+public:
+    int minSubtreeSumBST(int target, Node *root) {
+        vector<Node*> nodes;
+        traversal(root,nodes);
+        
+        int ans = INT_MAX;
+        
+        for(Node* node : nodes){
+            Node* temp = node;
+            if(isBst(temp,INT_MIN,INT_MAX) && subtreeSum(temp) == target){
+                ans = min(ans,height(temp));
+            }
+        }
+        
+        return ans==INT_MAX ? -1 : ans;
+    }
+};
