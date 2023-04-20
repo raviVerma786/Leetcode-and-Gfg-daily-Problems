@@ -1,0 +1,22 @@
+Question Link : https://practice.geeksforgeeks.org/problems/61567fb59e9f202db5cc2ad320ffeb6d95bf72d7/1
+
+Solution : 
+
+class Solution{
+    public:
+    bool wifiRange(int N, string S, int X){
+      int cnt = 0,maxLen = -1;
+      
+      for(int i=0;i<N;i++){
+          if(S[i] == '0' && i> maxLen) cnt++;
+          else if(S[i]=='1'){
+              cnt = 0;
+              maxLen = i + X;
+          }
+          
+          if(cnt > X) return false;
+      }
+      
+      return maxLen >= N-1;
+    }
+};
