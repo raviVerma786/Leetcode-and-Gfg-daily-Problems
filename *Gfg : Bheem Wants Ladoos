@@ -1,0 +1,39 @@
+Question Link : https://practice.geeksforgeeks.org/problems/9b61b8efbb030aed799055f776629dbf1287fbae/1
+
+Solution : 
+
+class Solution{
+    
+    private:
+        Node* homeNode = NULL;
+        unordered_map<Node*,Node*> par;
+        int vis[100009];
+        
+        void traverse(Node* root,Node* parent,int home){
+            if(!root) return;
+            if(root->data == home) homeNode = root;
+            
+            par[root] = parent;
+            traverse(root->left,root,home);
+            traverse(root->right,root,home);
+        }
+        
+        int helper(Node* node,int k){
+            if(!node || k==0 || vis[node->data]) return 0;
+            
+            vis[node->data] = true;
+            
+            return node->data + helper(node->left,k-1) + helper(node->right,k-1) +
+                      helper(par[node],k-1);
+        }
+        
+    public:
+    int ladoos(Node* root, int home, int k)
+    {
+        traverse(root,NULL,home);
+        memset(vis,false,sizeof(vis));
+        return helper(homeNode,k+1);
+    }
+
+
+};
