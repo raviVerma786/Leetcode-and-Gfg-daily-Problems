@@ -1,0 +1,65 @@
+Question Link : https://practice.geeksforgeeks.org/problems/5be83263c7f2cb866c60b23b73bb38f88de2461c/1
+
+Solution : 
+
+class Trie{
+  public:
+    Trie* next[26];
+    
+    bool containsKey(char ch){
+        return next[ch-'a'];
+    }
+    
+    bool insert(char ch,Trie* node){
+        next[ch-'a'] = node;
+    }
+     
+};
+class Solution{
+private:
+    Trie* root = new Trie();
+    
+    void insertInTrie(string &s,Trie* node){
+        for(char ch : s){
+            if(!node->containsKey(ch)){
+                node->insert(ch,new Trie());
+            }
+            
+            node = node->next[ch-'a'];
+        }
+    }
+    
+    bool isSuffixOrPrefix(string &s, Trie* node){
+        for(char ch : s){
+            if(!node->containsKey(ch)) return false;
+            node = node->next[ch-'a'];
+        }
+        
+        return true;
+    }
+public:
+    int prefixSuffixString(vector<string> &s1,vector<string> s2){
+        //insert all strings of s1 in trie
+        for(string s : s1){
+            Trie* node = root;
+            insertInTrie(s,node);
+            
+            node = root;
+            reverse(s.begin(),s.end());
+            insertInTrie(s,node);
+        }
+        
+        //search for prefix and suffixes of strings of s2
+        int cnt = 0;
+        for(string &s : s2){
+            Trie* node = root;
+            if(isSuffixOrPrefix(s,node)) cnt++;
+            else{
+                reverse(s.begin(),s.end());
+                if(isSuffixOrPrefix(s,node)) cnt++;
+            }
+        }
+        
+        return cnt;
+    }
+};
