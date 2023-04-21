@@ -1,0 +1,25 @@
+Question Link : https://leetcode.com/problems/profitable-schemes/description/
+
+Solution : 
+
+class Solution {
+private:
+    int dp[101][101][101];
+    int mod = 1e9 + 7;
+    int helper(vector<int>& group, vector<int>& profit,int minProfit,int i,int n,int prft){
+        if(i == group.size()) return prft >= minProfit;
+        if(dp[i][n][prft] != -1) return dp[i][n][prft];
+        
+        int notTake = helper(group,profit,minProfit,i+1,n,prft) % mod;
+        int take = 0;
+        if(n - group[i] >=0){
+            take =  helper(group,profit,minProfit,i+1,n-group[i],min(minProfit,prft + profit[i])) % mod;
+        }
+        return dp[i][n][prft] = (take + notTake) % mod;
+    }
+public:
+    int profitableSchemes(int n, int minProfit, vector<int>& group, vector<int>& profit) {
+        memset(dp,-1,sizeof(dp));
+        return helper(group,profit,minProfit,0,n,0);
+    }
+};
