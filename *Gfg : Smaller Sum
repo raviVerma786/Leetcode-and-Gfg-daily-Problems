@@ -1,0 +1,29 @@
+Question Link : https://practice.geeksforgeeks.org/problems/5877fde1c8e1029658845cd4bc94066ac1d4b09b/1
+
+Solution : 
+
+class Solution{
+public:
+    vector<long long> smallerSum(int n,vector<int> &arr){
+       vector<pair<long long,int>> v;
+       for(int i=0;i<n;i++){
+           v.push_back({arr[i],i});
+       }
+       
+       sort(v.begin(),v.end());
+       
+       for(int i=1;i<n;i++){
+           v[i].first += v[i-1].first;
+       }
+       
+       vector<long long> ans(n);
+       unordered_map<int,int> mp;
+       for(int i=0;i<n;i++){
+           long long num = v[i].first, index = v[i].second;
+           mp[arr[index]]++;
+           ans[index] = (num - arr[index]*1LL*mp[arr[index]]);
+       }
+       
+       return ans;
+    }
+};
