@@ -1,0 +1,50 @@
+Question Link : https://practice.geeksforgeeks.org/problems/a520c08a8ea9b617be25c38b0fc2fe057e889253/1
+
+Solution : 
+
+class Solution
+{
+public:
+//use concept of next greater element
+    vector<int> nearestSmallerTower(vector<int> arr)
+    {
+       int n = arr.size();
+       vector<int> ans(n,-1);
+       stack<int> st; //store indices 
+       
+       //checking right to left
+       for(int i=n-1;i>=0;i--){
+           
+           while(!st.empty() && arr[st.top()] >= arr[i]) st.pop();
+           if(!st.empty()) ans[i] = st.top();
+           
+           st.push(i);
+       }
+       
+       while(!st.empty()) st.pop();
+       
+       //now checking left to right
+       for(int i=0;i<n;i++){
+           while(!st.empty() && arr[st.top()] >= arr[i]) st.pop();
+           
+           if(!st.empty()) {
+               if(ans[i] == -1) ans[i] = st.top();
+               else if(abs(st.top() - i) == abs(ans[i] - i)){
+                   if(arr[st.top()] == arr[ans[i]]){
+                       ans[i] = min(st.top(),ans[i]);
+                   }
+                   else {
+                       ans[i] = (arr[st.top()] < arr[ans[i]]) ? st.top() : ans[i];
+                   }
+               }
+               else{
+                   ans[i] = (abs(st.top() - i) < abs(ans[i] - i)) ? st.top() : ans[i];
+               }
+           }
+           
+           st.push(i);
+       }
+       
+       return ans;
+    }
+};
