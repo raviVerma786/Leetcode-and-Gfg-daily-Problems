@@ -1,0 +1,34 @@
+Question Link : https://practice.geeksforgeeks.org/problems/c928f229cc972671d91c5e9f6b222414912cc88a/1
+
+Solution : 
+
+class Solution{
+public:
+    vector<char> easyTask(int n,string s,int q,vector<vector<string>> &queries){
+        vector<char> ans;
+        
+        for(vector<string>&v : queries){
+            if(v[0] == "1"){
+                int idx = stoi(v[1]);
+                char ch = v[2][0];
+                s[idx] = ch;
+            }
+            else{
+                vector<int> temp(26,0);
+                int left = stoi(v[1]), right = stoi(v[2]);
+                for(int i=left;i<=right;i++) temp[s[i]-'a']++;
+                
+                int k = stoi(v[3]),j=25;
+                while(k > 0){
+                    k -= temp[j];
+                    if(k <= 0){
+                        ans.push_back(j + 'a');
+                        break;
+                    }
+                    j--;
+                }
+            }
+        }
+        return ans;
+    }
+};
