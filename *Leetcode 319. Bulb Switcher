@@ -1,0 +1,19 @@
+Question Link : https://leetcode.com/problems/bulb-switcher/description/
+
+Solution : 
+
+class Solution {
+// pattern: 0 | 1 1 1 | 2 2 2 2 2 | 3 3 3 3 3 3 3 |.......
+//from 1 it makes AP => 3,5,7,9......
+public:
+    int bulbSwitch(int n) {
+        int ans = 0,cnt = 3;
+        while(n > 0){
+            n -= cnt;
+            cnt += 2;
+            ans++;
+        }
+
+        return ans;
+    }
+};
