@@ -1,0 +1,54 @@
+Question Link : https://practice.geeksforgeeks.org/problems/5a1277ffc1ec1d3a63d1a5d6b3920dd3d1294261/1
+
+Solution : 
+
+class Solution{
+public:
+    vector<vector<int>> chefAndWells(int n,int m,vector<vector<char>> &c){
+        vector<vector<int>> ans(n,vector<int>(m,INT_MAX));
+        queue<pair<int,pair<int,int>>> q; //{i,{j,distance}}
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(c[i][j] == 'W'){
+                    ans[i][j] = 0;
+                    q.push({i,{j,0}});
+                }
+                else if(c[i][j]=='N'){
+                    ans[i][j] = 0;
+                }
+            }
+        }
+        
+        int dx[4] = {0,0,-1,1};
+        int dy[4] = {-1,1,0,0};
+        while(!q.empty()){
+            int i = q.front().first,
+            j = q.front().second.first,
+            dist = q.front().second.second;
+            q.pop();
+            
+            for(int k=0;k<4;k++){
+                int x = i + dx[k], y = j + dy[k];
+                if(x>=0 && x<n && y>=0 && y<m && c[x][y]!='N' && ans[x][y] > (dist + 1)){
+                    ans[x][y] = dist + 1;
+                    q.push({x,{y,dist + 1}});
+                }
+            }
+        }
+        
+         for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(c[i][j] == '.') ans[i][j] = 0;
+                else if(ans[i][j] == INT_MAX){
+                    ans[i][j] = -1;
+                }
+                else {
+                    ans[i][j] *= 2;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
