@@ -1,0 +1,108 @@
+Question Link : https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/description/
+
+Solution 1(TLE): 
+
+class Solution {
+private:
+    bool isPathPresent(int src,int dst,int limit,vector<pair<int,int>>adj[],vector<bool>&vis){
+        if(src == dst) return true;
+        
+        vis[src] = true;
+        for(pair<int,int>& node : adj[src]){
+            if(!vis[node.first] && node.second < limit){
+                 if(isPathPresent(node.first,dst,limit,adj,vis)) return true;;
+            }
+        }
+        
+        return false;
+    }
+public:
+    vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList, vector<vector<int>>& queries) {
+        vector<pair<int,int>> adj[n];
+        for(vector<int>&v : edgeList){
+            adj[v[0]].push_back({v[1],v[2]});
+            adj[v[1]].push_back({v[0],v[2]});
+        }
+        
+        int q = queries.size();
+        vector<bool> ans(q,false);
+        for(int i=0;i<q;i++){
+            vector<bool> vis(n,false);
+            if(isPathPresent(queries[i][0],queries[i][1],queries[i][2],adj,vis)) ans[i] = true;
+        }
+
+        return ans;
+    }
+};
+
+Solution 2 (Efficient):
+
+// https://www.youtube.com/watch?v=bx-qcAteecg&ab_channel=DeepCodes
+
+class DSU{
+    public:
+        vector<int> size;
+        vector<int> parent;
+
+        DSU(int n){
+            size.resize(n);
+            parent.resize(n);
+
+            for(int i=0;i<n;i++){
+                size[i] = 0;
+                parent[i] = i;
+            }
+        }
+
+        int findParent(int node){
+            if(parent[node] == node) return node;
+            return parent[node] = findParent(parent[node]);
+        }
+
+        void makeUnion(int node1,int node2){
+            int u = findParent(node1),
+            v = findParent(node2);
+
+            if(u == v) return;
+            if(size[u] > size[v]){
+                parent[v] = u;
+                size[v] += size[u];
+            }
+            else{
+                parent[u] = v;
+                size[u] += size[v];
+            }
+        }
+};
+class Solution {
+public:
+    vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList, vector<vector<int>>& queries) {
+
+        sort(edgeList.begin(),edgeList.end(),[](vector<int>&v1,vector<int>&v2){
+            return v1[2] < v2[2];
+        });
+        
+        vector<vector<int>> newQueries;
+        for(int i=0;i<queries.size();i++){
+            newQueries.push_back({i,queries[i][0],queries[i][1],queries[i][2]});
+        }
+        sort(newQueries.begin(),newQueries.end(),[](vector<int>&v1,vector<int>&v2){
+            return v1[3] < v2[3];
+        });
+        
+        DSU* graph = new DSU(n);
+        vector<bool> ans(queries.size(),false);
+        int i=0;
+        for(vector<int>&q : newQueries){
+            int idx = q[0],u=q[1],v = q[2], limit = q[3];
+            while(i < edgeList.size() && edgeList[i][2] < limit){
+                graph->makeUnion(edgeList[i][0],edgeList[i][1]);
+                i++;
+            }
+
+            if(graph->findParent(u) == graph->findParent(v)) ans[idx] = true;
+        }
+
+        return ans;
+    }
+};
