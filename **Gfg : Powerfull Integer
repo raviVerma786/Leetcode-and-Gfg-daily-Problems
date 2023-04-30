@@ -1,0 +1,27 @@
+Question Link : https://practice.geeksforgeeks.org/problems/d894706c496da5c5a4f45b0360c7f4164c516f83/1
+
+Solution : 
+
+class Solution{
+    //same as ques : maximum intersection lines
+    // https://www.youtube.com/watch?v=NlUseSI8HNE&ab_channel=CODEKARLO
+public:
+    int powerfullInteger(int n,vector<vector<int>> &intervals,int k){
+        map<int,int> mp;
+        for(vector<int>v : intervals){
+            mp[v[0]]++;
+            mp[v[1] + 1]--; 
+        }
+        
+        int presum = 0,ans = -1;
+        for(pair<int,int> p : mp){
+            if(presum >= k) {
+                if(p.second >= 0) ans = max(ans,p.first);
+                else ans = max(ans,p.first - 1);
+            }
+            presum += p.second;
+        }
+        
+        return ans;
+    }
+};
