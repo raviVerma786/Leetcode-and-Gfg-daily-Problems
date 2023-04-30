@@ -1,0 +1,96 @@
+Question Link : https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/
+
+Solution : 
+
+// https://www.youtube.com/watch?v=dqK8Eui5E48&ab_channel=DeepCodes
+
+class DSU{
+    public:
+        vector<int> size;
+        vector<int> parent;
+
+        DSU(int n){
+            size.resize(n + 1);
+            parent.resize(n+1);
+
+            for(int i=0;i<=n;i++){
+                size[i] = 0;
+                parent[i] = i;
+            }
+        }
+
+        int findParent(int node){
+            if(parent[node] == node) return node;
+            return parent[node] = findParent(parent[node]);
+        }
+
+        void makeUnion(int node1,int node2){
+            int u = findParent(node1),
+            v = findParent(node2);
+
+            if(u != v){
+                if(size[u] > size[v]){
+                    size[u] += size[v];
+                    parent[v] = u;
+                }
+                else{
+                    size[v] += size[u];
+                    parent[u] = v;
+                }
+            }
+        }
+};
+class Solution {
+public:
+    int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+        //sort to add edges of type 3 firs
+        sort(edges.rbegin(),edges.rend());
+
+        DSU* alice = new DSU(n);
+        DSU* bob = new DSU(n);
+
+        int cnt = 0;
+
+        for(vector<int>&vec : edges){
+            int type = vec[0], u = vec[1], v = vec[2];
+
+            int uAlice = alice->findParent(u),
+            vAlice = alice->findParent(v),
+            uBob = bob->findParent(u),
+            vBob = bob->findParent(v);
+            
+            if(uAlice == vAlice && uBob == vBob){
+                cnt++;
+                continue;
+            }
+            
+            if(type == 3){
+                if(uAlice == vAlice && uBob == vBob) cnt++;
+                else{
+                    alice->makeUnion(u,v);
+                    bob->makeUnion(u,v);
+                }
+            }
+            else if(type == 2){
+                if(uBob == vBob) cnt++;
+                else bob->makeUnion(u,v);
+            }
+            else{
+                if(uAlice == vAlice) cnt++;
+                else  alice->makeUnion(u,v);
+            }
+        }
+        
+        //now checking if all are connected or not by checking number of parents of alice and bob
+        unordered_set<int> aliceParents,bobParents;
+        for(int i=1;i<=n;i++){
+            aliceParents.insert(alice->findParent(i));
+            bobParents.insert(bob->findParent(i));
+        }
+        
+        // if more than one parents then not fully traversable
+        if(aliceParents.size() > 1 || bobParents.size() > 1) return -1;
+
+        return cnt;
+    }
+};
