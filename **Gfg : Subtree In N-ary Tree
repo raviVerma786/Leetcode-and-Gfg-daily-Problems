@@ -1,0 +1,26 @@
+Question Link : https://practice.geeksforgeeks.org/problems/079dee7e7db7a784ed73f604e3cf1712432edf79/1
+
+Solution : 
+
+class Solution{
+private:
+    unordered_map<string,int> mp;
+    string helper(Node* root,int &ans){
+        if(!root) return "#";
+        string s = to_string(root->data) + ",";
+        for(Node* child : root->children){
+            s += helper(child,ans);
+        }
+
+        mp[s]++;
+        if(mp[s] == 2) ans++;
+
+        return s;
+    }
+public:
+    int duplicateSubtreeNaryTree(Node *root){
+       int ans = 0;
+       helper(root,ans);
+       return ans;
+    }
+};
