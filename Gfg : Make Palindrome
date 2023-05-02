@@ -1,0 +1,20 @@
+Question Link : https://practice.geeksforgeeks.org/problems/8d0e8785cef59cf4903b926ceb7100bcd16a9835/1
+
+Solution : 
+
+
+class Solution{
+public:
+    bool makePalindrome(int n,vector<string> &arr){
+      unordered_map<string,int> mp;
+      for(string &s : arr) mp[s]++;
+      
+      for(string &s : arr){
+          reverse(s.begin(),s.end());
+          if(mp[s] <= 0) return false;
+          mp[s]--;
+      }
+      
+      return true;
+    }
+};
