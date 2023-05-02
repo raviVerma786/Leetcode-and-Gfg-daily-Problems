@@ -1,0 +1,32 @@
+Question Link : https://practice.geeksforgeeks.org/problems/0a7c7f1089932257071f9fa076f25d353f91e0fd/1
+
+Solution : 
+
+class Solution{
+    public:
+    bool check(vector<int>&sweetness,int N,int K,int mid){
+        long long sum = 0;
+        for(int i=0;i<N;i++){
+            sum += sweetness[i];
+            if(sum >= mid){
+                sum = 0;
+                K--;
+            }
+        }
+        return K<=0;
+    }
+    int maxSweetness(vector<int>& sweetness, int N, int K) {
+        int low = 0,high = accumulate(sweetness.begin(),sweetness.end(),0);
+        int ans = 0;
+        while(low <= high){
+            int mid = low + (high - low)/2;
+            if(check(sweetness,N,K+1,mid)){
+                ans = mid;
+                low = mid + 1;
+            }
+            else high = mid - 1;
+        }
+        
+        return ans;
+    }
+};
