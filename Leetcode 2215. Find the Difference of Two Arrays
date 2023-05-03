@@ -1,0 +1,26 @@
+Question Link : https://leetcode.com/problems/find-the-difference-of-two-arrays/description/
+
+Solution : 
+
+class Solution {
+private:
+    void insert(unordered_map<int,int>&currMap,unordered_map<int,int>&checkMap,vector<vector<int>>&ans){
+        vector<int> temp;
+        for(pair<int,int> p : currMap){
+            if(checkMap.count(p.first) == 0) temp.push_back(p.first);
+        }
+        ans.push_back(temp);
+    }
+public:
+    vector<vector<int>> findDifference(vector<int>& nums1, vector<int>& nums2) {
+       unordered_map<int,int> mp1,mp2;
+       for(int i : nums1) mp1[i]++;
+       for(int i : nums2) mp2[i]++;
+
+       vector<vector<int>> ans;
+       insert(mp1,mp2,ans);
+       insert(mp2,mp1,ans);
+
+       return ans;
+    }
+};
