@@ -1,0 +1,34 @@
+Question Link : https://practice.geeksforgeeks.org/problems/df12afc57250e7f6fc101aa9c272343184fe9859/1
+
+Solution : (Simple Brute Force approach)
+
+class Solution{
+private:
+    bool isGoodSubtree(Node* root,int k,unordered_set<int>&st){
+        if(!root) return st.size() <= k;
+        
+        st.insert(root->data);
+        return isGoodSubtree(root->left,k,st) && isGoodSubtree(root->right,k,st);
+    }
+    
+    void traversal(Node* root,vector<Node*>&nodes){
+        if(root){
+            traversal(root->left,nodes);
+            nodes.push_back(root);
+            traversal(root->right,nodes);
+        }
+    }
+public:
+    int goodSubtrees(Node *root,int k){
+        vector<Node*> nodes;
+        traversal(root,nodes);
+        
+        int cnt = 0;
+        for(Node* node : nodes){
+            unordered_set<int> st;
+            if(isGoodSubtree(node,k,st)) cnt++;
+        }
+        
+        return cnt;
+    }
+};
