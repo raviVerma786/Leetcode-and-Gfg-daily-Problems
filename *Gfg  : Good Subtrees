@@ -32,3 +32,33 @@ public:
         return cnt;
     }
 };
+
+
+Solution 2 : (some better)
+
+class Solution{
+private:
+    int cnt = 0;
+    bool isGoodSubtree(Node* root,int k,unordered_set<int>&st){
+        if(!root) return st.size() <= k;
+        if(st.size() > k) return false;
+        
+        st.insert(root->data);
+        return isGoodSubtree(root->left,k,st) && isGoodSubtree(root->right,k,st);
+    }
+    void traversal(Node* root,int k){
+        if(root){
+            traversal(root->left,k);
+            
+            unordered_set<int> st;
+            cnt += (isGoodSubtree(root,k,st));
+            
+            traversal(root->right,k);
+        }
+    }
+public:
+    int goodSubtrees(Node *root,int k){
+        traversal(root,k);
+        return cnt;
+    }
+};
