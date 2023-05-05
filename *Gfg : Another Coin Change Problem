@@ -1,0 +1,29 @@
+Question Link : https://practice.geeksforgeeks.org/problems/09b910559335521654aa2909f86f893447d8f5ba/1
+
+Solution : 
+
+class Solution {
+  public:
+    int dp[101][1001];
+    bool helper(int n,int k,int target,vector<int>&coins,int i){
+        if(i==n) return k==0 && target==0;
+        if(k==0) return target == 0;
+        if(dp[k][target] != -1) return dp[k][target];
+        
+        bool take = false;
+        if(target - coins[i] >= 0)
+            take = take || helper(n,k-1,target-coins[i],coins,i);
+        
+        bool notTake = helper(n,k,target,coins,i+1);
+        
+        return dp[k][target] = take || notTake;
+    }
+    
+    bool makeChanges(int n, int k, int target, vector<int> &coins) {
+        memset(dp,-1,sizeof(dp));
+        return helper(n,k,target,coins,0);
+    }
+};
+
+
+Solution 2 : Iterative Solution
