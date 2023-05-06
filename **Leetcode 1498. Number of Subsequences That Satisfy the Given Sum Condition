@@ -25,7 +25,6 @@ public:
                 i++;
             }
             else {
-                if(2*nums[j] <= target) ans++;
                 j--;
             }
         }
