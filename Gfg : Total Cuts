@@ -1,0 +1,24 @@
+Question Link : https://practice.geeksforgeeks.org/problems/cbd515a00f6537180d2e66f1ffe11093a128e560/1
+
+Solution : 
+
+class Solution{
+public:
+    int totalCuts(int N,int K,vector<int> &A){
+        vector<int> largestFromLeft(N),smallestFromRight(N);
+        int largest = INT_MIN, smallest = INT_MAX;
+        for(int i=0;i<N;i++){
+            largest = max(largest,A[i]);
+            smallest = min(smallest,A[N - i - 1]);
+            largestFromLeft[i] = largest;
+            smallestFromRight[N - i - 1] = smallest;
+        }
+        
+        int cnt = 0;
+        for(int i=0;i<N-1;i++){
+            if(largestFromLeft[i] + smallestFromRight[i+1] >= K) cnt++;
+        }
+        
+        return cnt;
+    }
+};
