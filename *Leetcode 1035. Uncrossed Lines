@@ -1,0 +1,32 @@
+Question Link : https://leetcode.com/problems/uncrossed-lines/description/
+
+Solution : 
+
+class Solution {
+private:
+    int helper(vector<int>&num1,unordered_map<int,vector<int>>&indexInNum2,int i,int lastInNum2,vector<vector<int>>&dp){
+        if(i == num1.size()) return 0;
+        if(dp[i][lastInNum2 + 1] != -1) return dp[i][lastInNum2 + 1];
+
+        int take = 0;
+        int idx = upper_bound(indexInNum2[num1[i]].begin(),indexInNum2[num1[i]].end(),lastInNum2) - indexInNum2[num1[i]].begin();
+
+        if(idx < indexInNum2[num1[i]].size()){
+            take = 1 + helper(num1,indexInNum2,i+1,indexInNum2[num1[i]][idx],dp);
+        }
+        int notTake = helper(num1,indexInNum2,i+1,lastInNum2,dp);
+
+        return dp[i][lastInNum2 + 1] = max(take,notTake);
+    }
+public:
+    int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int,vector<int>> indexInNum2;
+        for(int i=0;i<nums2.size();i++){
+            indexInNum2[nums2[i]].push_back(i);
+        }
+        
+        int n1 = nums1.size(), n2 = nums2.size();
+        vector<vector<int>> dp(n1,vector<int>(n2 + 2,-1));
+        return helper(nums1,indexInNum2,0,-1,dp);
+    }
+};
