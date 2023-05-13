@@ -1,0 +1,25 @@
+Question Link : https://practice.geeksforgeeks.org/problems/e047b92794316450814b29de56cc9c6ec18371b7/1
+
+Solution : 
+
+class Solution {
+  private:
+    long long dp[100002][2];
+    long long helper(int N,vector<int>&A,int i,int gap){
+        if(i >= N) return 0;
+        if(dp[i][gap] != -1) return dp[i][gap];
+        
+        long long sum = 0;
+        if(gap == 1){
+            sum += A[i] + max(helper(N,A,i+1,0),helper(N,A,i+2,1));
+        }
+        else sum += max(A[i] + helper(N,A,i+1,0),helper(N,A,i+1,1));
+        
+        return dp[i][gap] = sum;
+    }
+  public:
+    long long findMaxSubsetSum(int N, vector<int> &A) {
+      memset(dp,-1,sizeof(dp));   
+      return helper(N,A,0,0);
+    }
+};
