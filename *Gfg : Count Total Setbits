@@ -1,0 +1,21 @@
+Question Link : https://practice.geeksforgeeks.org/problems/1132bd8ee92072cd31441858402641d6800fa6b3/1
+
+Solution : 
+
+class Solution {
+  public:
+  
+    long long countBits(long long N) {
+       long long ans = 0;
+       while(N){
+           long long bits = log2(N);
+           long long num = (1<<bits); 
+           
+           ans += (bits * (1<<(bits - 1))) + (N - (1<<bits) + 1) ;
+           N = N - (1<<bits);
+           
+       }
+       
+       return ans;
+    }
+};
