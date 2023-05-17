@@ -1,0 +1,26 @@
+Queation Link : https://practice.geeksforgeeks.org/problems/trace-path3840/1
+
+Solution : 
+
+class Solution{
+public:
+    int isPossible(int n, int m, string s){
+       int x = 0, y = 0, minHorizontal = 0, maxHorizontal=0, minVertical=0, maxVertical=0;
+       
+       for(char ch : s){
+           if(ch == 'L') x--;
+           else if(ch == 'R') x++;
+           else if(ch == 'U') y--;
+           else y++;
+           
+           minHorizontal = min(minHorizontal,x);
+           maxHorizontal = max(maxHorizontal,x);
+           minVertical = min(minVertical,y);
+           maxVertical = max(maxVertical,y);
+           
+           if((maxHorizontal - minHorizontal) >= m || (maxVertical - minVertical) >= n) return 0;
+       }
+       
+      return 1;
+    }
+};
