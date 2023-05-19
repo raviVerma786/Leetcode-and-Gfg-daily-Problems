@@ -1,0 +1,71 @@
+Question Link : https://practice.geeksforgeeks.org/problems/hands-of-straights/1
+
+Solution 1 ) : 
+
+class Solution {
+  public:
+    bool isStraightHand(int N, int groupSize, vector<int> &hand) {
+        if(N % groupSize) return false;
+        
+        map<int,int>mp;
+        for(int i=0;i<N;i++) mp[hand[i]]++;
+        
+        auto it = mp.begin();
+        while(it != mp.end()){
+            if(it->second == 0){
+                it++;
+                continue;
+            }
+            
+            int num = it->first;
+            for(int i=0;i<groupSize-1;i++){
+                if(mp.find(num + 1) == mp.end() || mp[num+1] < it->second) return false;
+                mp[num+1] -= it->second;
+                num++;
+            }
+            
+            it++;
+        }
+        
+        return true;
+    }
+};
+
+
+Solution 2 ): 
+
+class Solution {
+  public:
+    bool isStraightHand(int N, int groupSize, vector<int> &hand) {
+        // if(groupSize == 1)  return true;
+        if(N % groupSize) return false;
+        
+        unordered_map<int,int>mp;
+        for(int i=0;i<N;i++) mp[hand[i]]++;
+        vector<pair<int,int>> v;
+        for(pair<int,int> p : mp){
+            v.push_back({p.first, p.second});
+        }
+        
+        sort(v.begin(),v.end());
+        int i=0,j=1;
+        N = v.size();
+        while(j < N){
+            while(j < N && j - i + 1 <= groupSize && v[j].first == v[j-1].first + 1 && v[j].second
+            >= v[i].second){
+                v[j].second -= v[i].second;
+                j++;
+            }
+            j--;
+        
+            if(j - i + 1 == groupSize){
+                i++;
+                while(i<N && v[i].second == 0) i++;
+                j = i + 1;
+            }
+            else return false;
+        }
+        
+        return true;
+    }
+};
