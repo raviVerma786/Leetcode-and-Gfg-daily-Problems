@@ -1,0 +1,62 @@
+Question Link : https://leetcode.com/problems/shortest-bridge/description/
+
+Solution : 
+
+class Solution {
+public:
+    void dfs(vector<vector<int>>&grid,vector<vector<bool>>&vis,int i,int j,queue<pair<pair<int,int>,int>>&q){
+        if(i<0 || j<0 || i>= grid.size() || j>=grid[0].size() || grid[i][j] == 0 || vis[i][j]) return;
+
+        vis[i][j] = true;
+        q.push({{i,j},0});
+        
+        dfs(grid,vis,i+1,j,q);
+        dfs(grid,vis,i-1,j,q);
+        dfs(grid,vis,i,j-1,q);
+        dfs(grid,vis,i,j+1,q);
+    }
+
+    int shortestBridge(vector<vector<int>>& grid) {
+        int i=-1,j=-1;
+        int n = grid.size();
+        
+        //find first 1
+        for(int k=0;k<n;k++){
+            for(int l=0;l<n;l++){
+                if(grid[k][l] == 1){
+                    i = k;
+                    j = l;
+                    break;
+                }
+            }
+        }
+        queue<pair<pair<int,int>,int>> q; //{i,{j,dist}}
+        vector<vector<bool>> vis(n,vector<bool>(n,false));
+        dfs(grid,vis,i,j,q);
+
+        int dx[4] = {0,1,0,-1};
+        int dy[4] = {1,0,-1,0};
+        
+        int ans = INT_MAX;
+        while(!q.empty()){
+            int x = q.front().first.first, y = q.front().first.second,
+            dis = q.front().second;
+            q.pop();
+
+            for(int k=0;k<4;k++){
+                int r = x + dx[k], c = y + dy[k];
+                if(r>=0 && c>=0 && r<n && c<n && !vis[r][c]){
+                    q.push({{r,c},dis + 1});
+                    vis[r][c] = true;
+
+                    if(grid[r][c] == 1){
+                        ans = min(ans,dis);
+                    }
+
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
