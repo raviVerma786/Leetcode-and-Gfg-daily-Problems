@@ -1,0 +1,23 @@
+Question Link : https://practice.geeksforgeeks.org/problems/fbcd1787378ed396a8f24b47872cbc0ad2624f1d/1
+
+Solution : 
+
+class Solution {
+    public:
+    int solve(int N, vector<int> p){
+        vector<int> degree(N+1,0);
+        for(int i=1;i<N;i++){
+            degree[p[i]]++;
+            degree[i]++;
+        }
+        
+        int ans = N - 1; // maximum possible ans
+        // nodes having degree 1 will not get merged to reduce other will merged to reduce ans
+        
+        for(int i : degree){
+            ans -= (i == 1);
+        }
+        
+        return ans < 0 ? 0 : ans;
+    }
+};
