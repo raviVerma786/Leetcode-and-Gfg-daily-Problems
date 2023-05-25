@@ -1,0 +1,85 @@
+Question Link :https://practice.geeksforgeeks.org/problems/expression-add-operators/1
+
+Solution : 
+
+class Solution {
+  public:
+    vector<string> ans;
+    long long value(string &str){
+        vector<int> v;
+        long long i=0,num = 0;
+        while(i < str.size()){
+            if(str[i] >= '0' && str[i] <= '9') num = (num * 10) + (str[i] - '0');
+            else break;
+            
+            i++;
+        }
+        
+        v.push_back(num);
+        
+        while(i<str.size()){
+            char ch = str[i];
+            i++;
+            
+            if(i < str.size()-1 && str[i] == '0' && str[i+1] >='0' && str[i+1]<='9') return 1e15;
+            num = 0;
+            while(i<str.size() && str[i]>='0' && str[i] <='9'){
+                num = num * 10 + (str[i] - '0');
+                i++;
+            }
+            
+            if(ch == '+') v.push_back(num);
+            else if(ch == '-') v.push_back(-num);
+            else{
+                int x = v.back();
+                v.pop_back();
+                v.push_back(num * x);
+            }
+        }
+        return accumulate(v.begin(),v.end(),0);
+    }
+    void helper(string &s,int target,string &str,int i){
+        if(i == s.size()){
+            
+            if(value(str) == target){
+                ans.push_back(str);
+            }
+            
+            // cout<<str<<" "<<value(str)<<endl;
+            return;
+        }
+        
+        str.push_back(s[i]);
+        helper(s,target,str,i+1);
+        str.pop_back();
+        
+        str.push_back('+');
+        str.push_back(s[i]);
+        helper(s,target,str,i+1);
+        str.pop_back();
+        str.pop_back();
+        
+        
+        str.push_back('-');
+        str.push_back(s[i]);
+        helper(s,target,str,i+1);
+        str.pop_back();
+        str.pop_back();
+        
+        
+        str.push_back('*');
+        str.push_back(s[i]);
+        helper(s,target,str,i+1);
+        str.pop_back();
+        str.pop_back();
+    }
+    vector<string> addOperators(string S, int target) {
+        string str = "";
+        str.push_back(S[0]);
+        helper(S,target,str,1);
+        
+        sort(ans.begin(),ans.end());
+        ans.erase(unique(ans.begin(),ans.end()),ans.end());
+        return ans;
+    }
+};
