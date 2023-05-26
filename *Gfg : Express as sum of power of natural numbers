@@ -1,0 +1,44 @@
+Question Link : https://practice.geeksforgeeks.org/problems/express-as-sum-of-power-of-natural-numbers5647/1
+
+Solution :
+
+class Solution{
+    private:
+    int mod = 1e9 + 7;
+    int power(int a,int b){
+        int ans = 1;
+        while(b){
+            if(b&1) ans = (ans * 1LL * a)%mod;
+            
+            a = (a * 1LL * a) % mod;
+            b = b>>1;
+        }
+        return ans;
+    }
+    
+    int helper(int target,vector<int>&v,int i,vector<vector<int>>&dp){
+        if(i == v.size()) return target == 0;
+        if(dp[i][target] != -1) return dp[i][target];
+        
+        int take = 0;
+        if(target - v[i] >= 0){
+            take = helper(target - v[i],v,i+1,dp);
+        }
+        return dp[i][target] = (take + helper(target,v,i+1,dp)) % mod;
+    }
+    
+    public:
+    int numOfWays(int n, int x)
+    {
+        int limit = 1, number = power(limit,x);
+        vector<int> v;
+        while(number <= n){
+            v.push_back(number);
+            limit++;
+            number = power(limit,x);
+        }
+        
+        vector<vector<int>> dp(v.size(),vector<int>(n+1,-1));
+        return helper(n,v,0,dp);
+    }
+};
