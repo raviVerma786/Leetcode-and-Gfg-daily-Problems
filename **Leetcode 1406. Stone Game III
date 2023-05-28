@@ -1,0 +1,43 @@
+Question Link :https://leetcode.com/problems/stone-game-iii/description/
+
+Solution : 
+
+class Solution {
+public:
+    //this help function is taken from stone game II
+    int help(int idx, bool aliceTurn, vector<int> &piles, vector<vector<int>> &dp)
+    {
+        if (idx >= piles.size())
+            return 0;
+
+        if (dp[idx][aliceTurn] != -1)
+            return dp[idx][aliceTurn];
+        
+        int ans = (aliceTurn ? INT_MIN : INT_MAX);
+        int sum = 0;
+        for(int x=1;x<=3;x++){
+            if(idx + x - 1 >= piles.size()) break;
+            
+            sum += piles[idx + x - 1];
+            if(aliceTurn){
+                ans = max(ans,sum + help(idx + x,!aliceTurn,piles,dp));
+            }
+            else{
+                ans = min(ans,help(idx + x,!aliceTurn,piles,dp));
+            }
+        }
+
+        return dp[idx][aliceTurn] = ans;
+    }
+
+    string stoneGameIII(vector<int> &stoneValue)
+    {
+        int n = stoneValue.size();
+
+        vector<vector<int>> dp(n + 1, vector<int>(2, -1));
+        int alice = help(0, true,stoneValue, dp);
+        int bob = accumulate(stoneValue.begin(),stoneValue.end(),0) -  alice;
+
+         return (alice > bob) ? "Alice" : ((alice < bob) ? "Bob" : "Tie");
+    }
+};
