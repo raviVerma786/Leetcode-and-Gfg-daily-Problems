@@ -37,3 +37,36 @@ public:
         return accumulate(time.begin(),time.end(),0)/size;;
     }
 };
+
+Solution 2 : (Better to understand)
+
+class UndergroundSystem {
+private:
+    map<int,pair<string,int>> mp; // mp[id] = {start,checkinTime}
+    map<pair<string,string>,pair<int,double>> mpTime; //mpTime[{start,end}] => {people,totalTime}
+public:
+    UndergroundSystem() {
+        mp.clear();
+    }
+    
+    void checkIn(int id, string stationName, int t) {
+        mp[id] = {stationName,t};
+    }
+    
+    void checkOut(int id, string stationName, int t) {
+        string start = mp[id].first, end = stationName;
+        int timeTaken = (t - mp[id].second);
+
+        mpTime[{start,end}].first++;
+        mpTime[{start,end}].second += timeTaken;
+        
+    }
+    
+    double getAverageTime(string startStation, string endStation) {
+        int people = mpTime[{startStation,endStation}].first;
+        double totalTime = mpTime[{startStation,endStation}].second;
+
+        return totalTime/people;
+    }
+};
+
