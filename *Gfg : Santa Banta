@@ -1,0 +1,43 @@
+Question Link : https://practice.geeksforgeeks.org/problems/santa-banta2814/1
+
+Solution: 
+
+class Solution{
+private:
+    vector<int> prime;
+    void dfs(vector<vector<int>>&adj,vector<bool>&vis,int node,int &cnt){
+        vis[node] = true;
+        cnt++;
+        
+        for(int child : adj[node]){
+            if(!vis[child]) dfs(adj,vis,child,cnt);
+        }
+    }
+public:
+    void precompute(){
+        vector<bool> isPrime(1e6+1,true);
+        
+        isPrime[0] = isPrime[1] = false;
+        for(int i=2;i<1e6+1;i++)
+        if(isPrime[i]){
+            prime.push_back(i);
+            for(int j=2*i;j<1e6+1;j += i) isPrime[j] = false;
+        }
+    }
+    
+    int helpSanta(int n, int m, vector<vector<int>> &g){
+        int k = -1;;
+        vector<bool> vis(n+1,false);
+        for(int i=1;i<=n;i++){
+            if(!vis[i]){
+                int tempCnt = 0;
+                dfs(g,vis,i,tempCnt);
+                if(tempCnt > k) k = tempCnt;
+            }
+        }
+        
+        if(k == 1) return -1;
+        
+        return prime[k-1];
+    }
+};
