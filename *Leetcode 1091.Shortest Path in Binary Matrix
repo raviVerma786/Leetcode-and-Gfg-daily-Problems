@@ -1,0 +1,38 @@
+Question Link :https://leetcode.com/problems/shortest-path-in-binary-matrix/description/
+
+Solution : 
+
+class Solution {
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        if(grid[0][0] == 1) return -1;
+
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<bool>>vis(m,vector<bool>(n,false));
+
+        queue<pair<int,pair<int,int>>>q; //{distance,{x,y}}
+        q.push({1,{0,0}});
+        vis[0][0] = true;
+
+        int dx[8] = {1,0,-1,0,1,1,-1,-1};
+        int dy[8] = {0,1,0,-1,1,-1,1,-1};
+
+        while(!q.empty()){
+            int dis = q.front().first, i = q.front().second.first,
+            j = q.front().second.second;
+            q.pop();
+
+            if(i == m-1 && j== n-1) return dis;
+
+            for(int k=0;k<8;k++){
+                int x = i + dx[k], y = j + dy[k];
+                if(x>=0 && y>=0 && x<m && y<n && !vis[x][y] && grid[x][y] == 0){
+                    vis[x][y] = true;
+                    q.push({dis+1,{x,y}});
+                }
+            }
+        }
+
+        return -1;
+    }
+};
