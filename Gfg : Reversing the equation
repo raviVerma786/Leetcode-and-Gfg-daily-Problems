@@ -1,0 +1,36 @@
+Question Link : https://practice.geeksforgeeks.org/problems/reversing-the-equation2205/1
+
+Solution : 
+
+class Solution
+{
+  public:
+    string reverseEqn (string s)
+        {
+            stack<string> st;
+            
+            string str = "";
+            for(char ch : s){
+                if(ch >= '0' && ch<='9') str.push_back(ch);
+                else{
+                    st.push(str);
+                    str = "";
+                    
+                    str.push_back(ch);
+                    st.push(str);
+                    
+                    str = "";
+                }
+            }
+            
+            if(str.size()) st.push(str);
+            
+            string ans = "";
+            while(!st.empty()){
+                ans += st.top();
+                st.pop();
+            }
+            
+            return ans;
+        }
+};
