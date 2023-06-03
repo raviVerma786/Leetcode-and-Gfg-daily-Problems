@@ -1,0 +1,32 @@
+Question Link : https://leetcode.com/problems/time-needed-to-inform-all-employees/description/
+
+Solution : 
+
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<int> adj[n];
+        for(int i=0;i<n;i++){
+            if(i == headID) continue;
+
+            adj[manager[i]].push_back(i);
+        }
+        
+        queue<pair<int,int>> q; //{time,manager}
+        q.push({0,headID});
+        int ans = 0;
+
+        while(!q.empty()){
+            int node = q.front().second, time = q.front().first;
+            q.pop();
+            
+            ans = max(ans,time);
+            int inc = informTime[node];
+            for(int child : adj[node]){
+                q.push({time + inc,child});
+            }
+        }
+
+        return ans;
+    }
+};
