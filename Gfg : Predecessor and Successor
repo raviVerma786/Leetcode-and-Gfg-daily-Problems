@@ -1,0 +1,21 @@
+Question Link : https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1
+
+Solution : 
+
+class Solution
+{
+    public:
+    void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+    {
+        if(!root) return;
+        
+        findPreSuc(root->left,pre,suc,key);
+        
+        if(root->key != key){
+            if(root->key < key && (!pre || pre->key < root->key)) pre = root;
+            else if(!suc || suc->key > root->key) suc = root;
+        }
+        
+        findPreSuc(root->right,pre,suc,key);
+    }
+};
