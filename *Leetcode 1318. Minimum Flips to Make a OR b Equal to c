@@ -1,0 +1,38 @@
+Question Link : https://leetcode.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/description/
+
+Solution : 
+
+class Solution {
+public:
+    int minFlips(int a, int b, int c) {
+        int cnt = 0;
+
+        //flips in making bits of a | b = c
+        while(c){
+            int cBit = (c & 1), aBit = (a & 1), bBit = (b & 1);
+
+            if((aBit | bBit) != cBit){
+                if(cBit == 1) cnt++;
+                else if(cBit == 0) cnt += (aBit + bBit);
+            }
+
+            a = a>>1;
+            b = b>>1;
+            c = c>>1;
+        }
+        
+        //ensure no more set bits in a
+        while(a){
+            if((a&1)) cnt++;
+            a = a>>1;
+        }
+        
+        //ensure no more set bits in b
+        while(b){
+            if((b&1)) cnt++;
+            b = b>>1;
+        }
+
+        return cnt;
+    }
+};
