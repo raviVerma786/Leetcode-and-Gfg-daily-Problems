@@ -1,0 +1,62 @@
+Question Link : https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1
+
+Solution 1: 
+
+class Solution
+{
+	public:
+		vector<string>find_permutation(string S)
+		{
+		    sort(S.begin(),S.end());
+		    vector<string> ans; 
+		    
+		    //finding next permutations for simple solution see first submitted solution
+		    while(true){
+		        ans.push_back(S);
+		        
+		        int ind = -1,n = S.size();
+		        for(int i=n-2;i>=0;i--){
+		            if(S[i] < S[i+1]) {
+		                ind = i;
+		                break;
+		            }
+		        }
+		        
+		        if(ind == -1){
+		            break; //all permutations are stored
+		        }
+		        
+		       int closestSmaller = -1;
+               for(int i=n-1;i>ind;i--){
+                   if(S[i] > S[ind]){
+                       closestSmaller = i;
+                       break;
+                   }
+               }
+		        
+		        swap(S[closestSmaller],S[ind]);
+		        reverse(S.begin() + ind + 1,S.end());
+		    }
+		    
+		    return ans;
+		}
+};
+
+
+Solution 2 : 
+
+class Solution
+{
+	public:
+		vector<string>find_permutation(string S)
+		{
+		    sort(S.begin(),S.end());
+		    vector<string> ans; 
+		    
+		    do{
+		        ans.push_back(S);
+		    }while(next_permutation(S.begin(),S.end()));
+		    
+		    return ans;
+		}
+};
