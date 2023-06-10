@@ -1,0 +1,52 @@
+Question Link : https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/description/
+
+Solution : 
+
+class Solution {
+public:
+    bool isPossible(int n,int index,int maxSum,int mid){
+        long long minSumOfLeftElements = 0, minSumOfRightElements = 0;
+
+        if(index > 0){
+            long long k = mid  - 1; 
+            long long rem = mid - index -1;
+            minSumOfLeftElements = (k * (k + 1))/2;
+
+            if(rem > 0){
+                minSumOfLeftElements -= (rem * (rem + 1))/2; //minus sum of elements not entered
+            }
+            else minSumOfLeftElements -= rem; //putting 1 in all extra places
+        }
+
+        if(index < n-1){
+            long long k = mid - 1;
+            long long rem = mid - (n - index - 1) -1;
+            minSumOfRightElements = (k * (k + 1))/2;
+
+            if(rem > 0){
+                minSumOfRightElements -= (rem * (rem + 1))/2; //minus sum of elements not entered
+            }
+            else minSumOfRightElements -= rem; //putting 1 in all extra places
+        }
+        
+        return (mid + minSumOfLeftElements + minSumOfRightElements <= maxSum);
+    }
+
+    int maxValue(int n, int index, int maxSum) {
+        int low = 1,high = maxSum;
+        int ans = 0;
+
+        while(low <= high){
+            int mid = (low + high)/2;
+            
+            if(isPossible(n,index,maxSum,mid)){
+                ans = mid;
+                low = mid + 1;
+            }
+            else high = mid - 1;
+
+        }
+
+        return ans;
+    }
+};
