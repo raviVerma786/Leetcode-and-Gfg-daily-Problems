@@ -1,0 +1,43 @@
+Question Link : https://leetcode.com/problems/snapshot-array/description/
+
+Solution : 
+
+class SnapshotArray {
+private:
+    vector<vector<pair<int,int>>> snaps;
+    int cnt;
+public:
+    SnapshotArray(int length) {
+        cnt = 0;
+        snaps = vector<vector<pair<int,int>>>(length,vector<pair<int,int>>());
+    }
+    
+    void set(int index, int val) {
+        if(snaps[index].size() == 0) snaps[index].push_back({cnt,val});
+        else {
+            if(snaps[index].back().first == cnt) snaps[index].back().second = val;
+            else snaps[index].push_back({cnt,val});
+        }
+    }
+    
+    int snap() {
+        cnt++;
+        return cnt - 1;
+    }
+    
+    int get(int index, int snap_id) {
+        int low = 0 , high = snaps[index].size() - 1;
+        int ans = 0;
+
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(snaps[index][mid].first <= snap_id){
+                 ans = snaps[index][mid].second;
+                 low = mid + 1;
+            }
+            else high = mid -1 ;
+        }
+
+        return ans;
+    }
+};
