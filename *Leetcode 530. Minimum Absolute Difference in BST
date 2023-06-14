@@ -1,0 +1,20 @@
+Question Link : https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/
+
+Solution : 
+
+class Solution {
+public:
+    int val = -1, mindif = INT_MAX;
+    int getMinimumDifference(TreeNode* root) {
+        if(!root) return 0;
+        
+        getMinimumDifference(root->left);
+
+        if (val >= 0) mindif = min(mindif, root->val - val);
+        val = root->val;
+
+        getMinimumDifference(root->right);
+
+        return mindif;
+    }
+};
