@@ -1,0 +1,55 @@
+Question Link : https://practice.geeksforgeeks.org/problems/95bb244da24edd6214086ff934886ccda6ed9da8/1
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=g9YgQISJuCw&ab_channel=CODEKARLO
+  private:
+    unordered_map<int,int> leftMostPosition,rightMostPosition; //contains leftmost and rightmost position of elements
+    vector<int> v; //cotains types of elements in sorted order
+    
+  public:
+    long long helper(int pos,int index,vector<vector<long long>>&dp,int direction){
+        if(index == v.size()) return abs(pos); //going to origin again
+        if(dp[index][direction] != -1) return dp[index][direction];
+        
+        long long takeLeftMostFirst = abs(pos - leftMostPosition[v[index]]) + abs(rightMostPosition[v[index]] - leftMostPosition[v[index]]) +
+                                      helper(rightMostPosition[v[index]],index+1,dp,0);
+        
+        long long takeRightMostFirst = abs(pos - rightMostPosition[v[index]]) + abs(rightMostPosition[v[index]] - leftMostPosition[v[index]]) +
+                                      helper(leftMostPosition[v[index]],index + 1,dp,1);
+                                      
+        return dp[index][direction] = min(takeLeftMostFirst,takeRightMostFirst);
+    }
+    
+    long long minTime(int n, vector<int> &locations, vector<int> &types) {
+       int maxEle = *max_element(types.begin(),types.end());
+       vector<bool> isPresent(maxEle + 1,false); // to avoid sorting
+       
+       for(int fruit : types){
+           isPresent[fruit] = true;
+       }
+       
+       //filling vector v declared globally
+       for(int i=0;i<=maxEle;i++){
+           if(isPresent[i]){
+               v.push_back(i);
+           }
+       }
+       
+       //filling both maps declared globally
+       for(int i=0;i<types.size();i++){
+           if(leftMostPosition.count(types[i]) == 0){
+               leftMostPosition[types[i]] = locations[i];
+               rightMostPosition[types[i]] = locations[i];
+           }
+           else{
+               leftMostPosition[types[i]] = min(leftMostPosition[types[i]],locations[i]);
+               rightMostPosition[types[i]] = max(rightMostPosition[types[i]],locations[i]);
+           }
+       }
+       
+       vector<vector<long long>>dp(types.size(),vector<long long>(2,-1));
+       return helper(0,0,dp,0);
+    }
+};
