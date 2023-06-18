@@ -1,0 +1,45 @@
+Question Link : https://leetcode.com/problems/longest-increasing-path-in-a-matrix/description/
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=wv_GA9077Dc&ab_channel=CodewithAlisha
+private:
+    int lip(vector<vector<int>>&matrix,int i,int j,vector<vector<int>>&dp){
+        if(i<0 || j<0 || i==matrix.size() || j==matrix[0].size()) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int maxLen = 1;
+        //up
+        if(i-1 >= 0 && matrix[i-1][j] > matrix[i][j])
+            maxLen = max(maxLen,1 + lip(matrix,i-1,j,dp));
+    
+        //down
+        if(i+1 < matrix.size() && matrix[i+1][j] > matrix[i][j])
+             maxLen = max(maxLen,1 + lip(matrix,i+1,j,dp));
+
+        //left
+         if(j-1 >=0 && matrix[i][j-1] > matrix[i][j])
+             maxLen = max(maxLen,1 + lip(matrix,i,j-1,dp));
+
+        //right
+        if(j+1 < matrix[0].size() && matrix[i][j+1] > matrix[i][j])
+             maxLen = max(maxLen,1 + lip(matrix,i,j+1,dp));
+
+        return dp[i][j] = maxLen;
+    }
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n= matrix[0].size();
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+
+        int ans = 1;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                ans = max(ans,lip(matrix,i,j,dp));
+            }
+        }
+
+        return ans;
+    }
+};
