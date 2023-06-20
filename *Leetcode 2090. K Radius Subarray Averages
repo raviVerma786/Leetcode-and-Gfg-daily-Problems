@@ -1,0 +1,30 @@
+Question Link : https://leetcode.com/problems/k-radius-subarray-averages/description/
+
+Solution : 
+
+class Solution {
+public:
+    vector<int> getAverages(vector<int>& nums, int k) {
+        int n = nums.size();
+        
+        //storing prefix sum
+        vector<long long> prefixSum(n);
+        prefixSum[0] = nums[0];
+        for(int i=1;i<n;i++){
+            prefixSum[i] = nums[i] + prefixSum[i-1];
+        }
+
+        //calculating ans
+        vector<int> ans(n,-1);
+        int denominator = (2*k + 1); //total elements in k radius
+
+        for(int i = k; i<(n - k); i++){
+            long long leftSum = prefixSum[i], rightSum = prefixSum[i + k] - prefixSum[i];
+            if(i - k - 1 >= 0) leftSum -= prefixSum[i - k - 1];
+
+            ans[i] = (leftSum + rightSum)/denominator;
+        }
+
+        return ans;
+    }
+};
