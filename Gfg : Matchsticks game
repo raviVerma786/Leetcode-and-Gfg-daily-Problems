@@ -1,0 +1,19 @@
+Question Link : https://practice.geeksforgeeks.org/problems/-matchsticks-game4906/1
+
+Solution : 
+
+class Solution {
+  public:
+ //if N is multiple of 5 then who plays first will lose and if A is able to pick some number
+//of matchsticks such that number becomes multiple of 5 then B will lose definitely because
+//now after picking of A, B will be first to play.............(by observation)
+    int matchGame(long long N) {
+        if(N <= 4) return N;
+        else if((N - 1)%5 == 0) return 1;
+        else if((N-2)%5 == 0) return 2;
+        else if((N-3)%5 == 0) return 3;
+        else if((N-4)% 5 == 0) return 4;
+        
+        return -1;
+    }
+};
