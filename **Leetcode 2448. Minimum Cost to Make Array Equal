@@ -1,0 +1,33 @@
+Question Link : https://leetcode.com/problems/minimum-cost-to-make-array-equal/description/
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=clHTLCrl7eM&ab_channel=BroCoders
+public:
+    long long minCost(vector<int>& nums, vector<int>& cost) {
+      int n = nums.size();
+
+      vector<pair<int,int>> v;
+      for(int i=0;i<n;i++) v.push_back({nums[i],cost[i]});
+
+      sort(v.begin(),v.end());
+      long long totalElements = accumulate(cost.begin(),cost.end(),0LL);
+      long long mid = (totalElements + 1)/2;
+      
+      int j=0;
+      while(j<n && mid > 0){
+          mid -= v[j].second;
+          j++;
+      }
+      
+      long long finalEle = (j>0 ? v[j-1].first : v[0].first);
+      long long ans = 0;
+      for(int i=0;i<n;i++){
+          ans += (abs(finalEle - v[i].first) * v[i].second);
+      }
+
+      return ans;
+
+    }
+};
