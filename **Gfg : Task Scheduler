@@ -1,0 +1,53 @@
+Question Link : https://leetcode.com/problems/task-scheduler/description/
+https://practice.geeksforgeeks.org/problems/task-scheduler/1
+
+Solution : (Gfg)
+
+class Solution {
+  public:
+//   https://www.youtube.com/watch?v=tGw5GbDekTU&ab_channel=KnowledgeCenter
+    int leastInterval(int N, int K, vector<char> &tasks) {
+        vector<int> v(26);
+        int maxFreq = 0;
+        
+        for(char ch : tasks){
+            v[ch - 'A']++;
+            maxFreq = max(maxFreq,v[ch - 'A']);
+        }
+        
+        int cnt = 0;
+        for(int i : v){
+            if(i == maxFreq) cnt++;
+        }
+        
+        int ans =  (maxFreq - 1)*(K + 1) + cnt;
+        return max(ans,N);
+    }
+};
+
+
+Solution Leetcode : 
+
+class Solution {
+public:
+// https://www.youtube.com/watch?v=tGw5GbDekTU&ab_channel=KnowledgeCenter
+    int leastInterval(vector<char>& tasks, int K) {
+        int N = tasks.size();
+
+        vector<int> v(26);
+        int maxFreq = 0;
+        
+        for(char ch : tasks){
+            v[ch - 'A']++;
+            maxFreq = max(maxFreq,v[ch - 'A']);
+        }
+        
+        int cnt = 0;
+        for(int i : v){
+            if(i == maxFreq) cnt++;
+        }
+        
+        int ans =  (maxFreq - 1)*(K + 1) + cnt;
+        return max(ans,N);
+    }
+};
