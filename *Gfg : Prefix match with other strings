@@ -1,0 +1,66 @@
+Question Link : https://practice.geeksforgeeks.org/problems/prefix-match-with-other-strings/1
+
+Solution : 
+
+struct Node{
+    Node* next[26];
+    int cnt = 0;
+    
+    Node* getNext(char ch){
+        return next[ch - 'a'];
+    }
+    
+    bool containsKey(char ch){
+        return next[ch - 'a'] != NULL;
+    }
+    
+    void addKey(char ch,Node* node){
+        next[ch - 'a'] = node;
+    }
+};
+
+class Trie{
+    private:
+        Node* root = new Node();
+        
+    public:
+        void insert(string &s){
+            Node* node = root;
+            for(char ch : s){
+                if(!node->containsKey(ch)) node->addKey(ch,new Node());
+                node = node->getNext(ch);
+                node->cnt++;
+            }
+        }
+        
+        int getMaxPrefix(string &s,int k){
+            Node* node = root;
+            for(char ch : s){
+                if(!node->containsKey(ch)) return 0;
+                node = node->getNext(ch);
+            }
+            
+            return node->cnt;
+        }
+};
+
+class Solution{   
+public:
+    int klengthpref(string arr[], int n, int k, string str){   
+        if(k > str.size()) return 0;
+        
+        Trie* trie = new Trie();
+        int maxLen = 0;
+   
+        for(int i = 0;i<n;i++){
+            if(arr[i].size() >= k){
+                string temp = arr[i].substr(0,k);
+                trie->insert(temp); //no need to insert more than k characters
+            }
+        }
+        
+         str = str.substr(0,k);
+         return trie->getMaxPrefix(str,k);
+         
+    }
+};
