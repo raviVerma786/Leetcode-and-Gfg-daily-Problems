@@ -1,0 +1,31 @@
+Question Link :https://leetcode.com/problems/count-all-possible-routes/description/
+
+Solution : 
+
+class Solution {
+private:
+    int mod = 1e9 + 7;
+public:
+    int helper(vector<int>&locations,int start,int finish,int fuel,vector<vector<int>>&dp){
+        if(dp[start][fuel] != -1) return dp[start][fuel];
+
+        int ans = (start == finish); // if start == finish one route is found and ans = 1
+
+        for(int i=0;i<locations.size();i++){
+            if(start == i) continue;
+
+            int reqFuel = abs(locations[i] - locations[start]);
+            if(reqFuel <= fuel){
+                ans = (ans + helper(locations,i,finish,fuel - reqFuel,dp)) % mod;
+            }
+        }
+
+        return dp[start][fuel] = ans;
+    }
+    int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
+        int n = locations.size();
+        vector<vector<int>> dp(n,vector<int>(fuel+1,-1));
+
+        return helper(locations,start,finish,fuel,dp);
+    }
+};
