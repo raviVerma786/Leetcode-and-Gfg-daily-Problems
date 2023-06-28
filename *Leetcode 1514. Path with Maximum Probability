@@ -1,0 +1,41 @@
+Question Link : https://leetcode.com/problems/path-with-maximum-probability/description/
+
+Solution : 
+
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+
+        vector<pair<int,double>> adj[n]; //{child,probability}
+        for(int i=0;i<edges.size();i++){
+            adj[edges[i][0]].push_back({edges[i][1],succProb[i]});
+            adj[edges[i][1]].push_back({edges[i][0],succProb[i]});
+        }
+        
+        priority_queue<pair<double,int>> pq;
+        vector<double> dp(n,0);
+
+        pq.push({1.0,start});
+        dp[start] = 1.0;
+
+        while(!pq.empty()){
+            int node = pq.top().second;
+            double prob = pq.top().first;
+            pq.pop();
+            
+            if(node == end) return prob;//this will be maximum ensured by priority queue
+
+            for(pair<int,double>p : adj[node]){
+                int child = p.first;
+                double probability = p.second * prob;
+
+                if(probability > dp[child]){
+                    dp[child] = probability;
+                    pq.push({probability,child});
+                }
+            }
+        }
+
+        return 0;
+    }
+};
