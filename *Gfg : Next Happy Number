@@ -1,0 +1,80 @@
+Question Link : https://practice.geeksforgeeks.org/problems/next-happy-number4538/1
+
+Solution 1 : 
+
+class Solution{
+public:
+    bool check(int n){
+        unordered_map<int,int> mp;
+        
+        while(mp.find(n) == mp.end()){
+            int sum = 0;
+            mp[n]++;
+            
+            while(n){
+                int digit = n%10;
+                n = n/10;
+                
+                sum += (digit * digit);
+            }
+            
+            if(sum == 1) return true;
+            n = sum;
+        }
+        
+        return false;
+    }
+    
+    int nextHappy(int N){
+       int ans = -1;
+       int i = N+1;
+       
+       while(true){
+           if(check(i)){
+               ans = i;
+               break;
+           }
+           i++;
+       }
+       
+       return ans;
+    }
+};
+
+
+Solution 2 : 
+
+class Solution{
+public:
+    bool check(int n){
+        while(n > 9){
+            int sum = 0;
+            
+            while(n){
+                int digit = n%10;
+                n = n/10;
+                
+                sum += (digit * digit);
+            }
+            
+            n = sum;
+        }
+        
+        return n == 1 || n == 7;
+    }
+    
+    int nextHappy(int N){
+       int ans = -1;
+       int i = N+1;
+       
+       while(true){
+           if(check(i)){
+               ans = i;
+               break;
+           }
+           i++;
+       }
+       
+       return ans;
+    }
+};
