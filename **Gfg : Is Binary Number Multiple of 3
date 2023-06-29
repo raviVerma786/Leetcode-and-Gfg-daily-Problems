@@ -1,0 +1,22 @@
+Question Link : https://practice.geeksforgeeks.org/problems/is-binary-number-multiple-of-30654/1
+
+Solution : 
+
+class Solution{
+public:	
+		
+	int isDivisible(string s){
+	    int oddBits = 0, evenBits = 0;
+
+	    for(int i=0;i<s.size();i++){
+	        int bit = (s[i] - '0');
+	        if(bit & 1){
+	            if(i%2 == 0) evenBits++;
+	            else oddBits++;
+	        }
+	    }
+	    
+	    return abs(oddBits - evenBits) % 3 == 0;
+	}
+
+};
