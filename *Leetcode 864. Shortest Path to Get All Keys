@@ -1,0 +1,91 @@
+Question Link : https://leetcode.com/problems/shortest-path-to-get-all-keys/description/
+
+Solution : 
+
+class Solution {
+public:
+// https://www.youtube.com/watch?v=8JLFMlcxHyc&ab_channel=CodeFreaks
+    bool checker(int x, int y, int n, int m)
+    {
+        if(x >= 0 && x<n && y>=0 && y<m) return true;
+        return false;
+    }
+
+    int shortestPathAllKeys(vector<string>& grid) {
+
+        int nkeys=0, inix=0, iniy=0;
+
+        for(int i=0; i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j] == '@'){
+                    inix = i;
+                    iniy = j;
+                }
+                else if(grid[i][j] >= 'a' && grid[i][j] <= 'z') 
+                    nkeys++;
+            }
+        }
+
+        int mask = 1<<(nkeys);  // 100 
+        int orig = 1<<(nkeys+1); // 1000-1 === (8-1==7)
+
+        vector<vector<vector<bool>>> vis(orig, vector<vector<bool>> (grid.size(), vector<bool> (grid[0].size(), false)));
+
+        vector<int> dx = {1,0,-1,0};
+        vector<int> dy = {0,1,0,-1};
+
+        queue<vector<int>> q;
+
+        q.push({inix, iniy,0,mask});
+
+        while(!q.empty())
+        {
+            vector<int> p = q.front();
+            q.pop();
+            
+            int row = p[0], col = p[1], moves = p[2], bitMask = p[3];
+            vis[bitMask][row][col] = true;
+
+            if(bitMask == (orig-1) )
+                return moves;
+
+            for(int i=0;i<4; i++)
+            {
+                int xx = row + dx[i];
+                int yy = col + dy[i];
+                if(checker(xx,yy,grid.size(),grid[0].size()) && grid[xx][yy] != '#' && !vis[bitMask][xx][yy]){
+                    if(grid[xx][yy] >= 'a' && grid[xx][yy] <= 'z'){
+                        int l = grid[xx][yy]-'a';
+                        if((bitMask & (1<<l)) == 0)
+                        {
+                            q.push({xx,yy,moves+1,bitMask | (1<<l)});
+                            vis[bitMask | (1<<l)][xx][yy] = true;
+                        }
+                        else
+                        {
+                            q.push({xx,yy,moves+1,bitMask});
+                            vis[bitMask][xx][yy] = true;
+                        }
+
+                    }
+                    else if(grid[xx][yy] >= 'A' && grid[xx][yy] <= 'Z')
+                    {
+                        int l = grid[xx][yy]+32 -'a';
+                        if((bitMask & (1<<l)) != 0)
+                        {
+                            q.push({xx,yy,moves+1,bitMask});
+                            vis[bitMask][xx][yy] = true;
+                        } 
+                    }
+                    else
+                    {
+                        q.push({xx,yy,moves+1,bitMask});
+                        vis[bitMask][xx][yy]=true;
+                    }
+                    
+                }
+            }
+        }
+        return -1;
+    }
+};
