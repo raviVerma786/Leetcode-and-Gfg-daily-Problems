@@ -1,0 +1,29 @@
+Question Link : https://leetcode.com/problems/fair-distribution-of-cookies/description/
+
+Solution :
+
+class Solution {
+private:
+    int helper(vector<int>&cookies,vector<int>&children,int i,int k){
+        if(i == cookies.size()){
+            return *max_element(children.begin(),children.end());
+        }
+
+        int res = INT_MAX;
+        for(int j=0;j<k;j++){
+            children[j] += cookies[i];
+            res = min(res,helper(cookies,children,i+1,k));
+            children[j] -= cookies[i];
+
+            if(children[j] == 0) break; 
+        }
+
+        return res;
+    }
+public:
+    int distributeCookies(vector<int>& cookies, int k) {
+        int n = cookies.size();
+        vector<int> children(n,0);
+        return helper(cookies,children,0,k);
+    }
+};
