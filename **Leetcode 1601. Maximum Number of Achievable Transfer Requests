@@ -1,0 +1,29 @@
+Question Link : https://leetcode.com/problems/maximum-number-of-achievable-transfer-requests/description/
+
+Solution : 
+
+class Solution {
+public:
+    int helper(vector<vector<int>>& requests,vector<int>&exchange,int i){
+        if(i == requests.size()){
+            for(int i : exchange){
+                if(i!=0) return INT_MIN;
+            }
+            return 0;
+        }
+
+        exchange[requests[i][0]]++;
+        exchange[requests[i][1]]--;
+        int take = 1 + helper(requests,exchange,i+1);
+        exchange[requests[i][0]]--;
+        exchange[requests[i][1]]++;
+
+        int notTake = helper(requests,exchange,i+1);
+
+        return max(take,notTake);
+    }
+    int maximumRequests(int n, vector<vector<int>>& requests) {
+        vector<int> exchange(n,0);
+        return helper(requests,exchange,0);
+    }
+};
