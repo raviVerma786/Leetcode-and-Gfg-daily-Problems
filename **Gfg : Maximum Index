@@ -7,24 +7,21 @@ public:
 // https://www.youtube.com/watch?v=e5_T1EIHNm0&ab_channel=AkshayAnil
     int maxIndexDiff(int arr[], int n) {
        vector<int> rightMax(n),leftMin(n); // store index not value
-       rightMax[n-1] = n-1;
-       leftMin[0] = 0;
+       rightMax[n-1] = arr[n-1];
+       leftMin[0] = arr[0];
        
        for(int i=n-2;i>=0;i--){
-           if(arr[i] <= arr[rightMax[i+1]]) rightMax[i] = rightMax[i+1];
-           else rightMax[i] = i;
-           
+           rightMax[i] = max(arr[i],rightMax[i+1]);
        }
        
        for(int i=1;i<n;i++){
-           if(arr[i] >= arr[leftMin[i-1]]) leftMin[i] = leftMin[i-1];
-           else leftMin[i] = i;
+          leftMin[i] = min(arr[i],leftMin[i-1]);
        }
        
        int i=0,j=0,ans = 0;
        while(i<n && j<n){
-           if(arr[leftMin[i]] <= arr[rightMax[j]]){
-               ans = max(ans,rightMax[j] - leftMin[i]);
+           if(leftMin[i] <= rightMax[j]){
+               ans = max(ans,j-i);
                j++;
            }else i++;
        }
