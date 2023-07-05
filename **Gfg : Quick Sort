@@ -1,0 +1,70 @@
+Question Link : https://practice.geeksforgeeks.org/problems/quick-sort/1
+
+Solution 1 : last element as pivot
+
+class Solution
+{
+    public:
+    //Function to sort an array using quick sort algorithm.
+    void quickSort(int arr[], int low, int high)
+    {
+        if(low < high){
+            int partn = partition(arr,low,high);
+            quickSort(arr,low,partn - 1);
+            quickSort(arr,partn + 1,high);
+        }
+    }
+    
+    public:
+    int partition (int arr[], int low, int high)
+    {
+       int pivot = arr[high];
+       int i = low - 1;
+       
+       for(int j = low;j<high;j++){
+           if(arr[j] < pivot){
+               i++;
+               swap(arr[i],arr[j]);
+           }
+       }
+       
+       swap(arr[high],arr[i+1]);
+       
+       return i+1;
+    }
+};
+
+
+solution 2 : first element as pivot
+
+class Solution
+{
+    public:
+    //Function to sort an array using quick sort algorithm.
+    void quickSort(int arr[], int low, int high)
+    {
+        if(low < high){
+            int partn = partition(arr,low,high);
+            quickSort(arr,low,partn - 1);
+            quickSort(arr,partn + 1,high);
+        }
+    }
+    
+    public:
+    int partition (int arr[], int low, int high)
+    {
+       int pivot = arr[low];
+       int i = low + 1,j=high;
+       
+       do{
+           while(i<=high && arr[i] <= pivot) i++;
+           while(j>low && arr[j] > pivot) j--;
+           
+           if(i < j) swap(arr[i],arr[j]);
+       }while(i<j);
+       
+       swap(arr[low],arr[j]);
+       
+       return j;
+    }
+};
