@@ -1,0 +1,28 @@
+Question Link : https://leetcode.com/problems/put-marbles-in-bags/description/
+
+Solution : 
+
+class Solution {
+private:
+    // https://www.youtube.com/watch?v=UB1Q3TKvY3Y&ab_channel=codingMohan
+
+public:
+    long long putMarbles(vector<int>& weights, int k) {
+        if(k >= weights.size()) return 0;
+        
+        int n = weights.size();
+        vector<int> costs;
+        for(int i=1;i<n;i++){
+            costs.push_back(weights[i] + weights[i-1]);
+        }
+        sort(costs.begin(),costs.end());
+
+        long long maxCost = weights[0] + weights[n-1];
+        long long minCost = weights[0] + weights[n-1];
+
+        for(int i=0;i<(k-1);i++) minCost += costs[i];
+        for(int i=(n-k);i<costs.size();i++) maxCost += costs[i];
+
+        return maxCost - minCost;
+    }
+};
