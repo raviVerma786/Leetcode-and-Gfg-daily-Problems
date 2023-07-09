@@ -1,0 +1,45 @@
+Question Link : https://leetcode.com/problems/substring-with-largest-variance/description/
+
+Solution : 
+
+// https://www.youtube.com/watch?v=DbfHIdZL8rQ&ab_channel=CodeWithSunny
+
+class Solution {
+public:
+    int largestVariance(string s) {
+        vector<bool> present(26,false);
+        for(char ch : s){
+            present[ch - 'a'] = true;
+        }
+
+        int ans = 0;
+        for(char maxi='a'; maxi<='z'; maxi++){
+            for(char mini = 'a';mini<='z';mini++){
+                if(maxi == mini || !present[maxi-'a'] || !present[mini-'a']) continue;
+                
+                int iterCnt = 2; //two iterations to handle case like "abbbbb" where a is mini and b is maxi
+                while(iterCnt--){
+                    int f1 = 0, f2 = 0; //freq of maxi and mini respectively
+                    for(char ch : s){
+                        if(ch == maxi) f1++;
+                        else if(ch == mini) f2++;
+                        
+                        //Kadane's algorithm step
+                        if(f2 > f1){
+                            f1 = 0;
+                            f2 = 0;
+                        }
+                        
+                        if(f1 > 0 && f2 > 0){
+                            ans = max(ans,f1 - f2);
+                        }
+                    }
+                    reverse(s.begin(),s.end());
+                }
+
+            }
+        }
+
+        return ans;
+    }
+};
