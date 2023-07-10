@@ -1,0 +1,100 @@
+Question Link : https://practice.geeksforgeeks.org/problems/find-nth-element-of-spiral-matrix/1
+
+Solution : O(n*m)
+
+class Solution
+{
+    public:
+    int findK(int a[MAX][MAX],int n,int m,int k)
+    {
+ 		int i=0,j=0,ans = -1;
+ 		while(k > 0){
+ 		    int rowBegin = i,colBegin = j;
+ 		    
+ 		    //left to right
+ 		    while(j<m && k>0){
+ 		        k--;
+ 		        if(k == 0) ans = a[i][j];
+ 		        else j++;
+ 		    }
+ 		    i++;
+ 		    j--;
+ 		    
+ 		    //up to down
+ 		    while(i<n && k>0){
+ 		        k--;
+ 		        if(k == 0) ans = a[i][j];
+ 		        else i++;
+ 		    }
+ 		    i--;
+ 		    j--;
+ 		    
+ 		    //right to left
+ 		    while(j>=colBegin && k>0){
+ 		        k--;
+ 		        if(k == 0) ans = a[i][j];
+ 		        else j--;
+ 		    }
+ 		    j++;
+ 		    i--;
+ 		    
+ 		    // down to up
+ 		    while(i>rowBegin && k>0){
+ 		        k--;
+ 		        if(k == 0) ans = a[i][j];
+ 		        else i--;
+ 		    }
+ 		    i++;
+ 		    j++;
+ 		    
+ 		    n--;
+ 		    m--;
+ 		}
+ 		
+ 		return ans;
+    }
+};
+
+
+Optimal Solution : O(m + n)
+
+class Solution
+{
+    public:
+    int findK(int A[MAX][MAX], int n, int m, int k)
+    {
+    //Your code here
+      int r1 = 0,r2 = n,c1 = 0,c2 = m,i=0;
+      while(r1<r2 && c1<c2){
+          
+          if(c2 - c1 < k){
+              k -= (c2 - c1);
+          } else return A[r1][c1+k-1];
+          r1++;
+          c1 = c2-1;
+          
+          if(r2 - r1 < k){
+              k -= (r2 - r1);
+          } else return A[r1+k-1][c1];
+          r1 = r2 - 1;
+          c1--;
+          
+          if(c1 - i + 1 < k){
+              k -= (c1 - i + 1);
+          } else return A[r1][c1-k+1];
+          r1--;
+          c1=i;
+          
+          if(r1 - i < k){
+              k -= (r1 - i);
+          } else return A[r1-k+1][c1];
+          c1++;
+          r1 = i+1;
+          
+          c2--;
+          r2--;
+          i++;
+      }
+      return -1;
+    }
+};
