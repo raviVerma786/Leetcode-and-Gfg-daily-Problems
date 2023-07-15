@@ -1,0 +1,42 @@
+Question Link : https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/description/
+
+Solution : 
+
+class Solution {
+public:
+    int findNext(vector<vector<int>>&events,int curr){
+        //this finds next index that can be taken after curr index
+        int low = curr+1,high = events.size()-1;
+        int idx = events.size();
+
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(events[mid][0] > events[curr][1]){
+                idx = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
+        }
+
+        return idx;
+    }
+    
+    int findMaxValue(vector<vector<int>>&events,int k,int i,vector<vector<int>>&dp){
+      if(k == 0 || i==events.size()) return 0;
+      if(dp[i][k] != -1) return dp[i][k];
+
+        int idx = findNext(events,i);
+        int take = events[i][2] + findMaxValue(events,k-1,idx,dp);;
+        int notTake = findMaxValue(events,k,i+1,dp);
+      
+      return dp[i][k] = max(take,notTake);
+    }
+
+    int maxValue(vector<vector<int>>& events, int k) {
+       sort(events.begin(),events.end());
+       
+       int n = events.size();
+       vector<vector<int>>dp(n,vector<int>(k+1,-1));
+       return(findMaxValue(events,k,0,dp));
+    }
+};
