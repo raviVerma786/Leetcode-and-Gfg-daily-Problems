@@ -1,0 +1,91 @@
+Question Link : https://leetcode.com/problems/add-two-numbers-ii/
+
+
+Solution :
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverse(ListNode* head){
+        if(!head || !head->next) return head;
+
+        ListNode* curr = head,*prev=NULL;
+        while(curr){
+            ListNode* temp =curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+
+        return prev;
+    }
+
+    ListNode* addTwoNumbers(ListNode* list1, ListNode* list2) {
+        ListNode* l1 = reverse(list1);
+        ListNode* l2 = reverse(list2);
+
+        ListNode* sum = new ListNode(-1);
+        ListNode* newHead = sum;
+
+        int rem = 0;
+        while(l1 && l2){
+            int add = (l1->val + l2->val + rem)%10;
+            rem = (l1->val + l2->val + rem)/10;
+
+            ListNode* temp = new ListNode(add);
+            sum->next = temp;
+            sum = sum->next;
+
+            l1 = l1->next;
+            l2 = l2->next;
+        }
+
+        while(l1){
+            int add = (l1->val + rem)%10;
+            rem = (l1->val + rem)/10;
+
+            ListNode* temp = new ListNode(add);
+            sum->next = temp;
+            sum = sum->next;
+
+            l1 = l1->next;
+        }
+
+        while(l2){
+            int add = (l2->val + rem)%10;
+            rem = (l2->val + rem)/10;
+
+            ListNode* temp = new ListNode(add);
+            sum->next = temp;
+            sum = sum->next;
+
+            l2 = l2->next;
+        }
+
+        while(rem){
+            ListNode* temp = new ListNode(rem%10);
+            sum->next = temp;
+            sum = sum->next;
+
+            rem /= 10;
+        }
+
+        ListNode* temp = newHead;
+        newHead = newHead->next;
+        temp = NULL;
+        
+        reverse(list1);
+        reverse(list2);
+
+        return reverse(newHead);
+    }
+};
