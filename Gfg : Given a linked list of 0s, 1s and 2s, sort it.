@@ -1,0 +1,37 @@
+Question Link : https://practice.geeksforgeeks.org/problems/given-a-linked-list-of-0s-1s-and-2s-sort-it/1
+
+Solution : 
+
+class Solution
+{
+    public:
+    //Function to sort a linked list of 0s, 1s and 2s.
+    Node* segregate(Node *head) {
+        if(!head || !head->next) return head;
+        
+        Node* newHead = new Node(0);
+        Node* oneEnd = newHead;
+        
+        while(head){
+            Node* temp = head->next;
+            if(head->data == 0){
+                head->next = newHead;
+                newHead = head;
+            }else if(head->data == 1){
+                Node* nextOfCurr = oneEnd->next;
+                oneEnd->next = head;
+                head->next = nextOfCurr;
+                oneEnd = oneEnd->next;
+            }
+            else{
+                Node* nextOfCurr = oneEnd->next;
+                oneEnd->next = head;
+                head->next = nextOfCurr;
+            }
+            
+            head = temp;
+        }
+        
+        return newHead->next; //because one extra 0 was added
+    }
+};
