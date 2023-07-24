@@ -9,6 +9,7 @@ class Solution
     vector<int> rightView(Node *root)
     {
       vector<int>ans;
+      if(!root) return ans;
       queue<Node*> q;
       q.push(root);
       
