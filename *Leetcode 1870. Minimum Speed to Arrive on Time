@@ -1,0 +1,30 @@
+Question Link : https://leetcode.com/problems/minimum-speed-to-arrive-on-time/description/
+
+Solution : 
+
+class Solution {
+public:
+    bool isPossible(vector<int>&dist,int speed,double timeLimit){
+        double timeTaken = 0;
+        for(int d : dist){
+            timeTaken = ceil(timeTaken); // to depart at an integer time
+            timeTaken += ((d*1.0) / speed); //adding time taken to travel d
+        }
+
+        return timeTaken <= timeLimit;
+    }
+
+    int minSpeedOnTime(vector<int>& dist, double hour) {
+        int ans = -1, low = 1, high = 1e7;
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(isPossible(dist,mid,hour)){
+                ans = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
+        }
+
+        return ans;
+    }
+};
