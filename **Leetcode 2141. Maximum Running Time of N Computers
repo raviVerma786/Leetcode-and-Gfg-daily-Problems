@@ -1,0 +1,39 @@
+Question Link : https://leetcode.com/problems/maximum-running-time-of-n-computers/description/
+
+Solution : 
+
+class Solution {
+public:
+    bool isPossible(vector<int>&batteries,int n, long long avgTime){
+       int cnt = 0;
+       long long sum = 0;
+       for(int i=0;i<batteries.size();i++){
+           sum += batteries[i];
+           if(sum >= avgTime){
+               cnt++;
+               sum = sum % avgTime; //remaining power of last battery can be further used 
+           }
+           if(cnt == n) return true;
+       }
+
+       return false;
+    }
+
+    long long maxRunTime(int n, vector<int>& batteries) {
+        sort(batteries.begin(),batteries.end());
+
+        long long startTime = 1, endTime = 1e14;
+        long long ans = 0;
+        
+        while(startTime <= endTime){
+            long long avgTime = (startTime + endTime)/2;
+            if(isPossible(batteries,n,avgTime)){
+                ans = avgTime;
+                startTime = avgTime + 1;
+            }
+            else endTime = avgTime - 1;
+        }
+
+        return ans;
+    }
+};
