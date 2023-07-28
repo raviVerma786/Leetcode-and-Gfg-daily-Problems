@@ -1,0 +1,28 @@
+Question Link : https://leetcode.com/problems/predict-the-winner/description/
+
+Solution : 
+
+class Solution {
+private:
+    int dp[21][21];
+    int helper(vector<int>&arr,int i,int j){
+        if(i > j) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+        int x = arr[i] + min(helper(arr,i+2,j),helper(arr,i+1,j-1));
+        int y = arr[j] + min(helper(arr,i+1,j-1),helper(arr,i,j-2));
+        return dp[i][j] = max(x,y);
+    }
+
+public:
+    bool PredictTheWinner(vector<int>& nums) {
+        if(nums.size() == 1) return true;
+        memset(dp,-1,sizeof(dp));
+
+        int firstPlayerMaxScore = helper(nums,0,nums.size()-1);
+
+        int totalSum = accumulate(nums.begin(),nums.end(),0);
+        int secondPlayerScore = totalSum - firstPlayerMaxScore;
+
+        return firstPlayerMaxScore >= secondPlayerScore;
+    }
+};
