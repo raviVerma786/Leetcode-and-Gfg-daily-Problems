@@ -1,0 +1,34 @@
+Question Link : https://practice.geeksforgeeks.org/problems/median-of-bst/1
+
+Solution : 
+
+int cntNodes(struct Node* root){
+    if(!root) return 0;
+    return 1 + cntNodes(root->left) + cntNodes(root->right);
+}
+
+void inorder(struct Node* root,int& cnt,int n,float& median){
+    if(!root) return;
+    
+    inorder(root->left,cnt,n,median);
+    
+    if(n%2 == 0 && cnt == (n/2 - 1)) median = (median + root->data);
+    if(cnt == n/2){
+        if(n%2 == 0) median = (median + root->data)/2.0;
+        else median += root->data;
+    }
+    cnt++;
+    
+    inorder(root->right,cnt,n,median);
+}
+
+float findMedian(struct Node *root)
+{
+      int n = cntNodes(root);
+      
+      int cnt = 0;
+      float median = 0;
+      inorder(root,cnt,n,median);
+      
+      return median;
+}
