@@ -1,0 +1,25 @@
+Question Link : https://practice.geeksforgeeks.org/problems/inorder-successor-in-bst/1
+
+Solution : 
+
+class Solution{
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    Node* inorder(Node* root,Node* temp,Node* x){
+        if(!root) return temp;
+        
+        if(root->data <= x->data){
+            return inorder(root->right,temp,x);
+        }
+        else{
+            temp = root;
+            return inorder(root->left,temp,x);
+        }
+    }
+    
+    Node * inOrderSuccessor(Node *root, Node *x)
+    {
+        Node* temp = NULL;
+        return inorder(root,temp,x);
+    }
+};
