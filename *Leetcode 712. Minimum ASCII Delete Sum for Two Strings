@@ -1,0 +1,93 @@
+Question Link :  https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/
+
+Solution 1: Recursive Solution
+
+class Solution {
+public:
+    int lcsAsciiSum(string &s1,string& s2,int i,int j,vector<vector<int>>&dp){
+        if(i<0 || j<0) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int take = 0;
+        if(s1[i] == s2[j]){
+            take = s1[i] + lcsAsciiSum(s1,s2,i-1,j-1,dp);
+        }
+
+        int notTake = max(lcsAsciiSum(s1,s2,i-1,j,dp),lcsAsciiSum(s1,s2,i,j-1,dp));
+        return dp[i][j] = max(take,notTake);
+    }
+
+    int minimumDeleteSum(string s1, string s2) {
+        int n1 = s1.size(),n2=s2.size();
+        vector<vector<int>> dp(n1,vector<int>(n2,-1));
+        int lcs = lcsAsciiSum(s1,s2,s1.size()-1,s2.size()-1,dp);
+
+        int totalSum = 0;
+        for(char ch : s1) totalSum += ch;
+        for(char ch : s2) totalSum += ch;
+
+        return totalSum - (2 * lcs);
+    }
+};
+
+
+Solution 2 : Iterative Solution 
+
+class Solution {
+public:
+    int minimumDeleteSum(string s1, string s2) {
+        int n1 = s1.size(),n2=s2.size();
+        vector<vector<int>> dp(n1+1,vector<int>(n2+1,0));
+        for(int i=1;i<=n1;i++){
+            for(int j=1;j<=n2;j++){
+                int take = 0;
+                if(s1[i-1] == s2[j-1]){
+                    take = s1[i-1] + dp[i-1][j-1];
+                }
+
+                int notTake = max(dp[i-1][j],dp[i][j-1]);
+                dp[i][j] = max(take,notTake);
+            }
+        }
+
+        int lcs = dp[n1][n2];
+
+        int totalSum = 0;
+        for(char ch : s1) totalSum += ch;
+        for(char ch : s2) totalSum += ch;
+
+        return totalSum - (2 * lcs);
+    }
+};
+
+Solution 3 : Space optimised Iterative solution
+
+class Solution {
+public:
+    int minimumDeleteSum(string s1, string s2) {
+        int n1 = s1.size(),n2=s2.size();
+        vector<int> curr(n2+1,0),prev(n2+1,0);
+        
+        for(int i=1;i<=n1;i++){
+            for(int j=1;j<=n2;j++){
+                int take = 0;
+                if(s1[i-1] == s2[j-1]){
+                    take = s1[i-1] + prev[j-1];
+                }
+
+                int notTake = max(prev[j],curr[j-1]);
+                curr[j] = max(take,notTake);
+            }
+            prev = curr;
+        }
+
+        int lcs = curr[n2];
+
+        int totalSum = 0;
+        for(char ch : s1) totalSum += ch;
+        for(char ch : s2) totalSum += ch;
+
+        return totalSum - (2 * lcs);
+    }
+};
+
