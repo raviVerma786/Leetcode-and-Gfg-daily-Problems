@@ -1,0 +1,33 @@
+Question Link : https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
+
+Solution : 
+
+class Solution {
+public:
+    void backtrack(int i,string digits,unordered_map<char,string> m,vector<string>&ans,string curstr){
+        if(curstr.size()==digits.size()){//jitne characters honge utne letters ke hi words bhi honge
+            ans.push_back(curstr);
+            return;
+        }
+        for(char c : m[digits[i]] ){
+            backtrack(i+1,digits,m,ans,curstr+c);
+        }
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        unordered_map<char,string> m;
+         m['2'] = "abc";
+         m['3'] = "def";
+         m['4'] = "ghi";
+         m['5'] = "jkl";
+         m['6'] = "mno";
+         m['7'] = "pqrs";
+         m['8'] = "tuv";
+         m['9'] = "wxyz";
+         vector<string> ans;
+         string curstr="";
+         if(digits.size()>0)
+             backtrack(0,digits,m,ans,curstr);
+         return ans;
+    }
+};
