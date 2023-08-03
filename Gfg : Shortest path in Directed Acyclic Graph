@@ -1,0 +1,36 @@
+Question Link : https://practice.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1
+
+Solution : 
+
+class Solution {
+  public:
+     vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
+        vector<pair<int,int>>adj[N]; //{node,weight}
+        for(vector<int>&v : edges){
+            adj[v[0]].push_back({v[1],v[2]});
+        }
+        
+        vector<int>ans(N,INT_MAX);
+        queue<pair<int,int>>q; //{weight,node}
+        q.push({0,0});
+        ans[0] = 0;
+        
+        while(!q.empty()){
+            int wt = q.front().first, node = q.front().second;
+            q.pop();
+            
+            for(pair<int,int>p : adj[node]){
+                if(wt + p.second < ans[p.first]){
+                    ans[p.first] = wt + p.second;
+                    q.push({wt + p.second,p.first});
+                }
+            }
+        }
+        
+        for(int i=0;i<N;i++){
+            if(ans[i] == INT_MAX) ans[i] = -1;
+        }
+        
+        return ans;
+    }
+};
