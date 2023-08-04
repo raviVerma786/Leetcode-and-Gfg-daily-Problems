@@ -1,0 +1,30 @@
+Question Link : https://leetcode.com/problems/word-break/description/
+
+Solution ; 
+
+class Solution {
+    // https://www.youtube.com/watch?v=th4OnoGasMU&ab_channel=Techdose
+    // https://youtu.be/fNVs1J2KCyo
+public:
+    bool helper(string &s,unordered_set<string>&st,vector<int>&dp,int i=0){
+        if(i >= s.size()) return true;
+        if(dp[i] != -1) return dp[i];
+
+        string str = "";
+        for(int j=i;j<s.size();j++){
+            str.push_back(s[j]);
+            if(st.count(str) && helper(s,st,dp,j+1)) return dp[i] = true;
+        }
+
+        return dp[i] = false;
+    }
+
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> st;
+        for(string &str : wordDict) st.insert(str);
+        
+        int n = s.size();
+        vector<int>dp(n,-1);
+        return helper(s,st,dp);
+    }
+};
