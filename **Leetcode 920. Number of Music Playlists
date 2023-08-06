@@ -20,3 +20,37 @@ public:
         return dp[goal][n];
     }
 };
+
+
+Solution 2 : 
+
+Question Link : https://leetcode.com/problems/number-of-music-playlists/description/
+
+Solution : 
+
+class Solution {
+private:
+// https://www.youtube.com/watch?v=gk4qzZSmyrs&ab_channel=NeetCodeIO
+    int mod = 1e9 + 7;
+public:
+    int helper(int goal,int oldSongs,int n,int k,vector<vector<int>>&dp){
+      if(goal == 0 && oldSongs == n) return 1;
+      if(goal == 0 || oldSongs > n) return 0;
+      if(dp[oldSongs][goal] != -1) return dp[oldSongs][goal];
+
+      //Choosing new song
+      int ans = ((n - oldSongs) * 1LL * (helper(goal-1,oldSongs + 1,n,k,dp))) % mod;
+
+      //Choosing old song if at least k songs have been choosen
+      if(oldSongs > k){
+          ans = (ans + (oldSongs - k) * 1LL * (helper(goal - 1,oldSongs,n,k,dp)))%mod;
+      }
+
+      return dp[oldSongs][goal] = ans;
+    }
+
+    int numMusicPlaylists(int n, int goal, int k) {
+        vector<vector<int>>dp(n+1,vector<int>(goal+1,-1));
+        return helper(goal,0,n,k,dp);
+    }
+};
