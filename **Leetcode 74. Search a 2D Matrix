@@ -1,0 +1,23 @@
+Question Link ; https://leetcode.com/problems/search-a-2d-matrix/description/
+
+Solution : 
+
+class Solution {
+public:
+// source : striver => search in 2d matrix 
+//whole matrix is in sorted order,so if we do indexing 0 to (n*m - 1) then at index k ,i = k/col and j = k % col where col is total columns. Now we can apply binary search
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int m = matrix.size(),n=matrix[0].size();
+        int low = 0,high = n*m - 1;
+
+        while(low <= high){
+            int mid = (low + high) / 2;
+            int row = mid / n , col = mid % n;
+            if(matrix[row][col] == target) return true;
+            else if(matrix[row][col] < target) low = mid + 1;
+            else high = mid - 1;
+        }
+
+        return false;
+    }
+};
