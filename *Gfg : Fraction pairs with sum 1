@@ -1,0 +1,27 @@
+Question Link : https://practice.geeksforgeeks.org/problems/fraction-pairs-with-sum-1/1
+
+Solution : 
+
+class Solution
+{
+    public:
+    int countFractions(int n, int numerator[], int denominator[])
+    {
+        map<pair<int,int>,int> mp;
+        int cnt = 0;
+        
+        for(int i=0;i<n;i++){
+            int num = numerator[i], den = denominator[i];
+            int hcf = __gcd(num,den);
+            
+            num /= hcf;
+            den /= hcf;
+            
+           cnt += mp[{den - num,den}];
+            
+           mp[{num,den}]++;
+        }
+        
+        return cnt;
+    }
+};
