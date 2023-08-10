@@ -1,0 +1,102 @@
+Question Link : https://practice.geeksforgeeks.org/problems/coin-change2448/1
+
+Solution 1  : Recursive  Solution 
+
+class Solution {
+  public:
+    long long int helper(int  coins[],int n,int sum,int i,vector<vector<long long>>&dp){
+        if(i==n){
+            return sum == 0;
+        }
+        if(sum <  0) return  0;
+        if(dp[i][sum] != -1)  return dp[i][sum];
+        
+        long long take = 0;
+        return dp[i][sum] = helper(coins,n,sum - coins[i],i,dp) + helper(coins,n,sum,i+1,dp);
+        
+    }
+    
+    long long int count(int coins[], int N, int sum) {
+        sort(coins,coins+N);
+        vector<vector<long long>> dp(N,vector<long long>(sum + 1,-1));
+        
+        return helper(coins,N,sum,0,dp);
+    }
+};
+
+
+Solution 2  : Iterative Solution 
+
+
+class Solution {
+  public:
+    long long int count(int coins[], int n, int sum) {
+        sort(coins,coins+n);
+        vector<vector<long long>> dp(n+1,vector<long long>(sum + 1,0));
+        dp[n][0] = 1;
+        
+        for(int i=n-1;i>=0;i--){
+            for(int tar=0;tar<=sum;tar++){
+                long long take = 0;
+                if(coins[i] <= tar){
+                    take = dp[i][tar - coins[i]];
+                }
+                long long notTake = dp[i+1][tar];
+                
+                dp[i][tar] = take + notTake;
+            }
+        }
+        
+        return dp[0][sum];
+    }
+};
+
+
+Solution 3 : Space Optimized Solution
+
+class Solution {
+  public:
+    long long int count(int coins[], int n, int sum) {
+        // sort(coins,coins+n);
+        vector<long long> curr(sum+1,0),next(sum+1,0);
+        curr[0] = next[0] = 1;
+        
+        for(int i=n-1;i>=0;i--){
+            for(int tar=0;tar<=sum;tar++){
+                long long take = 0;
+                if(coins[i] <= tar){
+                    take = curr[tar - coins[i]];
+                }
+                long long notTake = next[tar];
+                
+                curr[tar] = take + notTake;
+            }
+            next = curr;
+        }
+        
+        return curr[sum];
+    }
+};
+class Solution {
+  public:
+    long long int count(int coins[], int n, int sum) {
+        // sort(coins,coins+n);
+        vector<long long> curr(sum+1,0),next(sum+1,0);
+        curr[0] = next[0] = 1;
+        
+        for(int i=n-1;i>=0;i--){
+            for(int tar=0;tar<=sum;tar++){
+                long long take = 0;
+                if(coins[i] <= tar){
+                    take = curr[tar - coins[i]];
+                }
+                long long notTake = next[tar];
+                
+                curr[tar] = take + notTake;
+            }
+            next = curr;
+        }
+        
+        return curr[sum];
+    }
+};
