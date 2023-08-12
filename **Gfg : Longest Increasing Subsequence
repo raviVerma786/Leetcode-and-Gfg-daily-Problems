@@ -1,0 +1,21 @@
+Question Link : https://leetcode.com/problems/longest-increasing-subsequence/description/
+https://practice.geeksforgeeks.org/problems/longest-increasing-subsequence-1587115620/1
+
+Solution : final solution O(nlogn) find other in question submissions
+
+class Solution {
+    // https://www.youtube.com/watch?v=MYHajVcnXSA&ab_channel=CodeHelp-byBabbar
+public:
+    int lengthOfLIS(vector<int>& arr) {
+        int n = arr.size();
+        vector<int> v;
+        for(int i=0;i<n;i++){
+            int idx = lower_bound(v.begin(),v.end(),arr[i]) - v.begin();
+            if(idx == v.size()) v.push_back(arr[i]);
+            else v[idx] = arr[i];
+        }
+       
+       return v.size();
+    }
+};
+
