@@ -1,0 +1,31 @@
+Question Link : https://practice.geeksforgeeks.org/problems/finding-the-numbers0215/1
+
+Solution : 
+
+class Solution
+{
+public:
+    vector<int> singleNumber(vector<int> nums) 
+    {
+        int xr = 0; // gives xor of both unique numbers
+        for(int i : nums){
+            xr = (xr ^ i);
+        }
+        
+        int pos = -1; //position of last set bit where both number differs
+        for(int i=30;i>=0;i--){
+            if((xr & (1<<i))){
+                pos = i;
+                break;
+            }
+        }
+        
+        int first = 0,second = 0; //first : xor of all numbers having set bit at pos and second : xor of all numbers having unset bit at pos
+        for(int i : nums){
+            if((i & (1<<pos))) first = (first ^ i);
+            else second = (second ^ i);
+        }
+        
+        return {second,first};
+    }
+};
