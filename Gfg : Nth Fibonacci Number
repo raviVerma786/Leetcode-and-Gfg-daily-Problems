@@ -1,0 +1,19 @@
+Question Link : https://practice.geeksforgeeks.org/problems/nth-fibonacci-number1335/1
+
+Solution : 
+
+class Solution {
+  public:
+    int nthFibonacci(int n){
+        int first = 1, second = 1,mod = 1e9 + 7;
+        
+        while(n > 2){
+            int num = (first + second) % mod;
+            first = second % mod;
+            second = num;
+            n--;
+        }
+        
+        return second;
+    }
+};
