@@ -1,0 +1,44 @@
+Question Link : https://practice.geeksforgeeks.org/problems/flip-bits0240/1
+
+Solution : 
+
+class Solution{
+    public:
+    int maxOnes(int a[], int n)
+    {
+        int l = 0,r = -1,left=0,right=-1;
+        int zero = 0, one = 0,diff = 0;
+        for(int i=0;i<n;i++){
+            if(a[i] == 0) zero++;
+            else one++;
+            
+            if(one > zero){
+                l = i+1;
+                one = 0;
+                zero = 0;
+            }else{
+                r = i;
+            }
+            
+            if(zero - one > diff){
+                left = l;
+                right = r;
+                diff = zero - one;
+            }
+        }
+        
+        while(left<n && a[left] == 1) left++;
+        while(right>=0 && a[right] == 1) right--;
+        
+        for(int i=left;i<=right;i++){
+           a[i] = !a[i];
+        }
+        
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            ans += a[i];
+        }
+        
+        return ans;
+    }
+};
