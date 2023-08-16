@@ -1,0 +1,68 @@
+Question Link : https://practice.geeksforgeeks.org/problems/nth-catalan-number0817/1
+
+Solution 1 : O(n) space and O(n) time
+class Solution
+{
+    public:
+    int inverse(int n,int p,int mod){
+        int ans = 1;
+        while(p){
+            if(p%2 == 1) ans = (ans *1LL *  n) % mod;
+            n = (n * 1LL * n) % mod;
+            p = p>>1;
+        }
+        
+        return ans;
+    }
+    
+    int findCatalan(int n) 
+    {
+        if(n <= 1) return 1;
+        int mod = 1e9 + 7;
+        
+        vector<int> fact(2*n+1,1);
+        for(int i=2;i<=(2*n);i++){
+            fact[i] = (fact[i-1] * 1LL * i) % mod;
+        }
+        
+        return ((fact[2*n] * 1LL * inverse(fact[n+1],mod - 2,mod))%mod * 
+        inverse(fact[n],mod-2,mod)) % mod;
+    }
+};
+
+
+
+Solution 2 : O(nlogn) time and O(1) space
+
+class Solution
+{
+    //nth catalan number is : (2*n C n)/(n+1)
+    public:
+    //Function to find the nth catalan number.
+    int inverse(int a,int b,int mod){
+        int ans = 1;
+        while(b){
+            if(b&1) ans = (ans *1LL * a) %mod;
+            a = (a * 1LL * a)%mod;
+            b = b>>1;
+        }
+        
+        return ans % mod;
+    }
+    
+    int findCatalan(int n) 
+    {
+        if(n <= 1) return 1;
+        int mod = 1e9 + 7;
+        
+        int N = 2*n,r = n,ans = 1;
+        
+        //finding (2n C n)
+        for(int i=1;i<=r;i++){
+            ans = (ans *1LL* (N - r + i))%mod; // mltiplying numerator
+            ans = (ans *1LL * inverse(i,mod-2,mod)) % mod; // multiplying inverse of denominator
+        }
+        
+        return (ans *1LL* inverse(n+1,mod - 2,mod)) % mod;
+    }
+};
