@@ -1,0 +1,42 @@
+Question Link : https://leetcode.com/problems/01-matrix/description/
+
+Solution : 
+
+class Solution {
+public:
+// https://www.youtube.com/watch?v=edXdVwkYHF8&list=PLgUwDviBIf0oE3gA41TKO2H5bHpPd7fzn&index=13&ab_channel=takeUforward
+    vector<vector<int>> updateMatrix(vector<vector<int>>& grid) {
+        int m = grid.size(),n = grid[0].size();
+	    vector<vector<bool>> vis(m,vector<bool>(n,false));
+	    vector<vector<int>> dist(m,vector<int>(n,INT_MAX));
+	    
+	    queue<vector<int>> q;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 0){
+                    q.push({i,j,0});
+                    vis[i][j] = true;
+                }
+            }
+        }
+        
+        int x[] = {1,0,-1,0};
+        int y[] = {0,1,0,-1};
+        while(!q.empty()){
+            int i = q.front()[0] , j = q.front()[1] , steps = q.front()[2];
+            q.pop();
+            
+            dist[i][j] = steps;
+            
+            for(int k=0;k<4;k++){
+                int row = i + x[k] , col = j + y[k];
+                if(row>=0 && row<m && col>=0 && col<n && !vis[row][col]){
+                    vis[row][col]=true;
+                    q.push({row,col,steps+1});
+                }
+            }
+        }
+        
+        return dist;
+    }
+};
