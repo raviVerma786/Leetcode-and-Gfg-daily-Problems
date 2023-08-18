@@ -1,0 +1,31 @@
+Question Link : https://leetcode.com/problems/maximal-network-rank/description/
+
+Solution :
+
+class Solution {
+public:
+    int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+        vector<int> adj[n];
+        for(vector<int> &v : roads){
+            adj[v[0]].push_back(v[1]);
+            adj[v[1]].push_back(v[0]);
+        }
+
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i == j) continue;
+                int cnt = adj[i].size() + adj[j].size();
+                for(int num : adj[i]){
+                    if(num == j){
+                        cnt--;
+                        break;
+                    }
+                }
+                ans = max(ans,cnt);
+            }
+        }
+
+        return ans;
+    }
+};
