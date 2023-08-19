@@ -1,0 +1,99 @@
+Question Link : https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/description/
+
+Solution : 
+
+// https://www.youtube.com/watch?v=zl-rLRPpl_s&ab_channel=CodingBeast
+class DSU{
+    public:
+    int totalDisjointSets;
+    vector<int> parent,size;
+
+    DSU(int n){
+        parent.resize(n+1);
+        size.resize(n+1);
+        totalDisjointSets = n;
+        
+        for(int i=0;i<=n;i++){
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findParent(int node){
+        if(node == parent[node]) return node;
+        return parent[node] = findParent(parent[node]);
+    }
+
+    bool makeUnion(int node1,int node2){
+        int u = findParent(node1);
+        int v = findParent(node2);
+
+        if(u == v) return false;
+
+        if(size[u]  > size[v]){
+            parent[v] = u;
+            size[u] += size[v];
+            totalDisjointSets--;
+        }
+        else{
+            parent[u] = v;
+            size[v] += size[u];
+            totalDisjointSets--;
+        }
+
+        return true;
+    }
+};
+
+class Solution {
+private:
+    int createMst(int n,vector<vector<int>>&edges,vector<int>include,vector<int>exclude){
+        //Krushkal's Algorithm
+        DSU dsu = DSU(n);
+        int sum = 0;
+
+        if(include.size() > 0){
+            dsu.makeUnion(include[0],include[1]);
+            sum += include[2];
+        }
+
+        for(vector<int>v : edges){
+            if(v != exclude && dsu.makeUnion(v[0],v[1])){
+                sum += v[2];
+            }
+        }
+
+        return dsu.totalDisjointSets == 1 ? sum : INT_MAX;
+    }
+public:
+    vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& edges) {
+        map<vector<int>,int> edgeIndex;
+        for(int i=0;i<edges.size();i++){
+            edgeIndex[edges[i]] = i;
+        }
+
+        //We are using Kruskal's Algorithm for MST
+        sort(edges.begin(),edges.end(),[&](vector<int>v1,vector<int>v2){
+            return v1[2] < v2[2];
+        });
+        
+        int mstSum = createMst(n,edges,{},{});
+        vector<int> critical,psuedoCritical;
+
+        for(vector<int>&edge : edges){
+            int excludeCost = createMst(n,edges,{},edge);
+            if(excludeCost > mstSum){
+                critical.push_back(edgeIndex[edge]);
+            }
+            else{
+                int includeCost = createMst(n,edges,edge,{});
+                if(includeCost == mstSum){
+                    psuedoCritical.push_back(edgeIndex[edge]);
+                }
+            }
+        }
+        
+
+        return {critical,psuedoCritical};
+    }
+};
