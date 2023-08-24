@@ -1,0 +1,42 @@
+Question Link : https://practice.geeksforgeeks.org/problems/multiply-two-strings/1
+
+Solution : 
+
+class Solution{
+  public:
+    /*You are required to complete below function */
+    string multiplyStrings(string s1, string s2) {
+       //Your code here
+       bool isNeg = false;
+       if(s1[0]=='-' && s2[0] =='-'){
+           isNeg = false;
+           s1 = s1.substr(1);
+           s2 = s2.substr(1);
+       }
+       else if(s1[0]=='-'){
+           isNeg = true;
+           s1 = s1.substr(1);
+       }
+       else if(s2[0] == '-'){
+           isNeg = true;
+           s2 = s2.substr(1);
+       }
+       int n = s1.size();
+       int m = s2.size();
+       string ans(n+m,'0');
+       for(int i=n-1;i>=0;i--){
+           for(int j= m-1;j>=0;j--){
+               int k = (s1[i] - '0')*(s2[j] - '0') + (ans[i+j+1] - '0');
+               ans[i+j+1] = k%10 + '0';
+               ans[i+j] += k/10;
+           }
+       }
+       
+       while(ans.size() > 1 && ans[0]=='0'){
+            ans = ans.substr(1);
+       }
+       if(ans != "0" && isNeg) ans = '-' + ans;
+       return ans;
+    }
+
+};
