@@ -1,0 +1,60 @@
+Question Link : https://leetcode.com/problems/text-justification/description/
+
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=2NE_CdAq0M8&ab_channel=TechAdorabyNivedita
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> ans;
+        int n = words.size();
+        int i = 0;
+
+        while(i < n){
+            int lineLength = words[i].size();
+            int j = i+1;
+            while(j <n && lineLength + words[j].size() + (j - i) <= maxWidth){
+                lineLength += words[j].size();
+                j++;
+            }
+
+            int numWords = j - i;
+            int numSpaces = maxWidth - lineLength;
+            
+            //Construct the justified line
+            string line;
+
+            //Handle special case where there is only one word or it is last line
+            if(numWords == 1 || j == n){
+                line = words[i];
+                for(int k = i+ 1;k<j;k++){
+                    line += ' ' + words[k];
+                }
+                
+                int space = maxWidth - line.size();
+                line += string(space,' ');
+            }
+            else{
+                int spaceBetweenWords = numSpaces / (numWords - 1);
+                int extraSpaces = numSpaces % (numWords - 1);
+
+                line = words[i];
+            
+                for(int k = i+1;k<j;k++){
+                    line += string(spaceBetweenWords,' ');
+                    if(extraSpaces > 0){
+                        line += ' ';
+                        extraSpaces--;
+                    }
+                    line += words[k];
+                }
+            }
+
+            ans.push_back(line);
+            i = j;
+        }
+
+        return ans;
+    }
+};
