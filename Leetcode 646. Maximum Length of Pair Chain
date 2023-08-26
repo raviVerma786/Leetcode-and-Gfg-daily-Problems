@@ -1,0 +1,22 @@
+Question Link : https://leetcode.com/problems/maximum-length-of-pair-chain/description/
+
+Solutoin :
+
+class Solution {
+public:
+    int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(),pairs.end(),[&](vector<int>v1,vector<int>v2){
+            return v1[1] < v2[1];
+        });
+
+        int cnt = 1,last = 0;
+        for(int i=1;i<pairs.size();i++){
+            if(pairs[i][0] > pairs[last][1]){
+                cnt++;
+                last = i;
+            }
+        }
+
+        return cnt;
+    }
+};
