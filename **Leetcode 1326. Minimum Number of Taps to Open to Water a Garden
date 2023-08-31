@@ -1,0 +1,32 @@
+Question Link : https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/description/
+
+Solution : 
+
+class Solution {
+public:
+    int minTaps(int n, vector<int>& ranges) {
+       vector<pair<int,int>> v;
+       for(int i=0;i<=n;i++){
+           v.push_back({i-ranges[i],i+ranges[i]});
+       }
+
+       sort(v.begin(),v.end());
+       int dist = 0,cnt = 0,i=0;
+       
+       while(i<=n){
+            int temp = dist;
+            while(i<=n && v[i].first <= dist){
+                temp = max(temp,v[i].second);
+                i++;
+            }
+
+            if(temp == dist) return -1;
+            else dist = temp;
+
+            cnt++;
+            if(dist >= n) return cnt;
+       }
+
+       return -1;
+    }
+};
