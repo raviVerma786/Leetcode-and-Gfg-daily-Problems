@@ -1,0 +1,51 @@
+Question Link : https://leetcode.com/problems/split-linked-list-in-parts/description/?envType=daily-question&envId=2023-09-06
+
+Solution : 
+
+class Solution {
+private:
+     int getLength(ListNode* head){
+        int cnt = 0;
+        while(head){
+            cnt++;
+            head = head->next;
+        }
+
+        return cnt;
+    }
+
+    void splitList(vector<ListNode*>&ans, ListNode* head, int partSize, int extraNodes){
+        while(head){
+            ans.push_back(head);
+
+            for(int i=0;i<(partSize-1);i++){
+                head = head->next;
+            }
+
+            if(partSize > 0 && extraNodes){
+                head = head->next;
+                extraNodes--;
+            }
+
+            if(head){
+                ListNode* nextNode = head->next;
+                head->next = NULL;
+                head = nextNode;
+            }
+        }
+    }
+
+public:
+    vector<ListNode*> splitListToParts(ListNode* head, int k) {
+        int totalLen = getLength(head);
+        
+        vector<ListNode*> ans;
+        splitList(ans,head,totalLen / k,totalLen % k);
+
+        while(ans.size() < k){
+            ans.push_back(NULL);
+        }
+
+        return ans;
+    }
+};
