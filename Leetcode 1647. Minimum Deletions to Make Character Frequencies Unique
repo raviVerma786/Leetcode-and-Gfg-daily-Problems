@@ -1,0 +1,38 @@
+Question Link : https://leetcode.com/problems/minimum-deletions-to-make-character-frequencies-unique/description/
+
+Solution :
+
+class Solution {
+public:
+    int minDeletions(string s) {
+        vector<int> v(26,0);
+        for(char ch : s){
+            v[ch-'a']++;
+        }
+        
+        int ans = 0;
+        for(int i=0;i<26;i++){
+            int cnt = v[i];
+
+            while(cnt > 0){
+                bool isSameCountPresent = false;
+                for(int j=0;j<26;j++){
+                    if(i == j) continue;
+                    else if(cnt == v[j]){
+                        isSameCountPresent = true;
+                        break;
+                    }
+                }
+
+                if(isSameCountPresent){
+                    ans++;
+                    v[i]--;
+                    cnt = v[i];
+                }
+                else break;
+            }
+        }
+
+        return ans;
+    }
+};
