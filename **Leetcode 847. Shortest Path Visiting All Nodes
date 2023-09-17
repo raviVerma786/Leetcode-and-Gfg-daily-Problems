@@ -1,0 +1,35 @@
+Question link : https://leetcode.com/problems/shortest-path-visiting-all-nodes/
+
+Solution : 
+
+class Solution {
+public:
+  int shortestPathLength(vector<vector<int>>& graph) {
+    int n = graph.size();
+    
+    queue<pair<int,pair<int,int>>> q; //{steps,node,visited nodes}
+    vector<vector<bool>> vis(n,vector<bool>(1<<n,false));
+    for(int i=0;i<n;i++){
+        q.push({0,{i,(1<<i)}});
+        vis[i][1<<i] = true;
+    }
+
+    while(!q.empty()){
+        int steps = q.front().first, node = q.front().second.first,
+        cntVisNodes = q.front().second.second;
+        q.pop();
+
+        if(cntVisNodes == (1<<n) - 1) return steps;
+
+        for(int i : graph[node]){
+            int cnt = (cntVisNodes | (1<<i));
+            if(!vis[i][cnt]){
+                q.push({steps+1,{i,cnt}});
+                vis[i][cnt] = true;
+            }
+        }
+    }
+
+    return -1;
+  }
+};
