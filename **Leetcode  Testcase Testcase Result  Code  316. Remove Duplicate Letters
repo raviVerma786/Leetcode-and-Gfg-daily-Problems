@@ -1,0 +1,41 @@
+Question Link : https://leetcode.com/problems/remove-duplicate-letters/description/
+
+Solution :
+
+class Solution {
+    // https://www.youtube.com/watch?v=j313ttNJjo0&ab_channel=Techdose
+public:
+    string removeDuplicateLetters(string s) {
+        vector<int> cnt(26,0);
+        vector<bool> vis(26,false);
+
+        for(char ch : s){
+            cnt[ch - 'a']++;
+        }
+
+        stack<char> st;
+        for(char ch : s){
+            if(vis[ch - 'a']){
+                cnt[ch - 'a']--;
+                continue;
+            }
+
+            while(!st.empty() && cnt[st.top() - 'a'] > 0 && ch < st.top()){
+                vis[st.top() - 'a'] = false;
+                st.pop();
+            }
+
+            st.push(ch);
+            vis[ch - 'a'] = true;
+            cnt[ch - 'a']--;
+        }
+
+        string ans = "";
+        while(!st.empty()){
+            ans = st.top() + ans;
+            st.pop();
+        }
+
+        return ans;
+    }
+};
