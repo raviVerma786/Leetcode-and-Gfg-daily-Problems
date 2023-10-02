@@ -1,0 +1,32 @@
+Question Link : https://practice.geeksforgeeks.org/problems/number-of-distinct-subsequences0909/1
+
+Solution : 
+
+class Solution{
+  public:	
+//   https://www.youtube.com/watch?v=tHuD_g3U_-8&ab_channel=PuneetKumarIIITD
+	int distinctSubsequences(string s)
+	{
+	    int n = s.size(), mod = 1e9 + 7;
+	    vector<long long> dp(26,-1);
+	    
+	    long long ans = 0;
+	    for(int i=0;i<n;i++){
+	       int idx = s[i] - 'a';
+	       
+	       if(i == 0){
+	           ans = 1;
+	           dp[idx] = 1;
+	           continue;
+	       }
+	       
+	       long long diff = (1 + ans) % mod;
+	       if(dp[idx] == -1) ans = (ans + diff) % mod;
+	       else ans = (ans + diff - dp[idx] + mod) % mod;
+	       
+	       dp[idx] = diff;
+	    }
+	    
+	    return ans + 1;
+	}
+};
