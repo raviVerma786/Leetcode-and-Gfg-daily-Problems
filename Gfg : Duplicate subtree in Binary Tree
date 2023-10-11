@@ -1,0 +1,36 @@
+Question Link : https://practice.geeksforgeeks.org/problems/duplicate-subtree-in-binary-tree/1
+
+Solution : 
+
+
+class Solution {
+  public:
+    bool isSame(Node* root1,Node* root2,int size){
+        if(!root1 && !root2) return size > 1;
+        if(!root1 || !root2 || root1->data != root2->data) return false;
+        
+        return isSame(root1->left,root2->left,size + 1) && isSame(root1->right,root2->right,size + 1);
+    }
+    
+    void traverse(Node* root,vector<Node*>&nodes){
+        if(!root) return;
+        
+        traverse(root->left,nodes);
+        nodes.push_back(root);
+        traverse(root->right,nodes);
+    }
+    
+    int dupSub(Node *root) {
+        vector<Node*> nodes;
+        traverse(root,nodes);
+        
+        int n = nodes.size();
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                if(isSame(nodes[i],nodes[j],0)) return true;
+            }
+        }
+        
+        return false;
+    }
+};
