@@ -1,0 +1,106 @@
+Question Link : https://practice.geeksforgeeks.org/problems/making-a-large-island/1
+
+Solution : 
+
+class DisjointSet{
+    // https://www.youtube.com/watch?v=lgiz0Oup6gM&ab_channel=takeUforward
+  public:
+    vector<int> parent,size;
+    
+    DisjointSet(int n){
+        parent.resize(n*n);
+        size.resize(n*n);
+        
+        for(int i=0;i<n*n;i++){
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+    
+    int findParent(int node){
+        if(parent[node] == node) return node;
+        return parent[node] = findParent(parent[node]);
+    }
+    
+    void makeUnion(int node1,int node2){
+        int u = findParent(node1),
+        v = findParent(node2);
+        
+        if(u == v) return;
+        
+        if(size[u] >= size[v]){
+            parent[v] = u;
+            size[u] += size[v];
+        }
+        else{
+            parent[u] = v;
+            size[v] += size[u];
+        }
+    }
+};
+
+class Solution
+{
+private: 
+    bool isValid(int i,int j,int n){
+        return i>=0 && i<n && j>=0 && j<n;
+    }
+    
+public:
+    int largestIsland(vector<vector<int>>& grid) 
+    {
+        int n = grid.size();
+        int dx[4] = {-1,0,1,0};
+        int dy[4] = {0,-1,0,1};
+        
+        DisjointSet obj(n);
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               if(grid[i][j] == 0) continue;
+               
+               for(int k=0;k<4;k++){
+                   int x = i + dx[k], y = j + dy[k];
+                   if(isValid(x,y,n) && grid[x][y] == 1){
+                       int node1 = (i*n + j),
+                       node2 = (x*n + y);
+                       
+                       obj.makeUnion(node1,node2);
+                   }
+               }
+            }
+        }
+        
+        // for(int i=0;i<n*n;i++){
+        //     cout<<obj.size[i]<<" ";
+        // }
+        // cout<<endl;
+        
+        int ans = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j] == 1) continue;
+                unordered_set<int> st;
+                for(int k=0;k<4;k++){
+                    int x = i + dx[k], y = j + dy[k];
+                    if(isValid(x,y,n) && grid[x][y] == 1){
+                        st.insert(obj.findParent(x*n + y));
+                    }
+                }
+                
+                int cnt = 0;
+                for(int p : st){
+                    cnt += obj.size[p];
+                }
+                
+                ans = max(ans,1 + cnt); //one for the zero
+            }
+        }
+        
+        for(int i=0;i<n*n;i++){
+            ans = max(ans,obj.size[obj.findParent(i)]);
+        }
+        
+        return ans;
+    }
+};
