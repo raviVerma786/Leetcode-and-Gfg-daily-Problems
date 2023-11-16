@@ -1,0 +1,34 @@
+Question Link : https://www.geeksforgeeks.org/problems/better-string/1
+
+Solution : 
+
+class Solution {
+    // https://www.youtube.com/watch?v=YrRLpfFkdZA
+  public:
+    int countDistinctSubseq(string& s){
+        int n = s.size();
+        int cnt = 1;
+        
+        vector<int> v(26,-1);
+        
+        for(char ch : s){
+            if(v[ch - 'a'] == -1){
+                v[ch - 'a'] = cnt;
+                cnt = (cnt * 2);
+            }
+            else{
+                int temp = v[ch - 'a'];
+                v[ch - 'a'] = cnt;
+                
+                cnt = (cnt * 2);
+                cnt -= temp;
+            }
+        }
+        
+        return cnt;
+    }
+    
+    string betterString(string str1, string str2) {
+        return countDistinctSubseq(str2) > countDistinctSubseq(str1) ? str2 : str1;
+    }
+};
