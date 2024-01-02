@@ -1,0 +1,25 @@
+Question Link : https://leetcode.com/problems/convert-an-array-into-a-2d-array-with-conditions/description/
+
+Solution : 
+
+class Solution {
+public:
+    vector<vector<int>> findMatrix(vector<int>& nums) {
+        unordered_map<int,int> mp;
+        int n = 0;
+        for(int i : nums){
+            mp[i]++;
+            n = max(n,mp[i]);
+        }
+
+        vector<vector<int>> ans(n);
+        for(pair<int,int>p : mp){
+            n = p.second;
+            for(int i=0;i<n;i++){
+                ans[i].push_back(p.first);
+            }
+        }
+
+        return ans;
+    }
+};
