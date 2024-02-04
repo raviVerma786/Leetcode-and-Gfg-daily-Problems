@@ -1,0 +1,48 @@
+Question Link : https://leetcode.com/problems/minimum-window-substring/description/?envType=daily-question&envId=2024-02-04
+
+Solution : 
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if(s.size() < t.size()) return "";
+
+        unordered_map<char,int> mp;
+        for(char ch : t){
+            mp[ch]++;
+        }
+        
+        unordered_map<char,int> temp;
+        string ans = "";
+        int cnt = 0;
+        int i = 0, j = 0;
+
+        while(j < s.size()){
+            if(mp.count(s[j])){
+                temp[s[j]]++;
+                if(temp[s[j]] <= mp[s[j]]){
+                    cnt++;
+                }
+            }
+            if(cnt == t.size()){
+                while(i<j && mp.count(s[i]) == 0 || temp[s[i]] > mp[s[i]]){
+                    if(temp.count(s[i])) temp[s[i]]--;
+                    i++;
+                }
+
+                if(ans == "" || j-i+1 < ans.size()){
+                    ans = s.substr(i,j-i+1);
+                }
+
+                if(i < s.size()){
+                    temp[s[i]]--;
+                    i++;
+                    cnt--;
+                }
+            }
+            j++;
+        }
+
+        return ans;
+    }
+};
