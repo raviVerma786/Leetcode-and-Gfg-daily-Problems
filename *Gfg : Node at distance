@@ -1,0 +1,35 @@
+Question Link : https://www.geeksforgeeks.org/problems/node-at-distance/1
+
+Solution : 
+
+class Solution
+{
+    public:
+    //Function to return count of nodes at a given distance from leaf nodes.
+    void dfs(Node* root,int k,vector<Node*>&path,unordered_set<Node*>&ans){
+        if(!root) return;
+        
+        path.push_back(root);
+        
+        if(!root->left && !root->right){
+            int p = (int)path.size() - (k + 1); //for k distance k + 1 nodes must be there
+            if(p >= 0){
+                ans.insert(path[p]);
+            }
+        }
+        
+        dfs(root->left,k,path,ans);
+        dfs(root->right,k,path,ans);
+        
+        path.pop_back();
+    }
+    
+    int printKDistantfromLeaf(Node* root, int k)
+    {
+        unordered_set<Node*> ans;
+        vector<Node*> path;
+        
+    	dfs(root,k,path,ans);
+    	return ans.size();
+    }
+};
