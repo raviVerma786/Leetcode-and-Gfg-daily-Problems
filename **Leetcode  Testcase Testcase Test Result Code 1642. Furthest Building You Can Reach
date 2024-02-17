@@ -1,0 +1,29 @@
+Question Link : https://leetcode.com/problems/furthest-building-you-can-reach/description/
+
+Solution : 
+
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        priority_queue<int> maxBricks;
+        int n = heights.size();
+
+        for(int i=1;i<n;i++){
+            if(heights[i] <= heights[i-1]) continue;
+
+            int d = heights[i] - heights[i-1];
+            bricks -= d;
+            maxBricks.push(d);
+
+            if(bricks < 0){
+                bricks += maxBricks.top();
+                maxBricks.pop();
+                ladders--;
+            }
+
+            if(ladders < 0) return i - 1;
+        }
+
+        return n-1;
+    }
+};
