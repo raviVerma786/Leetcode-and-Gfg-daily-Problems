@@ -1,0 +1,93 @@
+# C++ Code
+
+<>
+class Solution {
+public:
+    bool isPossible(vector<int>&nums,int limit,int k){
+        int n = nums.size();
+        int cnt = 0, i=0, j=0;
+        int common = 0; //pairs that are common while considering all pairs between two indices
+
+        while(j < n){
+            while(j<n && nums[j] - nums[i] <= limit){
+                j++;
+            }
+
+            int cntNumbers = j - i;
+            cnt += (cntNumbers * (cntNumbers - 1))/2;
+            cnt -= common;
+
+            while(j<n && nums[j] - nums[i] > limit){
+                i++;
+            }
+
+            common = ((j - i)*(j - i - 1))/2;
+        }
+
+        return cnt >= k;
+    }
+    int smallestDistancePair(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end());
+
+        int n = nums.size();
+        int low = 0, high = 1e6;
+        int ans = nums[n-1] - nums[0];
+
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(isPossible(nums,mid,k)){
+                ans = mid;
+                high = mid - 1;
+            }
+            else{
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+</>
+
+
+
+
+# Python Code:
+
+class Solution:
+    def isPossible(self,nums:List[int],limit:int,k:int) -> bool:
+        n = len(nums)
+        i,j = 0,0
+        cnt, commonCnt = 0,0
+
+        while j < n:
+            while j<n and (nums[j] - nums[i]) <= limit:
+                j += 1
+            
+            cntNumbers = j - i
+            cnt += (cntNumbers * (cntNumbers - 1)) // 2
+            cnt -= commonCnt
+
+            while j<n and (nums[j] - nums[i]) > limit:
+                i += 1
+            
+            commonCnt = ((j - i) * (j - i - 1)) // 2
+        
+        return cnt >= k
+
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        nums.sort()
+
+        n = len(nums)
+        low,high = 0, nums[n-1] - nums[0]
+        ans = 1e6
+
+        while(low <= high):
+            mid = (low + high) //2
+            if self.isPossible(nums,mid,k):
+                ans = mid
+                high = mid - 1
+            else:
+                low = mid + 1
+        
+        return ans
