@@ -1,0 +1,23 @@
+Question Link : https://leetcode.com/problems/maximum-width-ramp/description/?envType=daily-question&envId=2024-10-10
+
+Solution:
+
+class Solution:
+    def maxWidthRamp(self, nums: List[int]) -> int:
+        maxFromRight = nums.copy() # maxFromRight[i] will confirm whether there is number greater of equal to nums[i] in the right so that we can adjust our window
+
+        n = len(nums)
+        for i in range(n-2,-1,-1):
+            maxFromRight[i] = max(nums[i],maxFromRight[i+1])
+        
+        ans = 0
+        i,j = 0,1
+        while j < n:
+            if maxFromRight[j] >= nums[i]:
+                ans = max(ans,j-i)
+                j += 1
+            else:
+                i += 1
+        
+        return ans
+        
