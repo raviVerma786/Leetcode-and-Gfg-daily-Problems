@@ -1,0 +1,57 @@
+Question: 1910. Remove All Occurrences of a Substring
+Given two strings s and part, perform the following operation on s until all occurrences of the substring part are removed:
+Find the leftmost occurrence of the substring part and remove it from s.
+Return s after removing all occurrences of part.
+A substring is a contiguous sequence of characters in a string.
+
+Solution: class Solution {
+public:
+    void kmpToMakeLPS(vector<int>&lps,string& s){
+        int n = s.size();
+        for(int i=1;i<n;i++){
+            int j = lps[i-1];
+            while(j>0 && s[i] != s[j]){
+                j = lps[j-1];
+            }
+
+            if(s[i] == s[j]) j++;
+            lps[i] = j;
+        }
+    }
+
+    string removeOccurrences(string s, string part) {
+        stack<pair<char,int>> st; // {char, number of characters matched till here}
+        int n = part.size(), i = 0;
+        vector<int> lps(n,0);
+        kmpToMakeLPS(lps,part);
+
+        for(char ch : s){
+            while(i>0 && part[i] != ch){
+                i = lps[i-1];
+            }
+            if(part[i] == ch) i++;
+
+            st.push({ch,i});
+
+            if(i == n){
+                for(int j=0;j<n;j++){
+                    st.pop();
+                }
+                if(!st.empty()) i = st.top().second;
+                else i = 0;
+            }
+        }
+        
+        int stackSize = st.size();
+        string ans(stackSize,'#');
+        i = stackSize-1;
+
+        while(!st.empty()){
+            ans[i] = st.top().first;
+            st.pop();
+            i--;
+        }
+
+        return ans;
+    }
+};
