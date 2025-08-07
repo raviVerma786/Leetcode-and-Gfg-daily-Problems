@@ -1,0 +1,53 @@
+   int constructSegmentTree(vector<int>&segTree, int idx, vector<int>&arr, int l, int r){
+        // O(n) time complexity
+
+        if(l == r){
+            // leaf node
+            segTree[idx] = arr[l];
+            return arr[l];
+        }
+
+        int mid = (l + r)/2;
+        segTree[idx] = constructSegmentTree(segTree, 2*idx + 1, arr, l, mid) + constructSegmentTree(segTree, 2*idx + 2, arr, mid+1, r);
+
+        return segTree[idx];
+    }
+
+    int getSum(vector<int>&segTree, int node, int nodeRangeLeft, int nodeRangeRight, int ReqRangeLeft, int ReqRangeRight){
+        // O(log n) time complexity
+
+        if(nodeRangeLeft >= ReqRangeLeft && nodeRangeRight <= ReqRangeRight){
+            // total overlap
+            return segTree[node];
+        }
+        if(nodeRangeLeft > ReqRangeRight || nodeRangeRight < ReqRangeLeft){
+            // no overlap
+            return 0;
+        }
+
+        // Partial overlap
+        int mid = (nodeRangeLeft + nodeRangeRight)/2;
+        return getSum(segTree,2*node + 1, nodeRangeLeft, mid, ReqRangeLeft, ReqRangeRight) + getSum(segTree,2*node + 2, mid, nodeRangeRight, ReqRangeLeft, ReqRangeRight);
+    }
+
+    void updateSegmentTree(vector<int>&segTree, int node, int nodeRangeLeft, int nodeRangeRight, int changedPosition, int diff){
+        // O(log n) time complexity
+        if(nodeRangeLeft > changedPosition || nodeRangeRight < changedPosition){
+            // no overlap, no need to change. like we changed position 3, then only positions from 3 to n will be changed, not 0-2
+            return;
+        }
+
+        segTree[node] += diff;
+
+        if(nodeRangeLeft != nodeRangeRight){
+            int mid = (nodeRangeLeft + nodeRangeRight)/2;
+            updateSegmentTree(segTree, 2*node + 1, nodeRangeLeft, mid, changedPosition, diff);
+            updateSegmentTree(segTree, 2*node + 2, mid + 1, nodeRangeRight, changedPosition, diff);
+        }
+    }
+
+
+
+
+size of segment tree = (2^height - 1)
+height = log n, here base is 2
